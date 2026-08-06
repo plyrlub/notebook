@@ -11,6 +11,8 @@
     > JDK / Spring / Dubbo / Servlet 四机制全覆盖
 - [Java volatile 详解](Java/Java%20volatile%20详解.md) 
     > JMM/硬件链路、MESI、内存屏障、假共享、面试 10 问
+- [Java 反射详解](Java/Java%20反射详解.md) 
+    > 核心 API/为什么慢、缓存 → MethodHandle → LambdaMetafactory 四层优化、面试 8 问
 
 ## 数据库
 
