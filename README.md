@@ -13,6 +13,8 @@
     > JMM/硬件链路、MESI、内存屏障、假共享、面试 10 问
 - [Java 反射详解](Java/Java%20反射详解.md) 
     > 核心 API/为什么慢、缓存 → MethodHandle → LambdaMetafactory 四层优化、面试 8 问
+- [Java GC 详解](Java/Java%20GC%20详解.md) 
+    > 判活/算法/收集器演进（Serial→G1→ZGC）、三色标记、SafePoint、面试 11 问
 
 ## 数据库
 
