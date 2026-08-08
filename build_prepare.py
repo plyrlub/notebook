@@ -63,14 +63,28 @@ BUILDTOOL_RENAME_MAP = {
     "Maven 学习笔记（总览）.md": "maven-overview.md",
 }
 
-# ============ 其他语言：Lua 主题 ============
+# ============ 其他语言：Lua 主题（NN- 子目录系列）============
 LUA_SRC = os.path.join(REPO, "其他语言")
-LUA_RENAME_MAP = {
-    "Lua 语言详解.md": "lua-guide.md",
+# Lua 子目录（中文目录名 → 导航分组显示名）
+LUA_DIRS = {
+    "Lua": "Lua",
 }
-LUA_NAV_TITLES = {
-    "lua-guide.md": "Lua 语言详解",
-}
+
+def lua_slug(filename):
+    """Lua 中文文件名 → 英文 slug（lua-NN.md）
+    '00-Lua 总览.md' → 'lua-00.md'
+    '01-基础语法.md' → 'lua-01.md'
+    '11-三方资源（MySQL与Redis）.md' → 'lua-11.md'
+    """
+    base = os.path.splitext(filename)[0]
+    m = re.match(r"^(\d+)-", base)
+    if m:
+        return "lua-%s.md" % m.group(1)
+    return filename
+
+def lua_nav_title(filename):
+    """Lua 英文 slug → 中文导航标题（原中文文件名）"""
+    return os.path.splitext(filename)[0]
 
 # Nginx 子目录分类（中文目录名 → 导航分组显示名）
 NGINX_DIRS = {
@@ -139,13 +153,16 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed):
     nav_lines.append("nav:")
     nav_lines.append("  - 主页: index.md")
 
-    # ===== 其他语言主题：Lua =====
+    # ===== 其他语言主题：Lua（NN- 子目录系列）=====
     nav_lines.append("  - 其他语言:")
-    nav_lines.append("    - Lua:")
     if lua_renamed:
-        for en, cn in sorted(lua_renamed.get(".", {}).items()):
-            title = LUA_NAV_TITLES.get(en, cn)
-            nav_lines.append("      - %s: 其他语言/%s" % (title, en))
+        for dir_cn, dir_display in LUA_DIRS.items():
+            files = lua_renamed.get(dir_cn, {})
+            if not files:
+                continue
+            nav_lines.append("    - %s:" % dir_display)
+            for en, cn in sorted(files.items()):
+                nav_lines.append("      - %s: 其他语言/%s/%s" % (cn, dir_cn, en))
 
     # ===== Java 主题：两级折叠（核心机制 / JVM / 框架含 Tomcat）=====
     nav_lines.append("  - Java:")
@@ -261,7 +278,7 @@ def prepare_source(src_dir, dst_sub, rename_map, convert, exclude_dirs=None):
                     out.write(content)
             else:
                 shutil.copy2(src_path, dst_path)
-            renamed[rel_key][dst_name] = nginx_nav_title(f) if dst_sub == "Nginx" else f
+            renamed[rel_key][dst_name] = nginx_nav_title(f) if dst_sub in ("Nginx", "其他语言") else f
             copied += 1
     print("copied %d files to docs/%s" % (copied, dst_sub))
     return renamed
@@ -281,6 +298,17 @@ def prepare():
                 if f.endswith(".md"):
                     nginx_map[f] = nginx_slug(f)
 
+    # 1.2 构建 Lua 映射（子目录系列 → lua-NN.md）+ 合并 Nginx（Lua 内链接指向 Nginx）
+    lua_map = {}
+    lua_merge_map = {}
+    if os.path.exists(LUA_SRC):
+        for root, dirs, files in os.walk(LUA_SRC):
+            for f in files:
+                if f.endswith(".md"):
+                    lua_map[f] = lua_slug(f)
+        lua_merge_map = dict(lua_map)
+        lua_merge_map.update(nginx_map)  # 让 Lua 里的 Nginx 链接也能转英文
+
     # 1.5 复制主页 index.md（nav 引用它），并转换内部链接
     src_index = os.path.join(REPO, "index.md")
     if os.path.exists(src_index):
@@ -289,7 +317,7 @@ def prepare():
         merged_map = dict(JAVA_RENAME_MAP)
         merged_map.update(nginx_map)
         merged_map.update(BUILDTOOL_RENAME_MAP)
-        merged_map.update(LUA_RENAME_MAP)
+        merged_map.update(lua_map)
         content = convert_links(content, merged_map)
         with open(os.path.join(DST, "index.md"), "w", encoding="utf-8") as out:
             out.write(content)
@@ -316,10 +344,8 @@ def prepare():
         print("WARNING: Nginx/ dir not found")
         nginx_renamed = {}
 
-    # 3.5 其他语言目录（Lua）— 需合并 Nginx 映射（Lua 笔记链接指向 Nginx 系列）
+    # 3.5 其他语言目录（Lua）— 用 lua_slug 映射（已合并 Nginx 链接）
     if os.path.exists(LUA_SRC):
-        lua_merge_map = dict(LUA_RENAME_MAP)
-        lua_merge_map.update(nginx_map)  # 让 Lua 里的 Nginx 链接也能转英文
         lua_renamed = prepare_source(LUA_SRC, "其他语言", lua_merge_map, convert=True)
     else:
         print("WARNING: 其他语言/ dir not found")
