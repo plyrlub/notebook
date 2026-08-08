@@ -236,12 +236,21 @@ def prepare():
         shutil.rmtree(DST)
     os.makedirs(DST)
 
+    # 1.0 先构建 Nginx 映射（index.md 转换需要用到）
+    nginx_map = {}
+    if os.path.exists(NGINX_SRC):
+        for root, dirs, files in os.walk(NGINX_SRC):
+            for f in files:
+                if f.endswith(".md"):
+                    nginx_map[f] = nginx_slug(f)
+
     # 1.5 复制主页 index.md（nav 引用它），并转换内部链接
     src_index = os.path.join(REPO, "index.md")
     if os.path.exists(src_index):
         content = open(src_index, encoding="utf-8").read()
         # index.md 里可能引用 Java/Nginx 笔记，用合并映射转换
         merged_map = dict(JAVA_RENAME_MAP)
+        merged_map.update(nginx_map)
         content = convert_links(content, merged_map)
         with open(os.path.join(DST, "index.md"), "w", encoding="utf-8") as out:
             out.write(content)
@@ -256,12 +265,7 @@ def prepare():
         print("WARNING: Java/ dir not found")
 
     # 3. Nginx 目录（通用 slug 规则）
-    nginx_map = {}
     if os.path.exists(NGINX_SRC):
-        for root, dirs, files in os.walk(NGINX_SRC):
-            for f in files:
-                if f.endswith(".md"):
-                    nginx_map[f] = nginx_slug(f)
         nginx_renamed = prepare_source(NGINX_SRC, "Nginx", nginx_map, convert=True)
     else:
         print("WARNING: Nginx/ dir not found")
