@@ -100,7 +100,6 @@ theme:
     accent: indigo
   features:
     - navigation.sections
-    - navigation.expand
     - search.suggest
     - toc.integrate
 
