@@ -49,9 +49,10 @@ NAV_TITLES = {
 }
 
 
-def convert_links(content):
+def convert_links(content, base_dir=""):
     """把 markdown 链接里的中文文件名替换为英文文件名。
     链接: [显示名](中文名.md) → [显示名](英文名.md)
+    支持带路径前缀: [显示名](Java/中文名.md) → [显示名](Java/英文名.md)
     图片: ![](assets/xxx.png) 路径不变（保持目录层级）
     外部链接（无 .md 后缀或 http）不动。
     """
@@ -61,11 +62,15 @@ def convert_links(content):
         href = m.group(2)
         # 只处理指向本地 .md 的链接
         if href.endswith(".md") and not href.startswith("http"):
-            name = href.rsplit("/", 1)[-1]
+            path, _, name = href.rpartition("/")
             # 去除 %20 编码还原中文名
             name_raw = name.replace("%20", " ")
             if name_raw in RENAME_MAP:
-                return "[%s](%s)" % (display, RENAME_MAP[name_raw])
+                en = RENAME_MAP[name_raw]
+                # 保持原路径前缀（如果链接带 Java/ 等前缀）
+                if path:
+                    return "[%s](%s/%s)" % (display, path, en)
+                return "[%s](%s)" % (display, en)
         return m.group(0)
 
     # [显示](链接)
@@ -123,10 +128,13 @@ def prepare():
         shutil.rmtree(DST)
     os.makedirs(DST)
 
-    # 1.5 复制主页 index.md（nav 引用它）
+    # 1.5 复制主页 index.md（nav 引用它），并转换内部链接
     src_index = os.path.join(REPO, "index.md")
     if os.path.exists(src_index):
-        shutil.copy2(src_index, os.path.join(DST, "index.md"))
+        content = open(src_index, encoding="utf-8").read()
+        content = convert_links(content)
+        with open(os.path.join(DST, "index.md"), "w", encoding="utf-8") as out:
+            out.write(content)
         print("index.md copied to docs/")
     else:
         print("WARNING: index.md not found in repo root")
