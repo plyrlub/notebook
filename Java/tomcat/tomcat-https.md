@@ -4,12 +4,13 @@ tags: [Java, Tomcat, HTTPS, SSL, TLS, keytool, 证书]
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
 来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
+aliases: [Tomcat 对 HTTPS 的支持]
 ---
 
 # Tomcat 对 HTTPS 的支持
 
 > 本文是 Tomcat 学习笔记第 6 章（wolai 转存整理）。讲解 HTTPS 原理、浏览器握手流程，以及 Tomcat 配置 HTTPS 的具体步骤。
-> 关联笔记：[00-Tomcat 学习笔记（总览）](00-Tomcat%20学习笔记（总览）.md)、[02-Tomcat 服务器核心配置详解](02-Tomcat%20服务器核心配置详解.md)、[08-Tomcat 性能优化策略](08-Tomcat%20性能优化策略.md)
+> 关联笔记：[tomcat-overview](tomcat-overview.md)、[tomcat-server-config](tomcat-server-config.md)、[tomcat-performance-tuning](tomcat-performance-tuning.md)
 
 ## 📋 总纲
 

@@ -4,13 +4,14 @@ tags: [Java, Tomcat, 性能优化, JVM, GC, 线程池, Connector, 调优]
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
 来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
+aliases: [Tomcat 性能优化策略]
 ---
 
 # Tomcat 性能优化策略
 
 > 本文是 Tomcat 学习笔记第 7 章（wolai 转存整理）。从 **JVM 层** 和 **Tomcat 配置层** 两个维度讲解性能优化。
 > 性能优化的衡量指标：**响应时间**（执行某个操作的耗时）和**吞吐量**（系统在给定时间内能够支持的事务数量，单位 TPS，Transaction Per Second；一个事务 = 客户机发送请求到服务器做出反应的过程）。
-> 关联笔记：[00-Tomcat 学习笔记（总览）](00-Tomcat%20学习笔记（总览）.md)、**JVM 调优实战**、[02-Tomcat 服务器核心配置详解](02-Tomcat%20服务器核心配置详解.md)
+> 关联笔记：[tomcat-overview](tomcat-overview.md)、**JVM 调优实战**（见知识库）、[tomcat-server-config](tomcat-server-config.md)
 
 ## 📋 总纲
 
@@ -109,7 +110,7 @@ JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC -XX:ParallelGCThreads=4"
 
 - `maxThreads`：最大线程数（结合硬件与并发量设置，参考值 200~500）
 - `minSpareThreads`：核心线程数（常驻，建议预启动 `prestartminSpareThreads="true"` 避免首个请求慢）
-- 详见 [02-Tomcat 服务器核心配置详解](02-Tomcat%20服务器核心配置详解.md) 第 3 章
+- 详见 [tomcat-server-config](tomcat-server-config.md) 第 3 章
 
 ### 3.2 调整 Tomcat 的连接器
 

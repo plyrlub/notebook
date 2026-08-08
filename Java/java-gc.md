@@ -3,6 +3,7 @@ tags: [Java, JVM, GC, 垃圾回收, 机制]
 创建日期: 2026-08-06
 状态: ✅ 已归档（01-学习/Java/JVM）
 归属: 01-学习/Java/JVM
+aliases: [Java GC 详解]
 ---
 
 # Java GC 详解（判活 / 算法 / 收集器演进）
@@ -385,4 +386,4 @@ f. `-XX:+DisableExplicitGC` 可屏蔽 a 类（但注意堆外内存回收依赖�
 - 《深入理解 Java 虚拟机（第 3 版）》周志明
 - Oracle 官方：JDK 9/11/17 垃圾收集器文档（G1 / ZGC / Shenandoah）
 - OpenJDK JEP 333（ZGC）、JEP 189（Shenandoah）、JEP 248（G1）
-- 关联笔记：[[JVM 调优实战]]（参数与场景排查）、[[Java 反射详解]]（JVM 运行机制相关）
+- 关联笔记：**JVM 调优实战**（见知识库）（参数与场景排查）、[java-reflection](java-reflection.md)（JVM 运行机制相关）

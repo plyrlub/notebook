@@ -4,13 +4,14 @@ tags: [Java, Tomcat, server.xml, 配置, Connector, Executor, Engine, Host, Cont
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
 来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
+aliases: [Tomcat 服务器核心配置详解]
 ---
 
 # Tomcat 服务器核心配置详解（server.xml）
 
 > 本文是 Tomcat 学习笔记第 2 章（wolai 转存整理）。核心：**Tomcat 的配置主要在 conf/server.xml**，server.xml 中包含 Servlet 容器的相关配置（即 Catalina 的配置），本质是 **XML 标签的使用**。
 > 官方参考：https://tomcat.apache.org/tomcat-8.5-doc/config/ （8.5.100）
-> 关联笔记：[00-Tomcat 学习笔记（总览）](00-Tomcat%20学习笔记（总览）.md)、[01-Tomcat 系统架构与原理剖析](01-Tomcat%20系统架构与原理剖析.md)
+> 关联笔记：[tomcat-overview](tomcat-overview.md)、[tomcat-architecture](tomcat-architecture.md)
 
 ## 📋 总纲
 
