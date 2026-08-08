@@ -3,7 +3,6 @@ tags: [Java, 反射, 机制, JVM, 性能优化]
 创建日期: 2026-08-06
 状态: ✅ 已归档（01-学习/Java/核心机制）
 归属: 01-学习/Java/核心机制
-aliases: [Java 反射详解]
 ---
 
 # Java 反射机制详解（API / 原理 / 性能优化）
@@ -470,8 +469,6 @@ public class LambdaFactoryInvoker {
 | 8 | inflation 可调（`-Dsun.reflect.inflationThreshold`） |
 | 9+ | 模块系统：跨模块强封装，`--add-opens` 开放；`sun.reflect.inflationThreshold` 移除 |
 | 17+ | 强封装默认启用；`Class.newInstance()` 废弃（JDK 9 起）改用 `getDeclaredConstructor().newInstance()`；`java.lang.reflect.Proxy` 等 API 有性能改进，MethodHandle 表现整体优于早期版本 |
-
-- 关联笔记：**代码混淆详解**（见知识库）（混淆会重命名反射目标类/方法，反射场景必须 keep）、**Java 注解机制详解**（见知识库）（反射读取注解）、**Java Agent 与字节码增强详解**（见知识库）（运行期动态机制对比）
 
 ---
 

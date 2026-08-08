@@ -4,13 +4,12 @@ tags: [Java, Tomcat, 源码, 启动流程, Bootstrap, 请求流程]
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
 来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
-aliases: [Tomcat 核心流程剖析]
 ---
 
 # Tomcat 核心流程剖析
 
 > 本文是 Tomcat 学习笔记第 4 章（wolai 转存整理）。剖析 Tomcat 的启动流程与请求处理流程，配合源码跟踪理解。
-> 关联笔记：[tomcat-overview](tomcat-overview.md)、[tomcat-architecture](tomcat-architecture.md)、[tomcat-source-build](tomcat-source-build.md)
+> 关联笔记：[00-Tomcat 学习笔记（总览）](00-Tomcat%20学习笔记（总览）.md)、[01-Tomcat 系统架构与原理剖析](01-Tomcat%20系统架构与原理剖析.md)、[03-Tomcat 源码构建](03-Tomcat%20源码构建.md)
 
 ## 📋 总纲
 
@@ -79,7 +78,7 @@ startup.sh → catalina.sh → Bootstrap.main() → Bootstrap.init()
   → 响应反向返回
 ```
 
-> 详细组件职责见 [tomcat-architecture](tomcat-architecture.md) 第 3、4 章。
+> 详细组件职责见 [01-Tomcat 系统架构与原理剖析](01-Tomcat%20系统架构与原理剖析.md) 第 3、4 章。
 
 ---
 
