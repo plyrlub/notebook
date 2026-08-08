@@ -385,4 +385,4 @@ f. `-XX:+DisableExplicitGC` 可屏蔽 a 类（但注意堆外内存回收依赖�
 - 《深入理解 Java 虚拟机（第 3 版）》周志明
 - Oracle 官方：JDK 9/11/17 垃圾收集器文档（G1 / ZGC / Shenandoah）
 - OpenJDK JEP 333（ZGC）、JEP 189（Shenandoah）、JEP 248（G1）
-- 关联笔记：[[JVM 调优实战]]（参数与场景排查）、[[Java 反射详解]]（JVM 运行机制相关）
+- 关联笔记：**JVM 调优实战**（见知识库）（参数与场景排查）、[Java 反射详解](Java%20反射详解.md)（JVM 运行机制相关）
