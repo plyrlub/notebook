@@ -1,8 +1,8 @@
 ---
-tags: [Lua, 脚本语言, 通用技术, 元表, 协程, 编程语言]
+tags: [Lua, 脚本语言, 其他语言, 元表, 协程, LuaJIT, Redis脚本, 编程语言]
 创建日期: 2026-08-09
-状态: ✅ 已归档（01-学习/通用技术）
-归属: 01-学习/通用技术
+状态: ✅ 已归档（01-学习/其他语言）
+归属: 01-学习/其他语言
 ---
 
 # Lua 语言详解
@@ -19,16 +19,19 @@ tags: [Lua, 脚本语言, 通用技术, 元表, 协程, 编程语言]
 3. 基本数据类型
 4. 运算符
 5. 流程控制
-6. API
+6. API（含 Lua pattern 模式匹配）
 7. function
 8. 可变参数
 9. 元表 metatable 和元方法 metamethod
 10. 面向对象
-11. 协程Coroutines
+11. 协程 Coroutines
 12. 文件操作
 13. 包管理
-14. 操作三方资源
+14. 操作三方资源（MySQL / Redis / Redis Lua 脚本）
 15. 环境变量和隔离
+16. 错误处理（pcall / xpcall）
+17. Lua 5.4 新特性
+18. LuaJIT 与性能优化
 
 
 ## 学习目标
@@ -47,6 +50,10 @@ tags: [Lua, 脚本语言, 通用技术, 元表, 协程, 编程语言]
 10. 用协程实现分段执行与主动让出，写出 fibonacci 协程
 11. 用 io 库读写文件、用 require + package.path 做包管理、用 LuaRocks 装三方库（MySQL/Redis）
 12. 用 _G / _ENV / load 做沙箱环境隔离，安全执行不可信代码
+13. 用 pcall / xpcall / error 处理错误，写出带重试和资源清理的健壮代码
+14. 用 Lua pattern（非正则）做字符串匹配/提取/替换
+15. 写 Redis Lua 脚本实现分布式锁、固定窗口/令牌桶限流（理解原子性保证）
+16. 了解 Lua 5.4 新特性（<const>/<close>/整除//位运算）与 LuaJIT/FFI/GC 优化
 
 ## 前置知识
 
@@ -801,6 +808,77 @@ print(c)
 - string.char(0-255)码表字符，
 
 - string.byte('abc', 1, 3) 字符转码
+
+### 6.3 Lua pattern 模式匹配
+
+> ⚠️ **Lua 的 pattern ≠ 正则表达式**：语法是正则的「减配版」，字符类、量词、捕获都有，但**没有** `\d`/`\w`/`(?i)`/`|` 或/`{n,m}` 次数范围/反向引用/前瞻后顾。写之前先确认它在 Lua 里存在！
+
+**字符类**（一个字符类匹配**一个**字符）：
+
+| pattern | 含义 | 取反（大写） |
+|---|---|---|
+| `%a` | 字母 | `%A` 非字母 |
+| `%d` | 数字 0-9 | `%D` 非数字 |
+| `%w` | 字母+数字 | `%W` 其他 |
+| `%s` | 空白（空格/换行/tab） | `%S` 非空白 |
+| `%l` / `%u` | 小写 / 大写字母 | `%L` / `%U` |
+| `%p` | 标点符号 | `%P` 非标点 |
+| `%c` | 控制字符 | `%C` 非控制 |
+| `%x` | 十六进制数字 | `%X` 非十六进制 |
+| `.` | 任意字符 | — |
+| `%` 本身 | 转义字符（如 `%.` 匹配字面点） | — |
+
+**魔法字符**（需转义才能匹配字面量）：`( ) . % + - * ? [ ] ^ $`
+
+**量词与锚点**：
+
+| pattern | 含义 |
+|---|---|
+| `*` | 0 个或多个（**贪婪**） |
+| `+` | 1 个或多个（贪婪） |
+| `-` | 0 个或多个（**非贪婪**，匹配尽量少） |
+| `?` | 0 个或 1 个 |
+| `^` | 锚定开头（`^%d` 以数字开头） |
+| `$` | 锚定结尾（`%a$` 以字母结尾） |
+| `%bxy` | 平衡匹配：`%b()` 匹配配对的括号（含嵌套） |
+| `[abc]` / `[^abc]` | 字符集 / 取反字符集（`[a-z]` 范围） |
+
+**捕获**：`()` 分组，`string.match` 返回捕获内容（无分组返回整个匹配）：
+
+```lua
+-- 提取 2026-08-09 的年月日
+local y, m, d = string.match("2026-08-09", "(%d+)%-(%d+)%-(%d+)")
+print(y, m, d)  -- 2026 08 09
+
+-- 捕获在替换中的引用：%1 %2
+print(string.gsub("hello world", "(%w+) (%w+)", "%2 %1"))  -- world hello
+```
+
+**常用函数**：
+
+| 函数 | 作用 |
+|---|---|
+| `string.find(s, p, init, plain)` | 找位置，返回起止下标（plain=true 纯文本匹配，不解析 pattern） |
+| `string.match(s, p)` | 返回第一个匹配（或捕获组） |
+| `string.gmatch(s, p)` | 迭代器，for 循环逐个取匹配 |
+| `string.gsub(s, p, repl)` | 全局替换，返回新串+替换次数；repl 可用 `%1` 引用捕获、函数/table 动态替换 |
+
+```lua
+-- gmatch 提取所有单词
+for w in string.gmatch("lua is great", "%a+") do
+    print(w)  -- lua / is / great
+end
+
+-- gsub 用函数动态替换（数字翻倍）
+local s, n = string.gsub("a1b2c3", "%d", function(d) return tonumber(d) * 2 end)
+print(s, n)  -- a2b4c6  3
+```
+
+**易错点**：
+- `%d` 是数字，`\d` 是**普通反斜杠+d**（Lua 字符串转义后是 `d`），别把正则习惯带进来
+- 没有 `|` 或运算、没有 `{n,m}`：多选一用字符集 `[abc]`，精确次数用多次 `%d%d%d%d`
+- `-` 非贪婪和 `*` 贪婪的差异是新手第一坑：`"<b>a</b>c</b>"` 用 `<b>.-</b>` 匹配到第一组即停，`<b>.*</b>` 会吞到最后一个
+- 中文是 UTF-8 多字节，`%w`/`%a` 不匹配中文，需 `[\xE0-\xFF]` 或 utf8 库处理
 
 ## 七、function
 
@@ -1813,9 +1891,93 @@ client:get("key")
 client:del("key")
 ```
 
-#### 14.2.x Redis内部跑lua
+#### 14.2.x Redis 内部跑 Lua
 
-这是比较常见的一个场景，比如分布式锁，限流等场景
+这是比较常见的一个场景，比如分布式锁，限流等场景（详见 14.3）。
+
+#### 14.3 Redis Lua 脚本实战（分布式锁 / 限流）★
+
+> **为什么用 Lua**：Redis 执行 Lua 脚本是**原子**的（脚本整体作为一个操作执行，期间不会有其他命令插入），这是「读-判-写」三步操作安全的根本保证——也是分布式锁、限流、计数器的核心原理。Java 端通过 `DefaultRedisScript<T>` + `redisTemplate.execute(script, keys, args)` 调用。
+
+**执行方式**：
+
+| 命令 | 说明 |
+|---|---|
+| `EVAL script numkeys key... arg...` | 直接执行脚本 |
+| `SCRIPT LOAD script` | 预编译脚本，返回 SHA1 |
+| `EVALSHA sha1 numkeys key... arg...` | 用 SHA1 执行（避免每次传脚本） |
+| `SCRIPT EXISTS sha1` | 检查脚本是否已缓存 |
+
+**Redis 里的 Lua 环境**：
+- 内置 `redis.call(cmd, ...)` / `redis.pcall(cmd, ...)` 调 Redis 命令（pcall 出错返回 err 表而不抛异常）
+- 内置 `KEYS[i]`（key 参数）和 `ARGV[i]`（arg 参数），**访问 key 必须通过 KEYS 传**（集群分片依赖 key 声明）
+- 返回：Lua 值自动转 Redis 类型（table→数组，nil→false，number→整数）
+- **注意版本**：Redis 内置 Lua 5.1——**没有** `goto`、`//` 整除、位运算符（5.3+ 才有 bit 库）、`<const>` 等 5.4 新特性！
+
+**分布式锁（解锁必须用 Lua 保证原子性）**：
+
+```lua
+-- 加锁：SET key value NX PX 30000 已由 Redis 命令原子完成
+-- 解锁：先比较 value（防止删掉别人的锁），再 DEL —— 两步必须 Lua 原子
+if redis.call('get', KEYS[1]) == ARGV[1] then
+    return redis.call('del', KEYS[1])
+else
+    return 0
+end
+```
+
+```java
+// Spring Data Redis 使用示例
+DefaultRedisScript<Long> unlockScript = new DefaultRedisScript<>();
+unlockScript.setScriptText(
+    "if redis.call('get', KEYS[1]) == ARGV[1] then " +
+    "return redis.call('del', KEYS[1]) else return 0 end");
+unlockScript.setResultType(Long.class);
+redisTemplate.execute(unlockScript, Collections.singletonList("lock:order:1001"), requestId);
+```
+
+> 加锁必须带唯一标识 value（如 UUID + 线程号）：否则 A 持锁超时后 B 加锁，A 释放时会把 B 的锁删掉（经典误删）。
+
+**固定窗口限流（Lua 原子 读-判-写）**：
+
+```lua
+-- KEYS[1]=限流 key, ARGV[1]=窗口毫秒, ARGV[2]=阈值
+local current = redis.call('INCR', KEYS[1])
+if current == 1 then
+    redis.call('PEXPIRE', KEYS[1], ARGV[1])  -- 第一次设置窗口过期
+end
+return current <= tonumber(ARGV[2])
+```
+
+**令牌桶限流（滑动窗口版）**：
+
+```lua
+-- KEYS[1]=令牌桶key, ARGV[1]=容量, ARGV[2]=速率(每秒), ARGV[3]=当前时间ms, ARGV[4]=请求token数
+local tokenKey, timeKey = KEYS[1], KEYS[1] .. ':time'
+local capacity, rate = tonumber(ARGV[1]), tonumber(ARGV[2])
+local now, need = tonumber(ARGV[3]), tonumber(ARGV[4])
+
+local tokens = tonumber(redis.call('GET', tokenKey) or capacity)
+local lastTime = tonumber(redis.call('GET', timeKey) or now)
+-- 按时间差补令牌
+local delta = math.max(0, (now - lastTime) / 1000)
+tokens = math.min(capacity, tokens + delta * rate)
+redis.call('SET', tokenKey, tokens)
+redis.call('SET', timeKey, now)
+
+if tokens >= need then
+    redis.call('SET', tokenKey, tokens - need)
+    return 1
+else
+    return 0
+end
+```
+
+**易错点**：
+- 脚本内**不能**用全局变量（5.1 环境隔离，直接报错），所有中间值必须 `local`
+- `redis.call` 出错会抛异常中断脚本，用 `redis.pcall` 可捕获返回 `{err=...}` 表
+- 不要在脚本里 `KEYS[1]` 拼接字符串做 key（`KEYS[1]..':time'` 可以，但 `KEYS[1]` 必须是**调用方传入**的，不能从 ARGV 拼——集群模式下 key 无法预声明会报 CROSSSLOT）
+
 
 ## 十五、环境变量和隔离
 
@@ -1938,6 +2100,190 @@ end
 
 ---
 
+## 十六、错误处理（pcall / xpcall / error）
+
+Lua 没有 try-catch，错误处理靠**保护调用** + **错误抛出**两个函数配合。
+
+### 16.1 error 与 assert（抛出）
+
+| 函数 | 作用 |
+|---|---|
+| `error(msg [, level])` | 抛出错误，中断执行；level 控制报错位置信息层级 |
+| `assert(cond [, msg])` | cond 为假时抛出（默认 msg="assertion failed!"），为真返回 cond 及后续参数 |
+
+```lua
+local function divide(a, b)
+    assert(b ~= 0, "除数不能为 0")
+    return a / b
+end
+divide(1, 0)  -- error: 除数不能为 0
+```
+
+### 16.2 pcall（保护调用，类似 try-catch）
+
+```lua
+local ok, result = pcall(function()
+    error("出错了")
+end)
+print(ok, result)  -- false  出错了
+
+-- ok=false 时 result 是错误信息；ok=true 时是函数返回值（可多个）
+local ok2, a, b = pcall(function() return 1, 2 end)
+print(ok2, a, b)  -- true  1  2
+```
+
+**规律**：`pcall` 永远返回 `(ok, ...)`——第一个值是布尔，错误被**捕获不向上抛**，程序继续运行。
+
+### 16.3 xpcall（带调试回溯）
+
+`xpcall(f, errHandler)`：出错时先调 errHandler（通常用 `debug.traceback`），得到完整调用栈，定位错误来源：
+
+```lua
+local ok, err = xpcall(function()
+    local t = {}
+    print(t.a.b)  -- 索引 nil 报错
+end, debug.traceback)
+print(ok)
+print(err)  -- 含 stack traceback 完整调用链
+```
+
+### 16.4 错误处理的实践模式
+
+```lua
+-- ① 简单保护：不关心错误细节
+local ok, err = pcall(risky_func)
+if not ok then log(err) end
+
+-- ② 重试模式：可恢复错误重试 N 次
+local function retry(fn, n)
+    for i = 1, n do
+        local ok, res = pcall(fn)
+        if ok then return res end
+    end
+    error("重试 " .. n .. " 次仍失败")
+end
+
+-- ③ 资源清理：无 finally，用「收尾函数 + pcall」手动保证
+local f = io.open("a.txt", "w")
+local ok, err = pcall(function() f:write("data") end)
+f:close()  -- 无论成功失败都关闭
+if not ok then error(err) end
+```
+
+**易错点**：
+- `error()` 抛出的可以是**任意值**（字符串/table），团队规范里约定传 table 可带错误码
+- pcall 只能捕获**运行时错误**，语法错误在加载阶段（`load`/`loadfile`）就抛了，要先用 `load` 检查
+- 协程里 pcall 捕获的是**该协程内**的错误；跨协程错误要配合 `coroutine.resume` 的返回值处理
+- **性能**：pcall 有开销，不要在热循环里无谓包裹；只保护「可能失败」的边界（IO、外部调用）
+
+## 十七、Lua 5.4 新特性
+
+> 版本基线：本笔记实测环境 Lua 5.4（`_G._VERSION` 输出 Lua 5.4）。以下特性 5.4 引入，**LuaJIT 2.1 / Redis 内置 5.1 均不支持**，写 OpenResty 和 Redis 脚本时注意！
+
+### 17.1 `<const>` 常量变量 与 `<close>` 收尾变量
+
+```lua
+-- <const>：只读变量，赋值报错（编译期检查）
+local x <const> = 42
+-- x = 43  -- 报错: attempt to assign to const variable 'x'
+
+-- <close>：作用域结束时自动调用 __close 元方法（类似 try-with-resources）
+local f <close> = io.open("a.txt", "w")
+-- 函数/作用域结束自动 f:close()
+```
+
+`<close>` 是 5.4 最实用的新特性：文件、socket、锁等资源**自动释放**，不用手写收尾。
+
+### 17.2 整数除法 `//` 与位运算
+
+```lua
+print(7 / 2)   -- 3.5  浮点除法（5.3+ 就有）
+print(7 // 2)  -- 3    整数除法，向下取整（-7//2 = -4）
+print(7 % 2)   -- 1    取模
+
+-- 位运算（5.3+，5.4 完善）
+print(5 & 3)   -- 1    AND
+print(5 | 3)   -- 7    OR
+print(5 ~ 3)   -- 6    XOR
+print(~5)      -- -6   取反（按位）
+print(1 << 4)  -- 16   左移
+print(32 >> 2) -- 8    右移
+```
+
+### 17.3 其他 5.4 变化
+
+| 特性 | 说明 |
+|---|---|
+| `string.pack/unpack` | 二进制打包/解包（替代 `string.format` 的 `%c` 局限）：`string.pack(">i4", 123)` |
+| `utf8` 库 | UTF-8 处理：`utf8.len`/`utf8.char`/`utf8.codes`（中文长度正确） |
+| 分代 GC | `collectgarbage("generational")` 切换，短生命周期对象多的程序更高效 |
+| `math.random` 改进 | `math.randomseed` 更可靠（支持多参数） |
+| `print` 增强 | 可自定义 `print` 行为（改 `print` 全局函数） |
+| `warn` 函数 | `warn("...")` 输出警告（可被 `warn` 钩子拦截） |
+
+**从 5.1 迁移注意**：
+- `setfenv`/`getfenv` 已删除（5.2 起），用 `_ENV`（见 15.2）
+- `table.getn`、`math.mod`、`string.gfind` 已删除，用 `#`、`%`、`gmatch`
+- `unpack` 移到 `table.unpack`（全局 unpack 5.1 有、5.2+ 移除）
+- `#` 对含 nil 空洞的数组**未定义行为**（可能返回任意值），不要依赖
+
+## 十八、LuaJIT 与性能优化
+
+### 18.1 LuaJIT 是什么
+
+LuaJIT 是 Lua 的 **JIT（Just-In-Time）编译器**实现：解释执行 + 热点代码编译为机器码，性能比标准 Lua 解释器高 **10~50 倍**（接近 C 的 1/2~1/3）。**OpenResty 1.5.8.1 起默认启用 LuaJIT**——你写 Nginx Lua 跑的就是 LuaJIT，不是标准 Lua！
+
+| 对比 | 标准 Lua 5.4 | LuaJIT 2.1 |
+|---|---|---|
+| 执行方式 | 纯解释执行 | 解释 + JIT 编译机器码 |
+| 性能 | 基准 | 快 10~50 倍 |
+| 版本基线 | 5.4 | **5.1 语法** + 部分 5.2/5.3 扩展 |
+| 内存限制 | 无（分代 GC） | GC64 模式前 2GB（OpenResty 已默认 GC64） |
+| 典型场景 | 嵌入式/通用 | OpenResty、游戏（性能敏感） |
+
+**陷阱**：LuaJIT 是 5.1 语法！5.4 的 `<const>`、`//` 整除、位运算 `&|~` 在 LuaJIT 里**都没有**（位运算 LuaJIT 有自己的 `bit` 库：`bit.band`/`bit.bor`）。OpenResty 写代码要按 5.1 规范，别用 5.4 语法。
+
+### 18.2 FFI：零开销调用 C
+
+FFI（Foreign Function Interface）是 LuaJIT 的王牌：**直接在 Lua 里声明并调用 C 函数/结构体**，无 C 绑定层，性能接近原生 C：
+
+```lua
+local ffi = require("ffi")
+ffi.cdef**
+    int getpid(void);
+    double sqrt(double x);
+**（见知识库）
+print(ffi.C.getpid())       -- 进程号（直接调 libc）
+print(ffi.C.sqrt(16))       -- 4.0
+```
+
+- 相比标准 Lua 的 LuaJIT `ffi` 是内置模块（标准 Lua 需要 C API 扩展才能调 C）
+- OpenResty 的 `lua-resty-core` 就是 FFI 封装 Nginx C API（`ngx.re`/`ngx.ctx`），性能比纯 Lua 实现高
+- **注意**：FFI 与 JIT 配合最好，纯解释模式下降级为 C 函数调用开销
+
+### 18.3 GC 与性能优化建议
+
+**GC 控制**：
+
+```lua
+collectgarbage("collect")        -- 手动触发完整 GC
+collectgarbage("count")          -- 返回当前内存(KB)
+collectgarbage("setpause", 200)  -- 调整 GC 节奏
+collectgarbage("generational")   -- 5.4: 切分代 GC
+```
+
+**性能优化清单**（OpenResty/游戏场景）：
+
+1. **local 化一切**：全局变量访问是 `_G` 表查找，local 是寄存器访问，快 10 倍以上；热循环里把 `math.floor` 等存 local
+2. **字符串拼接用 table.concat**：`s = s .. "x"` 每次创建新串 O(n²)，`table.concat` 线性
+3. **避免创建临时 table**：循环里 `{}` 触发 GC 压力，复用 table 或值类型
+4. **热点函数别用 pcall**：有开销，边界保护用 `assert` 或前置判断
+5. **数值用整数**：Lua 数字是 double，整数在 JIT 下更快；大数运算注意精度
+6. **表预分配**：`table.new(n, m)`（LuaJIT 扩展）预分配避免 rehash
+7. **避开 JIT 黑洞**：`string.gsub` 复杂 pattern、`load` 动态编译、`setmetatable` 某些场景会触发解释执行（NYI），热点路径避免
+
+---
+
 ## 最佳实践
 
 1. **变量默认全局，慎用**：Lua 里 `a = 1` 是全局变量，函数内赋值前一定要 `local`，否则污染 _G 且难以排查
@@ -1948,6 +2294,9 @@ end
 6. **元表运算小心死循环**：`__newindex` 函数内用 `rawset(t,k,v)` 而不是 `t[k]=v`，否则无限递归 OOM
 7. **执行不可信代码必须沙箱**：用 `load(code, ..., {白名单})` + `_ENV` 限制，永远用白名单而非黑名单
 8. **协程是协作式**：切换由当前协程主动 yield 控制，不是抢占式，别当线程用
+9. **写 OpenResty/Redis 脚本按 Lua 5.1 规范**：LuaJIT 2.1 和 Redis 内置都是 5.1，5.4 的 <const>///整除/位运算不能用；位运算用 bit 库
+10. **Redis Lua 脚本原子性是分布式锁的前提**：解锁「比较 value + DEL」必须放脚本里，Java 端用 DefaultRedisScript 调用
+11. **热循环性能**：local 化、table.concat 拼串、避免临时 table、热点路径避开 string.gsub 复杂 pattern
 
 ## 常见踩坑
 
@@ -1962,7 +2311,7 @@ end
 
 ## 小结
 
-Lua 是一门轻量级嵌入式脚本语言（核心解释器 < 10KB），用**一个 table 打天下**：数组、Map、对象、模块都是它。它的进阶精髓在三块——**元表**（运算符重载与继承）、**协程**（协作式分段执行）、**环境隔离**（沙箱安全执行）。掌握这三块 + table/string 标准库，就掌握了 Lua 的 80%。
+Lua 是一门轻量级嵌入式脚本语言（核心解释器 < 10KB），用**一个 table 打天下**：数组、Map、对象、模块都是它。它的进阶精髓在四块——**元表**（运算符重载与继承）、**协程**（协作式分段执行）、**环境隔离**（沙箱安全执行）、**错误处理**（pcall 保护调用）。掌握这些 + table/string 标准库（含 pattern 模式匹配），再会写 **Redis Lua 脚本**（分布式锁/限流）和了解 **LuaJIT/FFI**（OpenResty 场景），就掌握了 Lua 的 90%。
 
 ## 下一篇
 

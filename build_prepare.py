@@ -63,8 +63,8 @@ BUILDTOOL_RENAME_MAP = {
     "Maven 学习笔记（总览）.md": "maven-overview.md",
 }
 
-# ============ 通用技术：Lua 主题 ============
-LUA_SRC = os.path.join(REPO, "通用技术")
+# ============ 其他语言：Lua 主题 ============
+LUA_SRC = os.path.join(REPO, "其他语言")
 LUA_RENAME_MAP = {
     "Lua 语言详解.md": "lua-guide.md",
 }
@@ -139,12 +139,13 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed):
     nav_lines.append("nav:")
     nav_lines.append("  - 主页: index.md")
 
-    # ===== 通用技术主题：Lua =====
-    nav_lines.append("  - 通用技术:")
+    # ===== 其他语言主题：Lua =====
+    nav_lines.append("  - 其他语言:")
     nav_lines.append("    - Lua:")
     if lua_renamed:
         for en, cn in sorted(lua_renamed.get(".", {}).items()):
-            nav_lines.append("      - %s: 通用技术/%s" % (cn, en))
+            title = LUA_NAV_TITLES.get(en, cn)
+            nav_lines.append("      - %s: 其他语言/%s" % (title, en))
 
     # ===== Java 主题：两级折叠（核心机制 / JVM / 框架含 Tomcat）=====
     nav_lines.append("  - Java:")
@@ -315,13 +316,13 @@ def prepare():
         print("WARNING: Nginx/ dir not found")
         nginx_renamed = {}
 
-    # 3.5 通用技术目录（Lua）— 需合并 Nginx 映射（Lua 笔记链接指向 Nginx 系列）
+    # 3.5 其他语言目录（Lua）— 需合并 Nginx 映射（Lua 笔记链接指向 Nginx 系列）
     if os.path.exists(LUA_SRC):
         lua_merge_map = dict(LUA_RENAME_MAP)
         lua_merge_map.update(nginx_map)  # 让 Lua 里的 Nginx 链接也能转英文
-        lua_renamed = prepare_source(LUA_SRC, "通用技术", lua_merge_map, convert=True)
+        lua_renamed = prepare_source(LUA_SRC, "其他语言", lua_merge_map, convert=True)
     else:
-        print("WARNING: 通用技术/ dir not found")
+        print("WARNING: 其他语言/ dir not found")
         lua_renamed = {}
 
     # 4. 生成 mkdocs.yml
