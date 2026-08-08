@@ -63,6 +63,15 @@ BUILDTOOL_RENAME_MAP = {
     "Maven 学习笔记（总览）.md": "maven-overview.md",
 }
 
+# ============ 通用技术：Lua 主题 ============
+LUA_SRC = os.path.join(REPO, "通用技术")
+LUA_RENAME_MAP = {
+    "Lua 语言详解.md": "lua-guide.md",
+}
+LUA_NAV_TITLES = {
+    "lua-guide.md": "Lua 语言详解",
+}
+
 # Nginx 子目录分类（中文目录名 → 导航分组显示名）
 NGINX_DIRS = {
     "01-基础认知": "01 基础认知",
@@ -124,11 +133,18 @@ def convert_links(content, rename_map, base_dir=""):
     return re.sub(r"\[([^\]]+)\]\(([^)]+\.md[^)]*)\)", repl, content)
 
 
-def generate_mkdocs_yml(java_renamed, nginx_renamed):
+def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed):
     """生成 mkdocs.yml（nav 两级折叠：主题 → 子域分组 → 笔记，默认收起）"""
     nav_lines = []
     nav_lines.append("nav:")
     nav_lines.append("  - 主页: index.md")
+
+    # ===== 通用技术主题：Lua =====
+    nav_lines.append("  - 通用技术:")
+    nav_lines.append("    - Lua:")
+    if lua_renamed:
+        for en, cn in sorted(lua_renamed.get(".", {}).items()):
+            nav_lines.append("      - %s: 通用技术/%s" % (cn, en))
 
     # ===== Java 主题：两级折叠（核心机制 / JVM / 框架含 Tomcat）=====
     nav_lines.append("  - Java:")
@@ -268,10 +284,11 @@ def prepare():
     src_index = os.path.join(REPO, "index.md")
     if os.path.exists(src_index):
         content = open(src_index, encoding="utf-8").read()
-        # index.md 里可能引用 Java/Nginx/构建工具 笔记，用合并映射转换
+        # index.md 里可能引用 Java/Nginx/构建工具/Lua 笔记，用合并映射转换
         merged_map = dict(JAVA_RENAME_MAP)
         merged_map.update(nginx_map)
         merged_map.update(BUILDTOOL_RENAME_MAP)
+        merged_map.update(LUA_RENAME_MAP)
         content = convert_links(content, merged_map)
         with open(os.path.join(DST, "index.md"), "w", encoding="utf-8") as out:
             out.write(content)
@@ -298,8 +315,17 @@ def prepare():
         print("WARNING: Nginx/ dir not found")
         nginx_renamed = {}
 
+    # 3.5 通用技术目录（Lua）— 需合并 Nginx 映射（Lua 笔记链接指向 Nginx 系列）
+    if os.path.exists(LUA_SRC):
+        lua_merge_map = dict(LUA_RENAME_MAP)
+        lua_merge_map.update(nginx_map)  # 让 Lua 里的 Nginx 链接也能转英文
+        lua_renamed = prepare_source(LUA_SRC, "通用技术", lua_merge_map, convert=True)
+    else:
+        print("WARNING: 通用技术/ dir not found")
+        lua_renamed = {}
+
     # 4. 生成 mkdocs.yml
-    generate_mkdocs_yml(None, nginx_renamed)
+    generate_mkdocs_yml(None, nginx_renamed, lua_renamed)
 
 
 if __name__ == "__main__":
