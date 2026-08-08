@@ -124,6 +124,14 @@ def prepare():
         shutil.rmtree(DST)
     os.makedirs(DST)
 
+    # 1.5 复制主页 index.md（nav 引用它）
+    src_index = os.path.join(REPO, "index.md")
+    if os.path.exists(src_index):
+        shutil.copy2(src_index, os.path.join(DST, "index.md"))
+        print("index.md copied to docs/")
+    else:
+        print("WARNING: index.md not found in repo root")
+
     # 2. 遍历 Java/ 目录，复制 + 重命名（保留 Java/ 目录层级）
     #    md 文件同步转换内容里的内部链接（中文名 → 英文名）
     copied = 0
