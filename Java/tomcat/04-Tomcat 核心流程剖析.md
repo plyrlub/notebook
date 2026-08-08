@@ -9,7 +9,7 @@ tags: [Java, Tomcat, 源码, 启动流程, Bootstrap, 请求流程]
 # Tomcat 核心流程剖析
 
 > 本文是 Tomcat 学习笔记第 4 章（wolai 转存整理）。剖析 Tomcat 的启动流程与请求处理流程，配合源码跟踪理解。
-> 关联笔记：[[00-Tomcat 学习笔记（总览）]]、[[01-Tomcat 系统架构与原理剖析]]、[[03-Tomcat 源码构建]]
+> 关联笔记：[00-Tomcat 学习笔记（总览）](00-Tomcat%20学习笔记（总览）.md)、[01-Tomcat 系统架构与原理剖析](01-Tomcat%20系统架构与原理剖析.md)、[03-Tomcat 源码构建](03-Tomcat%20源码构建.md)
 
 ## 📋 总纲
 
@@ -21,7 +21,7 @@ tags: [Java, Tomcat, 源码, 启动流程, Bootstrap, 请求流程]
 
 ## 1. 启动流程
 
-![[assets/ch4_00.png]]
+![](assets/ch4_00.png)
 
 ### 1.1 startup.sh
 
@@ -31,7 +31,7 @@ startup.sh
         └── 之后指向 org.apache.catalina.startup.Bootstrap 的 main 方法
 ```
 
-![[assets/ch4_01.png]]
+![](assets/ch4_01.png)
 
 - 用户在 bin 目录执行 `startup.sh`
 - startup.sh 内部调用 `catalina.sh start`
@@ -48,7 +48,7 @@ Bootstrap.main()
         └── 其他如图顺代码（daemon.start() → Catalina.start()）
 ```
 
-![[assets/ch4_01.png]]
+![](assets/ch4_01.png)
 
 关键点：
 
@@ -78,7 +78,7 @@ startup.sh → catalina.sh → Bootstrap.main() → Bootstrap.init()
   → 响应反向返回
 ```
 
-> 详细组件职责见 [[01-Tomcat 系统架构与原理剖析]] 第 3、4 章。
+> 详细组件职责见 [01-Tomcat 系统架构与原理剖析](01-Tomcat%20系统架构与原理剖析.md) 第 3、4 章。
 
 ---
 
@@ -88,7 +88,7 @@ startup.sh → catalina.sh → Bootstrap.main() → Bootstrap.init()
 
 ### 3.1 新建 Web 项目
 
-![[assets/ch4_02.png]]
+![](assets/ch4_02.png)
 
 - 用 IDE 新建一个 Web 项目（如 web_demo），写一个简单的 Servlet（hello）
 - 可以在这里进行**部署到 Tomcat 成品中测试**（先验证业务代码正确）
@@ -97,11 +97,11 @@ startup.sh → catalina.sh → Bootstrap.main() → Bootstrap.init()
 
 将上一步项目部署测试后 **War 包解压后的文件夹**，拷贝到源代码的 `webapps` 目录中：
 
-![[assets/ch4_03.png]]
+![](assets/ch4_03.png)
 
 ### 3.3 启动源码工程
 
-![[assets/ch4_04.png]]
+![](assets/ch4_04.png)
 
 此处启动项目之后，可在浏览器访问：
 

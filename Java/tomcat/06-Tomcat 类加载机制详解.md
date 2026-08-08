@@ -3,14 +3,14 @@ tags: [Java, Tomcat, 类加载, 双亲委派, WebAppClassLoader, 容器]
 创建日期: 2026-08-07
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
-来源: wolai 笔记转存第 5 章深度展开（[[05-Tomcat 类加载机制剖析]]）
+来源: wolai 笔记转存第 5 章深度展开（[05-Tomcat 类加载机制剖析](05-Tomcat%20类加载机制剖析.md)）
 ---
 
 # Tomcat 类加载机制详解（双亲委派的打破与类隔离）
 
-> 本篇聚焦 Tomcat 的**类加载机制**（WebAppClassLoader 与双亲委派的关系），是 [[05-Tomcat 类加载机制剖析]] 的深度展开篇。
-> 前置知识：[[Java 类加载机制与双亲委派详解]]（JDK 侧的双亲委派模型）
-> 系列索引：[[00-Tomcat 学习笔记（总览）]]
+> 本篇聚焦 Tomcat 的**类加载机制**（WebAppClassLoader 与双亲委派的关系），是 [05-Tomcat 类加载机制剖析](05-Tomcat%20类加载机制剖析.md) 的深度展开篇。
+> 前置知识：**Java 类加载机制与双亲委派详解**（JDK 侧的双亲委派模型）
+> 系列索引：[00-Tomcat 学习笔记（总览）](00-Tomcat%20学习笔记（总览）.md)
 
 ## 📋 总纲
 
@@ -125,7 +125,7 @@ WebAppClassLoader.loadClass(name):
 - 新 ClassLoader 加载出**全新的 Class 对象**（即使类名相同）
 - 旧 ClassLoader 及其加载的类，在**没有引用后**被 GC 回收（元空间）
 - **坑**：若旧类被外部持有引用（如静态变量、线程局部），旧 ClassLoader 无法回收 → 元空间泄漏（经典问题）
-- 详细热部署机制见 [[Java 类加载机制与双亲委派详解]] 第 6 节（类唯一性 + 自定义 ClassLoader 代码）
+- 详细热部署机制见 **Java 类加载机制与双亲委派详解** 第 6 节（类唯一性 + 自定义 ClassLoader 代码）
 
 ---
 
@@ -179,4 +179,4 @@ WebAppClassLoader.loadClass(name):
 ## 参考
 
 - Tomcat 官方架构文档（Class Loader HOW-TO）
-- 关联笔记：[[Java 类加载机制与双亲委派详解]]（JDK 侧机制）、[[Java SPI 机制详解]]（另一种打破方式：线程上下文类加载器）
+- 关联笔记：**Java 类加载机制与双亲委派详解**（JDK 侧机制）、**Java SPI 机制详解**（另一种打破方式：线程上下文类加载器）

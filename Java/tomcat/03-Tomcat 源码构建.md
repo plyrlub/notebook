@@ -9,7 +9,7 @@ tags: [Java, Tomcat, 源码, 构建, IDE, Bootstrap]
 # Tomcat 源码构建
 
 > 本文是 Tomcat 学习笔记第 3 章（wolai 转存整理）。记录从源码下载到 IDE 运行 Tomcat 的全过程，便于后续源码级学习。
-> 关联笔记：[[00-Tomcat 学习笔记（总览）]]、[[04-Tomcat 核心流程剖析]]、[[01-Tomcat 系统架构与原理剖析]]
+> 关联笔记：[00-Tomcat 学习笔记（总览）](00-Tomcat%20学习笔记（总览）.md)、[04-Tomcat 核心流程剖析](04-Tomcat%20核心流程剖析.md)、[01-Tomcat 系统架构与原理剖析](01-Tomcat%20系统架构与原理剖析.md)
 
 ## 📋 总纲
 
@@ -89,7 +89,7 @@ tomcat-src/
 -Dcatalina.base=/path/to/tomcat-src/source
 ```
 
-![[assets/ch3_00.png]]
+![](assets/ch3_00.png)
 
 ---
 
@@ -97,11 +97,11 @@ tomcat-src/
 
 **③ 此时运行成功；浏览器访问会提示：**
 
-![[assets/ch3_01.png]]
+![](assets/ch3_01.png)
 
 **④ 手动加载**
 
-![[assets/ch3_02.png]]
+![](assets/ch3_02.png)
 
 此时访问 `http://localhost:8080/`，可以正常看见 Tomcat 默认页面，表示 **Tomcat 源代码环境正常构建完成**。
 
@@ -119,7 +119,7 @@ tomcat-src/
 
 ### Q3：源码运行和成品 Tomcat 有什么区别？
 
-答：源码运行用 IDE 里的 Bootstrap main 方法直接启动，方便断点调试；成品 Tomcat 通过 startup.sh 启动。两者加载的配置、类路径本质相同，源码运行更适合学习源码流程（见 [[04-Tomcat 核心流程剖析]]）。
+答：源码运行用 IDE 里的 Bootstrap main 方法直接启动，方便断点调试；成品 Tomcat 通过 startup.sh 启动。两者加载的配置、类路径本质相同，源码运行更适合学习源码流程（见 [04-Tomcat 核心流程剖析](04-Tomcat%20核心流程剖析.md)）。
 
 ---
 
