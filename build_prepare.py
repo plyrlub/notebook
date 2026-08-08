@@ -101,7 +101,6 @@ theme:
   features:
     - navigation.sections
     - search.suggest
-    - toc.integrate
 
 markdown_extensions:
   - admonition
