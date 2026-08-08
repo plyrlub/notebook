@@ -179,6 +179,7 @@ theme:
 markdown_extensions:
   - admonition
   - codehilite
+  - nl2br
   - toc:
       permalink: true
   - tables
