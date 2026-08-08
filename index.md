@@ -27,6 +27,15 @@
 - [Tomcat 学习笔记（总览）](Java/tomcat/00-Tomcat%20学习笔记（总览）.md)
     基于 8.5.x：架构/Coyote/Catalina、server.xml 全标签、源码构建、启动流程、类加载、HTTPS、性能优化 + 类加载深度篇
 
+### 构建工具
+
+- [构建工具总览（Maven vs Gradle 选型对比）](Java/构建工具/00-构建工具总览（Maven%20vs%20Gradle%20选型对比）.md)
+    两大构建工具定位、核心差异与选型建议
+- [Maven 总览](Java/构建工具/Maven/00-Maven%20总览.md)
+    Maven 进阶 5 篇：依赖与仓库/生命周期与插件/私服与测试/版本与灵活构建
+- [Gradle 学习笔记（总览）](Java/构建工具/Gradle/Gradle%20学习笔记（总览）.md)
+    Gradle 核心模型：Task/生命周期/DSL/依赖冲突/多项目构建/性能优化
+
 ---
 
 ## 服务器

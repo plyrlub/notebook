@@ -9,7 +9,7 @@ tags: [构建工具, Maven, Gradle, 选型, Java, 对比]
 
 > 版本基线：Maven 3.9.x / Gradle 8.x 为主线（本机实测：Maven 3.9.16 + JDK 17；Gradle 5.1.1 + JDK 8，见 [Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md) 🧪 小节）
 > 受众：Java 后端开发，已掌握至少一种构建工具的基础用法，想系统理解 Maven 与 Gradle 的差异并做选型决策。
-> 关联笔记：[Maven 学习笔记（总览）](Maven/Maven%20学习笔记（总览）.md)、[Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md)
+> 关联笔记：[Maven 学习笔记（总览）](Maven/00-Maven%20总览.md)、[Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md)
 
 ## 📋 总纲
 
@@ -34,7 +34,7 @@ tags: [构建工具, Maven, Gradle, 选型, Java, 对比]
 
 ## 前置知识
 
-- [Maven 学习笔记（总览）](Maven/Maven%20学习笔记（总览）.md)——Maven 的依赖配置、生命周期、插件机制
+- [Maven 学习笔记（总览）](Maven/00-Maven%20总览.md)——Maven 的依赖配置、生命周期、插件机制
 - [Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md)——Gradle 的 Task、Configuration、DSL 机制
 - 需掌握：Java 项目结构、依赖坐标（groupId:artifactId:version）基本概念
 
@@ -243,7 +243,7 @@ A → D → X(2.0)        版本 2.0  ← 选这个（版本更高）
 
 ## 相关笔记（导航）
 
-- [Maven 学习笔记（总览）](Maven/Maven%20学习笔记（总览）.md)——Maven 详细机制
+- [Maven 学习笔记（总览）](Maven/00-Maven%20总览.md)——Maven 详细机制
 - [Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md)——Gradle 详细机制
 
 ## 参考资料

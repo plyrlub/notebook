@@ -56,11 +56,16 @@ NGINX_SRC = os.path.join(REPO, "Nginx")
 
 # ============ 构建工具：Java 下二级分组（Maven/Gradle 子目录 + 00 总览）============
 BUILDTOOL_SRC = os.path.join(REPO, "Java", "构建工具")
-# basename → 英文 slug（构建工具 3 篇 basename 唯一）
+# basename → 英文 slug
 BUILDTOOL_RENAME_MAP = {
     "00-构建工具总览（Maven vs Gradle 选型对比）.md": "buildtool-overview.md",
     "Gradle 学习笔记（总览）.md": "gradle-overview.md",
-    "Maven 学习笔记（总览）.md": "maven-overview.md",
+    # Maven 系列（拆分为 5 篇）
+    "00-Maven 总览.md": "maven-00.md",
+    "01-依赖与仓库.md": "maven-01.md",
+    "02-生命周期与插件.md": "maven-02.md",
+    "03-私服与测试.md": "maven-03.md",
+    "04-版本与灵活构建.md": "maven-04.md",
 }
 
 # ============ 其他语言：Lua 主题（NN- 子目录系列）============
@@ -186,11 +191,15 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed):
         if en in JAVA_NAV_TITLES:
             nav_lines.append("      - %s: Java/tomcat/%s" % (JAVA_NAV_TITLES[en], en))
 
-    # Java 构建工具（Maven/Gradle + 00 总览）
+    # Java 构建工具（Maven 系列 + Gradle + 00 总览）
     nav_lines.append("    - 构建工具:")
     nav_lines.append("      - 构建工具总览（Maven vs Gradle 选型）: Java/构建工具/buildtool-overview.md")
+    nav_lines.append("      - Maven 总览: Java/构建工具/Maven/maven-00.md")
+    nav_lines.append("      - Maven 依赖与仓库: Java/构建工具/Maven/maven-01.md")
+    nav_lines.append("      - Maven 生命周期与插件: Java/构建工具/Maven/maven-02.md")
+    nav_lines.append("      - Maven 私服与测试: Java/构建工具/Maven/maven-03.md")
+    nav_lines.append("      - Maven 版本与灵活构建: Java/构建工具/Maven/maven-04.md")
     nav_lines.append("      - Gradle 学习笔记（总览）: Java/构建工具/Gradle/gradle-overview.md")
-    nav_lines.append("      - Maven 学习笔记（总览）: Java/构建工具/Maven/maven-overview.md")
 
     # ===== 服务器主题：Nginx（含 01-08 子分组）=====
     nav_lines.append("  - 服务器:")
