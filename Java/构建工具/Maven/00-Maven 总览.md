@@ -15,7 +15,7 @@ tags: [Maven, 构建工具, Java, 依赖管理]
 
 > 版本基线：Maven 3.9.x 为主线（本机实测：Maven 3.9.16 + JDK 17）
 > 受众：Java 后端开发，已掌握 Maven 基本使用（坐标、依赖声明、常用命令），想系统补齐**不常用的进阶知识点**（依赖调解/生命周期细节/私服/版本管理）。
-> 关联笔记：[00-构建工具总览（Maven vs Gradle 选型对比）](../buildtool-overview.md)、[Gradle 学习笔记（总览）](../Gradle/gradle-overview.md)
+> 关联笔记：[00-构建工具总览（Maven vs Gradle 选型对比）](../00-构建工具总览（Maven vs Gradle 选型对比）.md)、[Gradle 学习笔记（总览）](../Gradle/Gradle 学习笔记（总览）.md)
 
 ## 📋 总纲
 
@@ -43,8 +43,8 @@ tags: [Maven, 构建工具, Java, 依赖管理]
 
 ## 前置知识
 
-- [00-构建工具总览（Maven vs Gradle 选型对比）](../buildtool-overview.md)——构建工具定位与选型
-- [Gradle 学习笔记（总览）](../Gradle/gradle-overview.md)——对照理解两种构建模型的差异
+- [00-构建工具总览（Maven vs Gradle 选型对比）](../00-构建工具总览（Maven vs Gradle 选型对比）.md)——构建工具定位与选型
+- [Gradle 学习笔记（总览）](../Gradle/Gradle 学习笔记（总览）.md)——对照理解两种构建模型的差异
 - 需掌握：Maven 坐标（groupId:artifactId:version）、常用命令（mvn compile/test/package）、本地仓库 ~/.m2 基本概念
 
 ---
@@ -54,4 +54,5 @@ tags: [Maven, 构建工具, Java, 依赖管理]
 ---
 
 本文档主要是对自己不常用的记录下来而已，一些常用的已忽略。
-# 1. 依赖配置
+
+> 系列导航：[01-依赖与仓库](01-依赖与仓库.md) → [02-生命周期与插件](02-生命周期与插件.md) → [03-私服与测试](03-私服与测试.md) → [04-版本与灵活构建](04-版本与灵活构建.md)
