@@ -116,35 +116,48 @@ def convert_links(content, rename_map, base_dir=""):
 
 
 def generate_mkdocs_yml(java_renamed, nginx_renamed):
-    """生成 mkdocs.yml（nav 显示中文标题，URL 英文）"""
+    """生成 mkdocs.yml（nav 两级折叠：主题 → 子域分组 → 笔记，默认收起）"""
     nav_lines = []
     nav_lines.append("nav:")
     nav_lines.append("  - 主页: index.md")
 
-    # Java 部分（保留原逻辑）
+    # ===== Java 主题：两级折叠（核心机制 / JVM / 框架含 Tomcat）=====
     nav_lines.append("  - Java:")
-    for en, title in JAVA_NAV_TITLES.items():
-        if not en.startswith("tomcat-"):
-            nav_lines.append("    - %s: Java/%s" % (title, en))
-    nav_lines.append("  - Tomcat:")
-    for en, title in JAVA_NAV_TITLES.items():
-        if en.startswith("tomcat-"):
-            nav_lines.append("    - %s: Java/tomcat/%s" % (title, en))
 
-    # Nginx 部分（按子目录分组）
-    nav_lines.append("  - Nginx:")
-    # 顶层文件（00 总览 + 28-99）
+    # Java 核心机制（SPI / volatile / 反射）
+    nav_lines.append("    - Java 核心机制:")
+    for en in ["java-spi.md", "java-volatile.md", "java-reflection.md"]:
+        if en in JAVA_NAV_TITLES:
+            nav_lines.append("      - %s: Java/%s" % (JAVA_NAV_TITLES[en], en))
+
+    # JVM
+    nav_lines.append("    - JVM:")
+    if "java-gc.md" in JAVA_NAV_TITLES:
+        nav_lines.append("      - %s: Java/%s" % (JAVA_NAV_TITLES["java-gc.md"], "java-gc.md"))
+
+    # Java 框架（含 Tomcat）
+    nav_lines.append("    - Java 框架:")
+    for en in ["tomcat-overview.md", "tomcat-architecture.md", "tomcat-server-config.md",
+               "tomcat-source-build.md", "tomcat-core-process.md", "tomcat-classloader.md",
+               "tomcat-classloader-deepdive.md", "tomcat-https.md", "tomcat-performance-tuning.md"]:
+        if en in JAVA_NAV_TITLES:
+            nav_lines.append("      - %s: Java/tomcat/%s" % (JAVA_NAV_TITLES[en], en))
+
+    # ===== 服务器主题：Nginx（含 01-08 子分组）=====
+    nav_lines.append("  - 服务器:")
+    nav_lines.append("    - Nginx:")
+    # Nginx 顶层文件（00 总览 + 28-99）
     top_files = nginx_renamed.get(".", {})
     for en, cn in sorted(top_files.items()):
-        nav_lines.append("    - %s: Nginx/%s" % (cn, en))
-    # 子目录分组
+        nav_lines.append("      - %s: Nginx/%s" % (cn, en))
+    # Nginx 子目录分组（01-08）
     for dir_cn, dir_display in NGINX_DIRS.items():
         files = nginx_renamed.get(dir_cn, {})
         if not files:
             continue
-        nav_lines.append("    - %s:" % dir_display)
+        nav_lines.append("      - %s:" % dir_display)
         for en, cn in sorted(files.items()):
-            nav_lines.append("      - %s: Nginx/%s/%s" % (cn, dir_cn, en))
+            nav_lines.append("        - %s: Nginx/%s/%s" % (cn, dir_cn, en))
 
     mkdocs = """site_name: 笔记分享库
 site_description: 个人学习笔记整理
@@ -159,6 +172,7 @@ theme:
     primary: indigo
     accent: indigo
   features:
+    - navigation.collapse
     - navigation.sections
     - search.suggest
 
