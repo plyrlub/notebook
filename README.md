@@ -1,7 +1,12 @@
 # 📚 笔记分享库
 
-> 技术笔记
-> 仓库地址：https://gitee.com/plyr/notebook
+> 个人学习笔记整理
+>
+> **仓库镜像**
+> - Gitee：https://gitee.com/plyr/notebook
+> - GitHub：https://github.com/plyrlub/notebook
+>
+> **网页版（GitHub Pages，推荐阅读）**：https://plyrlub.github.io/notebook/
 
 ---
 
@@ -25,5 +30,3 @@ _（待分享）_
 ## LLM / AI
 
 _（待分享）_
-
-
