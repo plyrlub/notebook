@@ -3,3 +3,6 @@
 # MkDocs 构建产物（build_prepare.py 生成，不入库）
 docs/
 mkdocs.yml
+
+# Python 缓存
+__pycache__/
