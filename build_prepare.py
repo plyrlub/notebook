@@ -54,6 +54,15 @@ JAVA_NAV_TITLES = {
 # ============ Nginx：通用 slug 规则 ============
 NGINX_SRC = os.path.join(REPO, "Nginx")
 
+# ============ 构建工具：Java 下二级分组（Maven/Gradle 子目录 + 00 总览）============
+BUILDTOOL_SRC = os.path.join(REPO, "Java", "构建工具")
+# basename → 英文 slug（构建工具 3 篇 basename 唯一）
+BUILDTOOL_RENAME_MAP = {
+    "00-构建工具总览（Maven vs Gradle 选型对比）.md": "buildtool-overview.md",
+    "Gradle 学习笔记（总览）.md": "gradle-overview.md",
+    "Maven 学习笔记（总览）.md": "maven-overview.md",
+}
+
 # Nginx 子目录分类（中文目录名 → 导航分组显示名）
 NGINX_DIRS = {
     "01-基础认知": "01 基础认知",
@@ -143,6 +152,12 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed):
         if en in JAVA_NAV_TITLES:
             nav_lines.append("      - %s: Java/tomcat/%s" % (JAVA_NAV_TITLES[en], en))
 
+    # Java 构建工具（Maven/Gradle + 00 总览）
+    nav_lines.append("    - 构建工具:")
+    nav_lines.append("      - 构建工具总览（Maven vs Gradle 选型）: Java/构建工具/buildtool-overview.md")
+    nav_lines.append("      - Gradle 学习笔记（总览）: Java/构建工具/Gradle/gradle-overview.md")
+    nav_lines.append("      - Maven 学习笔记（总览）: Java/构建工具/Maven/maven-overview.md")
+
     # ===== 服务器主题：Nginx（含 01-08 子分组）=====
     nav_lines.append("  - 服务器:")
     nav_lines.append("    - Nginx:")
@@ -192,17 +207,21 @@ markdown_extensions:
     print("mkdocs.yml generated")
 
 
-def prepare_source(src_dir, dst_sub, rename_map, convert):
+def prepare_source(src_dir, dst_sub, rename_map, convert, exclude_dirs=None):
     """通用：遍历源目录，复制 + 重命名 + 转换链接。
-    src_dir: Java/ 或 Nginx/
-    dst_sub: docs 下的子目录名（Java / Nginx）
+    src_dir: Java/ 或 Nginx/ 或 Java/构建工具/
+    dst_sub: docs 下的子目录名（Java / Nginx / Java/构建工具）
     rename_map: 中文名→英文名映射（Nginx 用 nginx_slug 生成）
     convert: 是否转换内部链接
+    exclude_dirs: 需要跳过的子目录名列表（如 Java 下独立处理的"构建工具"）
     返回 {相对目录: {英文名: 中文显示名}}
     """
+    exclude_dirs = exclude_dirs or []
     renamed = {}
     copied = 0
     for root, dirs, files in os.walk(src_dir):
+        # 跳过需独立处理的子目录
+        dirs[:] = [d for d in dirs if d not in exclude_dirs]
         rel = os.path.relpath(root, src_dir)
         target_dir = os.path.join(DST, dst_sub, rel) if rel != "." else os.path.join(DST, dst_sub)
         os.makedirs(target_dir, exist_ok=True)
@@ -249,9 +268,10 @@ def prepare():
     src_index = os.path.join(REPO, "index.md")
     if os.path.exists(src_index):
         content = open(src_index, encoding="utf-8").read()
-        # index.md 里可能引用 Java/Nginx 笔记，用合并映射转换
+        # index.md 里可能引用 Java/Nginx/构建工具 笔记，用合并映射转换
         merged_map = dict(JAVA_RENAME_MAP)
         merged_map.update(nginx_map)
+        merged_map.update(BUILDTOOL_RENAME_MAP)
         content = convert_links(content, merged_map)
         with open(os.path.join(DST, "index.md"), "w", encoding="utf-8") as out:
             out.write(content)
@@ -259,11 +279,17 @@ def prepare():
     else:
         print("WARNING: index.md not found in repo root")
 
-    # 2. Java 目录
+    # 2. Java 目录（排除独立处理的"构建工具"子目录）
     if os.path.exists(JAVA_SRC):
-        prepare_source(JAVA_SRC, "Java", JAVA_RENAME_MAP, convert=True)
+        prepare_source(JAVA_SRC, "Java", JAVA_RENAME_MAP, convert=True, exclude_dirs=["构建工具"])
     else:
         print("WARNING: Java/ dir not found")
+
+    # 2.5 构建工具目录（Java 下二级分组）
+    if os.path.exists(BUILDTOOL_SRC):
+        prepare_source(BUILDTOOL_SRC, "Java/构建工具", BUILDTOOL_RENAME_MAP, convert=True)
+    else:
+        print("WARNING: Java/构建工具 dir not found")
 
     # 3. Nginx 目录（通用 slug 规则）
     if os.path.exists(NGINX_SRC):
