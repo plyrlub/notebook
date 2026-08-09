@@ -111,6 +111,26 @@ LUA_DIRS = {
     "Lua": "Lua",
 }
 
+# ============ Linux：服务器主题（NN- 系列）============
+LINUX_SRC = os.path.join(REPO, "Linux")
+
+
+def linux_slug(filename):
+    """Linux 中文文件名 → 英文 slug（linux-NN.md）
+    '00-Linux总览.md' → 'linux-00.md'
+    '01-用户管理与登录授权.md' → 'linux-01.md'
+    """
+    base = os.path.splitext(filename)[0]
+    m = re.match(r"^(\d+)-", base)
+    if m:
+        return "linux-%s.md" % m.group(1)
+    return filename
+
+
+def linux_nav_title(filename):
+    """Linux 英文 slug → 中文导航标题（原中文文件名）"""
+    return os.path.splitext(filename)[0]
+
 def lua_slug(filename):
     """Lua 中文文件名 → 英文 slug（lua-NN.md）
     '00-Lua 总览.md' → 'lua-00.md'
@@ -277,7 +297,7 @@ def convert_links(content, rename_map, base_dir=""):
     return re.sub(r"\[([^\]]+)\]\(([^)]+\.md[^)]*)\)", repl, content)
 
 
-def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed, dist_renamed=None, cicd_renamed=None, sprotect_renamed=None):
+def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed, dist_renamed=None, cicd_renamed=None, sprotect_renamed=None, linux_renamed=None):
     """生成 mkdocs.yml（nav 两级折叠：主题 → 子域分组 → 笔记，默认收起）"""
     nav_lines = []
     nav_lines.append("nav:")
@@ -362,6 +382,11 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed,
 
     # ===== 服务器主题：Nginx（含 01-08 子分组）=====
     nav_lines.append("  - 服务器:")
+    nav_lines.append("    - Linux:")
+    if linux_renamed:
+        for en, cn in sorted(linux_renamed.get(".", {}).items()):
+            title = cn[:-3] if cn.endswith(".md") else cn
+            nav_lines.append("      - %s: Linux/%s" % (title, en))
     nav_lines.append("    - Nginx:")
     # Nginx 顶层文件（00 总览 + 28-99）
     top_files = nginx_renamed.get(".", {})
@@ -503,6 +528,10 @@ def prepare():
         merged_map.update(lua_map)
         merged_map.update(CACHE_RENAME_MAP)
         merged_map.update(SPROTECT_RENAME_MAP)
+        if os.path.exists(LINUX_SRC):
+            for f in os.listdir(LINUX_SRC):
+                if f.endswith(".md"):
+                    merged_map[f] = linux_slug(f)
         if os.path.exists(DIST_SRC):
             dist_map = build_dist_map()
             merged_map.update(dist_map)
@@ -577,8 +606,8 @@ def prepare():
 
     # 3.8 CI-CD 目录（主章节 ci-NN + 补充专题 sp-NN）— 合并 Nginx 映射（Lua/S8 篇链接指向 Nginx）
     cicd_renamed = {}
+    cicd_map = {}
     if os.path.exists(CICD_SRC):
-        cicd_map = {}
         for root, dirs, files in os.walk(CICD_SRC):
             for f in files:
                 if f.endswith(".md"):
@@ -590,8 +619,22 @@ def prepare():
     else:
         print("WARNING: CI-CD/ dir not found")
 
+    # 3.9 Linux 目录（NN- 系列）— 合并 Nginx/CI-CD 映射（总览篇链接指向 Nginx/CI-CD）
+    linux_renamed = {}
+    if os.path.exists(LINUX_SRC):
+        linux_map = {}
+        for f in os.listdir(LINUX_SRC):
+            if f.endswith(".md"):
+                linux_map[f] = linux_slug(f)
+        linux_merge_map = dict(linux_map)
+        linux_merge_map.update(nginx_map)
+        linux_merge_map.update(cicd_map if os.path.exists(CICD_SRC) else {})
+        linux_renamed = prepare_source(LINUX_SRC, "Linux", linux_merge_map, convert=True)
+    else:
+        print("WARNING: Linux/ dir not found")
+
     # 4. 生成 mkdocs.yml
-    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed, dist_renamed, cicd_renamed, sprotect_renamed)
+    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed, dist_renamed, cicd_renamed, sprotect_renamed, linux_renamed)
 
 
 if __name__ == "__main__":
