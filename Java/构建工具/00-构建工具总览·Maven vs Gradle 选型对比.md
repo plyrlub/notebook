@@ -5,7 +5,7 @@ tags: [构建工具, Maven, Gradle, 选型, Java, 对比]
 归属: 01-学习/Java/构建工具
 ---
 
-# 00-构建工具总览（Maven vs Gradle 选型对比）
+# 00-构建工具总览·Maven vs Gradle 选型对比
 
 > 版本基线：Maven 3.9.x / Gradle 8.x 为主线（本机实测：Maven 3.9.16 + JDK 17；Gradle 5.1.1 + JDK 8，见 [Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md) 🧪 小节）
 > 受众：Java 后端开发，已掌握至少一种构建工具的基础用法，想系统理解 Maven 与 Gradle 的差异并做选型决策。

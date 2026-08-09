@@ -58,7 +58,7 @@ NGINX_SRC = os.path.join(REPO, "Nginx")
 BUILDTOOL_SRC = os.path.join(REPO, "Java", "构建工具")
 # basename → 英文 slug
 BUILDTOOL_RENAME_MAP = {
-    "00-构建工具总览（Maven vs Gradle 选型对比）.md": "buildtool-overview.md",
+    "00-构建工具总览·Maven vs Gradle 选型对比.md": "buildtool-overview.md",
     "Gradle 学习笔记（总览）.md": "gradle-overview.md",
     # Maven 系列（拆分为 5 篇）
     "00-Maven 总览.md": "maven-00.md",
@@ -66,6 +66,19 @@ BUILDTOOL_RENAME_MAP = {
     "02-生命周期与插件.md": "maven-02.md",
     "03-私服与测试.md": "maven-03.md",
     "04-版本与灵活构建.md": "maven-04.md",
+}
+
+# ============ 前后端缓存：通用技术下主题（NN- 系列）============
+CACHE_SRC = os.path.join(REPO, "通用技术", "前后端缓存")
+CACHE_RENAME_MAP = {
+    "00-前后端缓存总览.md": "cache-00.md",
+    "01-客户端缓存详解.md": "cache-01.md",
+    "02-协商缓存详解.md": "cache-02.md",
+}
+CACHE_NAV_TITLES = {
+    "cache-00.md": "前后端缓存总览",
+    "cache-01.md": "客户端缓存详解",
+    "cache-02.md": "协商缓存详解",
 }
 
 # ============ 其他语言：Lua 主题（NN- 子目录系列）============
@@ -152,11 +165,19 @@ def convert_links(content, rename_map, base_dir=""):
     return re.sub(r"\[([^\]]+)\]\(([^)]+\.md[^)]*)\)", repl, content)
 
 
-def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed):
+def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed):
     """生成 mkdocs.yml（nav 两级折叠：主题 → 子域分组 → 笔记，默认收起）"""
     nav_lines = []
     nav_lines.append("nav:")
     nav_lines.append("  - 主页: index.md")
+
+    # ===== 通用技术主题：前后端缓存 =====
+    nav_lines.append("  - 通用技术:")
+    nav_lines.append("    - 前后端缓存:")
+    if cache_renamed:
+        for en, cn in sorted(cache_renamed.get(".", {}).items()):
+            title = CACHE_NAV_TITLES.get(en, cn)
+            nav_lines.append("      - %s: 通用技术/前后端缓存/%s" % (title, en))
 
     # ===== 其他语言主题：Lua（NN- 子目录系列）=====
     nav_lines.append("  - 其他语言:")
@@ -327,6 +348,7 @@ def prepare():
         merged_map.update(nginx_map)
         merged_map.update(BUILDTOOL_RENAME_MAP)
         merged_map.update(lua_map)
+        merged_map.update(CACHE_RENAME_MAP)
         content = convert_links(content, merged_map)
         with open(os.path.join(DST, "index.md"), "w", encoding="utf-8") as out:
             out.write(content)
@@ -360,8 +382,15 @@ def prepare():
         print("WARNING: 其他语言/ dir not found")
         lua_renamed = {}
 
+    # 3.6 通用技术/前后端缓存（NN- 系列）
+    if os.path.exists(CACHE_SRC):
+        cache_renamed = prepare_source(CACHE_SRC, "通用技术/前后端缓存", CACHE_RENAME_MAP, convert=True)
+    else:
+        print("WARNING: 通用技术/前后端缓存 dir not found")
+        cache_renamed = {}
+
     # 4. 生成 mkdocs.yml
-    generate_mkdocs_yml(None, nginx_renamed, lua_renamed)
+    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed)
 
 
 if __name__ == "__main__":

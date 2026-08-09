@@ -9,7 +9,7 @@ tags: [Gradle, 构建工具, Java, 依赖管理, Groovy, Kotlin DSL]
 
 > 版本基线：Gradle 8.x 为主线，标注 5.x 差异（本机实测环境为 Gradle 5.1.1 + JDK 8，见 🧪 实测小节）
 > 受众：Java 后端开发，已会用 Maven（坐标/依赖/生命周期），想系统掌握 Gradle 的核心机制与差异。默认你懂构建工具基本概念，但「Task 增量构建」「Configuration 依赖范围」「Kotlin DSL」从零讲起。
-> 关联笔记：[00-构建工具总览（Maven vs Gradle 选型对比）](../00-构建工具总览（Maven%20vs%20Gradle%20选型对比）.md)、[Maven 总览](../Maven/00-Maven%20总览.md)
+> 关联笔记：[00-构建工具总览·Maven vs Gradle 选型对比](../00-构建工具总览·Maven%20vs%20Gradle%20选型对比.md)、[Maven 总览](../Maven/00-Maven%20总览.md)
 
 ## 📋 总纲
 
@@ -39,7 +39,7 @@ tags: [Gradle, 构建工具, Java, 依赖管理, Groovy, Kotlin DSL]
 ## 前置知识
 
 - [Maven 总览](../Maven/00-Maven%20总览.md)——坐标、依赖范围、生命周期概念是 Gradle 的对照基础
-- [00-构建工具总览（Maven vs Gradle 选型对比）](../00-构建工具总览（Maven%20vs%20Gradle%20选型对比）.md)——两者定位差异先建立
+- [00-构建工具总览·Maven vs Gradle 选型对比](../00-构建工具总览·Maven%20vs%20Gradle%20选型对比.md)——两者定位差异先建立
 - 需掌握：Java 项目基本结构（src/main/java、src/test/java）
 
 ---
@@ -377,7 +377,7 @@ org.gradle.jvmargs=-Xmx2g               # 构建 JVM 内存
 
 ## 8. Gradle vs Maven：全维度对比
 
-（详细版见 [00-构建工具总览（Maven vs Gradle 选型对比）](../00-构建工具总览（Maven%20vs%20Gradle%20选型对比）.md)）
+（详细版见 [00-构建工具总览·Maven vs Gradle 选型对比](../00-构建工具总览·Maven%20vs%20Gradle%20选型对比.md)）
 
 | 维度 | Maven | Gradle | 结论 |
 |---|---|---|---|
@@ -443,7 +443,7 @@ org.gradle.jvmargs=-Xmx2g               # 构建 JVM 内存
 
 ## 下一篇
 
-[00-构建工具总览（Maven vs Gradle 选型对比）](../00-构建工具总览（Maven%20vs%20Gradle%20选型对比）.md)——两个构建工具的完整对比与选型指南
+[00-构建工具总览·Maven vs Gradle 选型对比](../00-构建工具总览·Maven%20vs%20Gradle%20选型对比.md)——两个构建工具的完整对比与选型指南
 
 ## 🧪 本机实测（2026-08-09）
 
