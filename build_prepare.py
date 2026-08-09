@@ -91,6 +91,19 @@ CACHE_NAV_TITLES = {
     "cache-05.md": "补充·缓存监控",
 }
 
+# ============ 软件保护：通用技术下主题（NN- 系列）============
+SPROTECT_SRC = os.path.join(REPO, "通用技术", "软件保护")
+SPROTECT_RENAME_MAP = {
+    "00-软件保护总览.md": "protect-00.md",
+    "01-代码混淆详解.md": "protect-01.md",
+    "02-License授权详解.md": "protect-02.md",
+}
+SPROTECT_NAV_TITLES = {
+    "protect-00.md": "软件保护总览",
+    "protect-01.md": "代码混淆详解",
+    "protect-02.md": "License授权详解",
+}
+
 # ============ 其他语言：Lua 主题（NN- 子目录系列）============
 LUA_SRC = os.path.join(REPO, "其他语言")
 # Lua 子目录（中文目录名 → 导航分组显示名）
@@ -264,7 +277,7 @@ def convert_links(content, rename_map, base_dir=""):
     return re.sub(r"\[([^\]]+)\]\(([^)]+\.md[^)]*)\)", repl, content)
 
 
-def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed, dist_renamed=None, cicd_renamed=None):
+def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed, dist_renamed=None, cicd_renamed=None, sprotect_renamed=None):
     """生成 mkdocs.yml（nav 两级折叠：主题 → 子域分组 → 笔记，默认收起）"""
     nav_lines = []
     nav_lines.append("nav:")
@@ -293,6 +306,13 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed,
         for en, cn in sorted(cache_renamed.get(".", {}).items()):
             title = CACHE_NAV_TITLES.get(en, cn)
             nav_lines.append("      - %s: 通用技术/前后端缓存/%s" % (title, en))
+
+    # ===== 通用技术主题：软件保护 =====
+    nav_lines.append("    - 软件保护:")
+    if sprotect_renamed:
+        for en, cn in sorted(sprotect_renamed.get(".", {}).items()):
+            title = SPROTECT_NAV_TITLES.get(en, cn)
+            nav_lines.append("      - %s: 通用技术/软件保护/%s" % (title, en))
 
     # ===== 其他语言主题：Lua（NN- 子目录系列）=====
     nav_lines.append("  - 其他语言:")
@@ -482,6 +502,7 @@ def prepare():
         merged_map.update(BUILDTOOL_RENAME_MAP)
         merged_map.update(lua_map)
         merged_map.update(CACHE_RENAME_MAP)
+        merged_map.update(SPROTECT_RENAME_MAP)
         if os.path.exists(DIST_SRC):
             dist_map = build_dist_map()
             merged_map.update(dist_map)
@@ -533,6 +554,17 @@ def prepare():
         print("WARNING: 通用技术/前后端缓存 dir not found")
         cache_renamed = {}
 
+    # 3.6.5 通用技术/软件保护（NN- 系列）— 合并缓存/Nginx/Java 映射（混淆篇链接指向 Java 反射等）
+    sprotect_renamed = {}
+    if os.path.exists(SPROTECT_SRC):
+        sprotect_merge_map = dict(SPROTECT_RENAME_MAP)
+        sprotect_merge_map.update(nginx_map)
+        sprotect_merge_map.update(CACHE_RENAME_MAP)
+        sprotect_merge_map.update(JAVA_RENAME_MAP)
+        sprotect_renamed = prepare_source(SPROTECT_SRC, "通用技术/软件保护", sprotect_merge_map, convert=True)
+    else:
+        print("WARNING: 通用技术/软件保护 dir not found")
+
     # 3.7 分布式目录（核心原理 dist-NN + ZooKeeper 子目录 zk-NN）— 合并 Nginx 映射（ZK 篇链接指向 Nginx）
     dist_renamed = {}
     if os.path.exists(DIST_SRC):
@@ -559,7 +591,7 @@ def prepare():
         print("WARNING: CI-CD/ dir not found")
 
     # 4. 生成 mkdocs.yml
-    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed, dist_renamed, cicd_renamed)
+    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed, dist_renamed, cicd_renamed, sprotect_renamed)
 
 
 if __name__ == "__main__":
