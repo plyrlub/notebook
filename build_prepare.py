@@ -147,6 +147,51 @@ def nginx_nav_title(filename):
     return os.path.splitext(filename)[0]
 
 
+# ============ 分布式：核心原理（根目录 dist-NN）+ ZooKeeper 子目录（zk-NN）============
+DIST_SRC = os.path.join(REPO, "分布式")
+
+
+def dist_slug(filename):
+    """分布式根目录中文文件名 → 英文 slug（dist-NN.md）
+    '00-分布式基础总览.md' → 'dist-00.md'
+    '06-负载均衡详解.md' → 'dist-06.md'
+    """
+    base = os.path.splitext(filename)[0]
+    m = re.match(r"^(\d+)-", base)
+    if m:
+        return "dist-%s.md" % m.group(1)
+    return filename
+
+
+def zk_slug(filename):
+    """Zookeeper 子目录中文文件名 → 英文 slug（zk-NN.md）
+    '00-ZooKeeper总览.md' → 'zk-00.md'
+    '09-应用场景与分布式协同.md' → 'zk-09.md'
+    """
+    base = os.path.splitext(filename)[0]
+    m = re.match(r"^(\d+)-", base)
+    if m:
+        return "zk-%s.md" % m.group(1)
+    return filename
+
+
+def dist_nav_title(filename):
+    """分布式英文 slug → 中文导航标题（原中文文件名）"""
+    return os.path.splitext(filename)[0]
+
+
+def build_dist_map():
+    """构建分布式全文件名 → 英文 slug 映射（根目录 dist-NN，Zookeeper 子目录 zk-NN）"""
+    dist_map = {}
+    if os.path.exists(DIST_SRC):
+        for root, dirs, files in os.walk(DIST_SRC):
+            for f in files:
+                if f.endswith(".md"):
+                    rel = os.path.relpath(root, DIST_SRC)
+                    dist_map[f] = zk_slug(f) if rel != "." else dist_slug(f)
+    return dist_map
+
+
 def convert_links(content, rename_map, base_dir=""):
     """把 markdown 链接里的中文文件名替换为英文文件名。
     链接: [显示名](中文名.md) → [显示名](英文名.md)
@@ -175,11 +220,27 @@ def convert_links(content, rename_map, base_dir=""):
     return re.sub(r"\[([^\]]+)\]\(([^)]+\.md[^)]*)\)", repl, content)
 
 
-def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed):
+def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed, dist_renamed=None):
     """生成 mkdocs.yml（nav 两级折叠：主题 → 子域分组 → 笔记，默认收起）"""
     nav_lines = []
     nav_lines.append("nav:")
     nav_lines.append("  - 主页: index.md")
+
+    # ===== 分布式主题：核心原理 + ZooKeeper 子目录 =====
+    if dist_renamed:
+        nav_lines.append("  - 分布式:")
+        # 根目录核心原理（dist-NN）
+        top_files = dist_renamed.get(".", {})
+        if top_files:
+            nav_lines.append("    - 核心原理:")
+            for en, cn in sorted(top_files.items()):
+                nav_lines.append("      - %s: 分布式/%s" % (cn, en))
+        # ZooKeeper 子目录（zk-NN）
+        zk_files = dist_renamed.get("Zookeeper", {})
+        if zk_files:
+            nav_lines.append("    - ZooKeeper:")
+            for en, cn in sorted(zk_files.items()):
+                nav_lines.append("      - %s: 分布式/Zookeeper/%s" % (cn, en))
 
     # ===== 通用技术主题：前后端缓存 =====
     nav_lines.append("  - 通用技术:")
@@ -321,7 +382,7 @@ def prepare_source(src_dir, dst_sub, rename_map, convert, exclude_dirs=None):
                     out.write(content)
             else:
                 shutil.copy2(src_path, dst_path)
-            renamed[rel_key][dst_name] = nginx_nav_title(f) if dst_sub in ("Nginx", "其他语言") else f
+            renamed[rel_key][dst_name] = nginx_nav_title(f) if dst_sub in ("Nginx", "其他语言", "分布式") else f
             copied += 1
     print("copied %d files to docs/%s" % (copied, dst_sub))
     return renamed
@@ -356,12 +417,15 @@ def prepare():
     src_index = os.path.join(REPO, "index.md")
     if os.path.exists(src_index):
         content = open(src_index, encoding="utf-8").read()
-        # index.md 里可能引用 Java/Nginx/构建工具/Lua 笔记，用合并映射转换
+        # index.md 里可能引用 Java/Nginx/构建工具/Lua/分布式 笔记，用合并映射转换
         merged_map = dict(JAVA_RENAME_MAP)
         merged_map.update(nginx_map)
         merged_map.update(BUILDTOOL_RENAME_MAP)
         merged_map.update(lua_map)
         merged_map.update(CACHE_RENAME_MAP)
+        if os.path.exists(DIST_SRC):
+            dist_map = build_dist_map()
+            merged_map.update(dist_map)
         content = convert_links(content, merged_map)
         with open(os.path.join(DST, "index.md"), "w", encoding="utf-8") as out:
             out.write(content)
@@ -404,8 +468,18 @@ def prepare():
         print("WARNING: 通用技术/前后端缓存 dir not found")
         cache_renamed = {}
 
+    # 3.7 分布式目录（核心原理 dist-NN + ZooKeeper 子目录 zk-NN）— 合并 Nginx 映射（ZK 篇链接指向 Nginx）
+    dist_renamed = {}
+    if os.path.exists(DIST_SRC):
+        dist_map = build_dist_map()
+        dist_merge_map = dict(dist_map)
+        dist_merge_map.update(nginx_map)
+        dist_renamed = prepare_source(DIST_SRC, "分布式", dist_merge_map, convert=True)
+    else:
+        print("WARNING: 分布式/ dir not found")
+
     # 4. 生成 mkdocs.yml
-    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed)
+    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed, dist_renamed)
 
 
 if __name__ == "__main__":
