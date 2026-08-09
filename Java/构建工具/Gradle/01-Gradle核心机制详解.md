@@ -9,7 +9,7 @@ tags: [Gradle, 构建工具, Java, Groovy, Kotlin DSL, Wrapper]
 
 > 版本基线：Gradle 8.x 为主线，标注 5.x 差异（本机实测环境为 Gradle 5.1.1 + JDK 8，见 [05-Gradle性能优化详解](05-Gradle性能优化详解.md) 🧪 实测小节）
 > 受众：Java 后端开发，已会用 Maven（坐标/依赖/生命周期），想系统掌握 Gradle 的核心机制与差异。
-> 关联笔记：[00-构建工具总览·Maven & Gradle选型对比](00-构建工具总览·Maven%20&%20Gradle选型对比.md)、[01-依赖与仓库](01-依赖与仓库.md)
+> 关联笔记：**00-构建工具总览·Maven & Gradle选型对比**（见知识库）、[01-依赖与仓库](../Maven/01-依赖与仓库.md)
 
 ## 📋 总纲
 
@@ -30,8 +30,8 @@ tags: [Gradle, 构建工具, Java, Groovy, Kotlin DSL, Wrapper]
 
 ## 前置知识
 
-- [01-依赖与仓库](01-依赖与仓库.md)——坐标、依赖范围、生命周期概念是 Gradle 的对照基础
-- [00-构建工具总览·Maven & Gradle选型对比](00-构建工具总览·Maven%20&%20Gradle选型对比.md)——两者定位差异先建立
+- [01-依赖与仓库](../Maven/01-依赖与仓库.md)——坐标、依赖范围、生命周期概念是 Gradle 的对照基础
+- **00-构建工具总览·Maven & Gradle选型对比**（见知识库）——两者定位差异先建立
 - 需掌握：Java 项目基本结构（src/main/java、src/test/java）
 
 ---

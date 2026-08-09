@@ -9,7 +9,7 @@ tags: [Gradle, 构建工具, 性能优化, Build Cache, Configuration Cache, 守
 
 > 版本基线：Gradle 8.x 为主线，标注 5.x 差异（本机实测 Gradle 5.1.1 + JDK 8）
 > 受众：想提升 Gradle 构建速度、理解性能三大武器 + 配置缓存的后端开发。
-> 关联笔记：[04-Gradle多项目构建详解](04-Gradle多项目构建详解.md)、[00-构建工具总览·Maven & Gradle选型对比](00-构建工具总览·Maven%20&%20Gradle选型对比.md)
+> 关联笔记：[04-Gradle多项目构建详解](04-Gradle多项目构建详解.md)、**00-构建工具总览·Maven & Gradle选型对比**（见知识库）
 
 ## 📋 总纲
 

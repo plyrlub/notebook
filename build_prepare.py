@@ -395,9 +395,11 @@ def prepare():
         print("WARNING: 其他语言/ dir not found")
         lua_renamed = {}
 
-    # 3.6 通用技术/前后端缓存（NN- 系列）
+    # 3.6 通用技术/前后端缓存（NN- 系列）— 合并 Nginx 映射（缓存篇链接指向 Nginx 缓存机制）
     if os.path.exists(CACHE_SRC):
-        cache_renamed = prepare_source(CACHE_SRC, "通用技术/前后端缓存", CACHE_RENAME_MAP, convert=True)
+        cache_merge_map = dict(CACHE_RENAME_MAP)
+        cache_merge_map.update(nginx_map)
+        cache_renamed = prepare_source(CACHE_SRC, "通用技术/前后端缓存", cache_merge_map, convert=True)
     else:
         print("WARNING: 通用技术/前后端缓存 dir not found")
         cache_renamed = {}
