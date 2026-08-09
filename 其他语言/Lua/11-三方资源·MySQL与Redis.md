@@ -5,7 +5,7 @@ tags: [Lua, MySQL, Redis, Lua脚本, 其他语言]
 归属: 01-学习/其他语言/Lua
 ---
 
-# Lua 三方资源（MySQL/Redis）
+# Lua 三方资源·MySQL与Redis
 
 > 上一篇：[10-文件与包管理](10-文件与包管理.md)
 > 下一篇：[12-环境隔离与沙箱](12-环境隔离与沙箱.md)
