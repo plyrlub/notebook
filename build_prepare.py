@@ -18,25 +18,25 @@ JAVA_SRC = os.path.join(REPO, "Java")
 # 中文文件名 → 英文文件名（URL 用）
 JAVA_RENAME_MAP = {
     # Tomcat 系列
-    "00-Tomcat 学习笔记（总览）.md": "tomcat-overview.md",
-    "01-Tomcat 系统架构与原理剖析.md": "tomcat-architecture.md",
-    "02-Tomcat 服务器核心配置详解.md": "tomcat-server-config.md",
-    "03-Tomcat 源码构建.md": "tomcat-source-build.md",
-    "04-Tomcat 核心流程剖析.md": "tomcat-core-process.md",
-    "05-Tomcat 类加载机制剖析.md": "tomcat-classloader.md",
-    "06-Tomcat 类加载机制详解.md": "tomcat-classloader-deepdive.md",
-    "07-Tomcat 对 HTTPS 的支持.md": "tomcat-https.md",
-    "08-Tomcat 性能优化策略.md": "tomcat-performance-tuning.md",
+    "00-Tomcat总览.md": "tomcat-overview.md",
+    "01-Tomcat系统架构与原理剖析.md": "tomcat-architecture.md",
+    "02-Tomcat服务器核心配置详解.md": "tomcat-server-config.md",
+    "03-Tomcat源码构建.md": "tomcat-source-build.md",
+    "04-Tomcat核心流程剖析.md": "tomcat-core-process.md",
+    "05-Tomcat类加载机制剖析.md": "tomcat-classloader.md",
+    "06-Tomcat类加载机制详解.md": "tomcat-classloader-deepdive.md",
+    "07-Tomcat对HTTPS的支持.md": "tomcat-https.md",
+    "08-Tomcat性能优化策略.md": "tomcat-performance-tuning.md",
     # 独立笔记
-    "Java SPI 机制详解.md": "java-spi.md",
-    "Java volatile 详解.md": "java-volatile.md",
-    "Java 反射详解.md": "java-reflection.md",
-    "Java GC 详解.md": "java-gc.md",
+    "Java SPI机制详解.md": "java-spi.md",
+    "Java volatile详解.md": "java-volatile.md",
+    "Java反射详解.md": "java-reflection.md",
+    "Java GC详解.md": "java-gc.md",
 }
 
 # 英文文件名 → 导航显示名（中文）
 JAVA_NAV_TITLES = {
-    "tomcat-overview.md": "Tomcat 学习笔记（总览）",
+    "tomcat-overview.md": "Tomcat总览",
     "tomcat-architecture.md": "01 系统架构与原理剖析",
     "tomcat-server-config.md": "02 服务器核心配置详解",
     "tomcat-source-build.md": "03 源码构建",
@@ -45,10 +45,10 @@ JAVA_NAV_TITLES = {
     "tomcat-classloader-deepdive.md": "06 类加载机制详解",
     "tomcat-https.md": "07 对 HTTPS 的支持",
     "tomcat-performance-tuning.md": "08 性能优化策略",
-    "java-spi.md": "Java SPI 机制详解",
-    "java-volatile.md": "Java volatile 详解",
-    "java-reflection.md": "Java 反射详解",
-    "java-gc.md": "Java GC 详解",
+    "java-spi.md": "Java SPI机制详解",
+    "java-volatile.md": "Java volatile详解",
+    "java-reflection.md": "Java反射详解",
+    "java-gc.md": "Java GC详解",
 }
 
 # ============ Nginx：通用 slug 规则 ============
@@ -58,10 +58,14 @@ NGINX_SRC = os.path.join(REPO, "Nginx")
 BUILDTOOL_SRC = os.path.join(REPO, "Java", "构建工具")
 # basename → 英文 slug
 BUILDTOOL_RENAME_MAP = {
-    "00-构建工具总览·Maven vs Gradle 选型对比.md": "buildtool-overview.md",
-    "Gradle 学习笔记（总览）.md": "gradle-overview.md",
-    # Maven 系列（拆分为 5 篇）
-    "00-Maven 总览.md": "maven-00.md",
+    "00-构建工具总览·Maven & Gradle选型对比.md": "buildtool-overview.md",
+    # Gradle 系列（拆分 5 篇）
+    "01-Gradle核心机制详解.md": "gradle-01.md",
+    "02-Gradle Task与生命周期详解.md": "gradle-02.md",
+    "03-Gradle依赖管理详解.md": "gradle-03.md",
+    "04-Gradle多项目构建详解.md": "gradle-04.md",
+    "05-Gradle性能优化详解.md": "gradle-05.md",
+    # Maven 系列（4 篇，00 总览已并入构建工具总览）
     "01-依赖与仓库.md": "maven-01.md",
     "02-生命周期与插件.md": "maven-02.md",
     "03-私服与测试.md": "maven-03.md",
@@ -75,7 +79,7 @@ CACHE_RENAME_MAP = {
     "01-客户端缓存详解.md": "cache-01.md",
     "02-协商缓存详解.md": "cache-02.md",
     "03-后端缓存补充·缓存更新策略.md": "cache-03.md",
-    "04-后端缓存补充·CDN 协同.md": "cache-04.md",
+    "04-后端缓存补充·CDN协同.md": "cache-04.md",
     "05-后端缓存补充·缓存监控.md": "cache-05.md",
 }
 CACHE_NAV_TITLES = {
@@ -83,7 +87,7 @@ CACHE_NAV_TITLES = {
     "cache-01.md": "客户端缓存详解",
     "cache-02.md": "协商缓存详解",
     "cache-03.md": "补充·缓存更新策略",
-    "cache-04.md": "补充·CDN 协同",
+    "cache-04.md": "补充·CDN协同",
     "cache-05.md": "补充·缓存监控",
 }
 
@@ -218,15 +222,18 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed)
         if en in JAVA_NAV_TITLES:
             nav_lines.append("      - %s: Java/tomcat/%s" % (JAVA_NAV_TITLES[en], en))
 
-    # Java 构建工具（Maven 系列 + Gradle + 00 总览）
+    # Java 构建工具（Maven 系列 + Gradle 系列 + 00 总览）
     nav_lines.append("    - 构建工具:")
-    nav_lines.append("      - 构建工具总览（Maven vs Gradle 选型）: Java/构建工具/buildtool-overview.md")
-    nav_lines.append("      - Maven 总览: Java/构建工具/Maven/maven-00.md")
+    nav_lines.append("      - 构建工具总览（Maven & Gradle 选型）: Java/构建工具/buildtool-overview.md")
     nav_lines.append("      - Maven 依赖与仓库: Java/构建工具/Maven/maven-01.md")
     nav_lines.append("      - Maven 生命周期与插件: Java/构建工具/Maven/maven-02.md")
     nav_lines.append("      - Maven 私服与测试: Java/构建工具/Maven/maven-03.md")
     nav_lines.append("      - Maven 版本与灵活构建: Java/构建工具/Maven/maven-04.md")
-    nav_lines.append("      - Gradle 学习笔记（总览）: Java/构建工具/Gradle/gradle-overview.md")
+    nav_lines.append("      - Gradle核心机制详解: Java/构建工具/Gradle/gradle-01.md")
+    nav_lines.append("      - Gradle Task与生命周期详解: Java/构建工具/Gradle/gradle-02.md")
+    nav_lines.append("      - Gradle依赖管理详解: Java/构建工具/Gradle/gradle-03.md")
+    nav_lines.append("      - Gradle多项目构建详解: Java/构建工具/Gradle/gradle-04.md")
+    nav_lines.append("      - Gradle性能优化详解: Java/构建工具/Gradle/gradle-05.md")
 
     # ===== 服务器主题：Nginx（含 01-08 子分组）=====
     nav_lines.append("  - 服务器:")

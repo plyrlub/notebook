@@ -578,7 +578,7 @@ location /hello {
 
 #### 特例说明
 
-1. **`content_by_lua_block` 中使用 `--` 注释而非 `#`**：Lua 的注释语法是 `--`（单行）和 `--[[ ... --]]`（多行），不是 Nginx 的 `#`。在 `*_by_lua_block` 内的代码遵循 Lua 语法，不是 Nginx 配置语法。
+1. **`content_by_lua_block` 中使用 `--` 注释而非 `#`**：Lua 的注释语法是 `--`（单行）和 `--**... --**（见知识库）`（多行），不是 Nginx 的 `#`。在 `*_by_lua_block` 内的代码遵循 Lua 语法，不是 Nginx 配置语法。
 
 2. **`content_by_lua_block` 和 `content_by_lua_file` 不能同时用于同一 location**：一个 location 只能有一个 content 阶段处理器。如果你同时写了 `proxy_pass` 和 `content_by_lua_block`，Nginx 会报配置错误。
 

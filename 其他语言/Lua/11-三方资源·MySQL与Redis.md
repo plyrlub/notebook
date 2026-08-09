@@ -31,7 +31,7 @@ brew install luarocks
 luarocks install luasql-mysql
 ```
 
-## 14.1 操作 MySQL
+## 1. 操作 MySQL
 
 luasql
 
@@ -64,7 +64,7 @@ conn:close()
 client:close()
 ```
 
-## 14.2 操作 Redis
+## 2. 操作 Redis
 
 需要先安装luasocket
 
@@ -82,11 +82,11 @@ client:get("key")
 client:del("key")
 ```
 
-### 14.2.x Redis 内部跑 Lua
+### 2.1 Redis 内部跑 Lua
 
 这是比较常见的一个场景，比如分布式锁，限流等场景（详见 14.3）。
 
-### 14.3 Redis Lua 脚本实战（分布式锁 / 限流）★
+## 3. Redis Lua 脚本实战（分布式锁 / 限流）★
 
 > **为什么用 Lua**：Redis 执行 Lua 脚本是**原子**的（脚本整体作为一个操作执行，期间不会有其他命令插入），这是「读-判-写」三步操作安全的根本保证——也是分布式锁、限流、计数器的核心原理。Java 端通过 `DefaultRedisScript<T>` + `redisTemplate.execute(script, keys, args)` 调用。
 

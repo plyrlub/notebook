@@ -6,10 +6,10 @@ tags: [Java, Tomcat, 架构, Coyote, Catalina, Container, Servlet]
 来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
 ---
 
-# Tomcat 系统架构与原理剖析
+# Tomcat系统架构与原理剖析
 
 > 本文是 Tomcat 学习笔记第 1 章（wolai 转存整理）。围绕「浏览器如何访问服务器」「Tomcat 两大核心组件（Coyote 连接器 + Catalina 容器）」展开。
-> 关联笔记：[00-Tomcat 学习笔记（总览）](00-Tomcat%20学习笔记（总览）.md)、[02-Tomcat 服务器核心配置详解](02-Tomcat%20服务器核心配置详解.md)、[06-Tomcat 类加载机制详解](06-Tomcat%20类加载机制详解.md)
+> 关联笔记：[00-Tomcat总览](00-Tomcat总览.md)、[02-Tomcat服务器核心配置详解](02-Tomcat服务器核心配置详解.md)、[06-Tomcat类加载机制详解](06-Tomcat类加载机制详解.md)
 
 ## 📋 总纲
 
@@ -180,7 +180,7 @@ Engine（引擎）
 
 这 4 种组件是父子关系。Tomcat 通过这种分层的架构，使 Servlet 容器具有很好的灵活性。
 
-> **上述组件的配置就体现在 conf/server.xml 中** → 详见 [02-Tomcat 服务器核心配置详解](02-Tomcat%20服务器核心配置详解.md)
+> **上述组件的配置就体现在 conf/server.xml 中** → 详见 [02-Tomcat服务器核心配置详解](02-Tomcat服务器核心配置详解.md)
 
 ---
 

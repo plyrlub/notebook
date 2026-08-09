@@ -5,7 +5,7 @@ tags: [Lua, 数据类型, table, 其他语言]
 归属: 01-学习/其他语言/Lua
 ---
 
-# Lua 数据类型与 table
+# Lua数据类型与table
 
 > 上一篇：[01-基础语法](01-基础语法.md)
 > 下一篇：[03-运算符与流程控制](03-运算符与流程控制.md)
@@ -51,7 +51,7 @@ end
 > 真
 > 真
 
-## 3.1 function
+## 1. function
 
 function 是 Lua 的**第一类值**（first-class value）：可以存变量、作参数、作返回值。基础定义形式：
 
@@ -77,11 +77,11 @@ print(apply(function(v) return v + 1 end, 10))  -- 11
 
 > 深层玩法（闭包/table 内嵌函数/可变参数）见 [04-函数与闭包](04-函数与闭包.md)。
 
-## 3.2 table 表
+## 2. table 表
 
 不是指数据库中的表，而是一种数据类型
 
-### 3.2.x Map 形式
+### 2.1 Map 形式
 
 类似于 Map，用k-v的方式来表现
 
@@ -132,7 +132,7 @@ info.id = nil
 info['sex'] = nil
 ```
 
-### 3.2.x 数组形式
+### 2.2 数组形式
 
 ```lua
 tableName = {
@@ -182,7 +182,7 @@ end
     info[1] = "ll"
 ```
 
-### 3.2.x 组合形式
+### 2.3 组合形式
 
 ```lua
 Jinfo3 = {
@@ -230,9 +230,8 @@ coutry  -->     china
 
 > [!note] 注意遍历的函数时pairs，而不要轻易使用ipairs(这函数会只遍历数组形式，不会遍历 Map 形式的)
 
-## 六、API
 
-## 6.1 table API
+## 3. table API
 
 > 📌 原笔记书签链接已丢失
 

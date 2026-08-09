@@ -553,14 +553,14 @@ local _M = {}
 -- ============================================================
 _M.sql_injection = {
     -- 经典 ' OR 1=1 注入
-    [[(?i)\bunion\b.+\bselect\b]],           -- UNION SELECT 注入
-    [[(?i)'\s*or\s*\d+\s*=\s*\d+]],          -- ' OR 1=1
-    [[(?i)'\s*or\s*'\w*'\s*=\s*'\w*']],      -- ' OR 'a'='a
-    [[(?i);\s*(drop|alter|create|insert|update|delete)\b]], -- 分号后跟 DDL/DML
-    [[(?i)--|/\*|\*/]],                       -- SQL 注释符
-    [[(?i)\bexec\b\s*\(|\bxp_cmdshell\b]],   -- 存储过程调用
-    [[(?i)\bwaitfor\b\s+delay\b]],            -- 时间盲注 WAITFOR DELAY
-    [[(?i)\bbenchmark\b\s*\(|\bsleep\b\s*\(|]], -- 时间盲注 BENCHMARK/SLEEP
+    **(?i)\bunion\b.+\bselect\b**（见知识库）,           -- UNION SELECT 注入
+    **(?i)'\s*or\s*\d+\s*=\s*\d+**（见知识库）,          -- ' OR 1=1
+    **(?i)'\s*or\s*'\w*'\s*=\s*'\w*'**（见知识库）,      -- ' OR 'a'='a
+    **alter|create|insert|update|delete)\b**（见知识库）, -- 分号后跟 DDL/DML
+    **/\*|\*/**（见知识库）,                       -- SQL 注释符
+    **\bxp_cmdshell\b**（见知识库）,   -- 存储过程调用
+    **(?i)\bwaitfor\b\s+delay\b**（见知识库）,            -- 时间盲注 WAITFOR DELAY
+    **\bsleep\b\s*\(|**（见知识库）, -- 时间盲注 BENCHMARK/SLEEP
 }
 
 -- ============================================================
@@ -568,32 +568,32 @@ _M.sql_injection = {
 -- ============================================================
 _M.xss = {
     [[(?i)<script[^>]*>.*?</script>]],        -- <script> 标签
-    [[(?i)<script\b]],                        -- 任意 script 标签开始
-    [[(?i)</script>]],                        -- script 标签结束
-    [[(?i)javascript:]],                      -- javascript: 协议
-    [[(?i)on(error|load|click|mouseover|submit|focus|blur)\s*=]], -- onXxx 事件
-    [[(?i)<iframe\b]],                        -- iframe 标签
+    **(?i)<script\b**（见知识库）,                        -- 任意 script 标签开始
+    **(?i)</script>**（见知识库）,                        -- script 标签结束
+    **(?i)javascript:**（见知识库）,                      -- javascript: 协议
+    **load|click|mouseover|submit|focus|blur)\s*=**（见知识库）, -- onXxx 事件
+    **(?i)<iframe\b**（见知识库）,                        -- iframe 标签
     [[(?i)<img\b[^>]+\bon\w+\s*=]],           -- img 标签带事件
     [[(?i)<svg\b[^>]+\bon\w+\s*=]],           -- svg 标签带事件
-    [[(?i)eval\s*\(|alert\s*\(|prompt\s*\(|]], -- JS 危险函数
-    [[(?i)document\.cookie]],                 -- 读取 cookie
+    **alert\s*\(|prompt\s*\(|**（见知识库）, -- JS 危险函数
+    **(?i)document\.cookie**（见知识库）,                 -- 读取 cookie
 }
 
 -- ============================================================
 -- 恶意 User-Agent 规则
 -- ============================================================
 _M.malicious_ua = {
-    [[(?i)sqlmap]],         -- sqlmap 注入工具
-    [[(?i)nikto]],          -- nikto 扫描器
-    [[(?i)nmap]],           -- nmap 端口扫描
-    [[(?i)masscan]],        -- masscan 扫描器
-    [[(?i)dirbuster]],      -- 目录爆破工具
-    [[(?i)wpscan]],         -- WordPress 扫描器
-    [[(?i)acunetix]],       -- Acunetix 漏洞扫描
-    [[(?i)nessus]],         -- Nessus 漏洞扫描
-    [[(?i)hydra]],          -- hydra 暴力破解
-    [[(?i)metasploit]],     -- Metasploit 框架
-    [[(?i)\bbot\b]],        -- 通用爬虫（视业务需求可移除）
+    **(?i)sqlmap**（见知识库）,         -- sqlmap 注入工具
+    **(?i)nikto**（见知识库）,          -- nikto 扫描器
+    **(?i)nmap**（见知识库）,           -- nmap 端口扫描
+    **(?i)masscan**（见知识库）,        -- masscan 扫描器
+    **(?i)dirbuster**（见知识库）,      -- 目录爆破工具
+    **(?i)wpscan**（见知识库）,         -- WordPress 扫描器
+    **(?i)acunetix**（见知识库）,       -- Acunetix 漏洞扫描
+    **(?i)nessus**（见知识库）,         -- Nessus 漏洞扫描
+    **(?i)hydra**（见知识库）,          -- hydra 暴力破解
+    **(?i)metasploit**（见知识库）,     -- Metasploit 框架
+    **(?i)\bbot\b**（见知识库）,        -- 通用爬虫（视业务需求可移除）
 }
 
 return _M
@@ -1958,21 +1958,21 @@ if chunk and chunk ~= "" then
     -- 敏感信息脱敏：手机号中间 4 位替换为 ****
     -- ngx.re.gsub 是 FFI 正则替换，支持 PCRE 语法
     -- 替换 11 位手机号，保留前 3 后 4
-    local new_chunk, n, err = ngx.re.gsub(chunk, [[(\d{3})\d{4}(\d{4})]], "$1****$2", "o")
+    local new_chunk, n, err = ngx.re.gsub(chunk, **(\d{3})\d{4}(\d{4})**（见知识库）, "$1****$2", "o")
     if new_chunk then
         chunk = new_chunk
     end
 
     -- 身份证号脱敏：保留前 6 后 4
     -- 18 位身份证号
-    new_chunk, n, err = ngx.re.gsub(chunk, [[(\d{6})\d{8}(\d{4})]], "$1********$2", "o")
+    new_chunk, n, err = ngx.re.gsub(chunk, **(\d{6})\d{8}(\d{4})**（见知识库）, "$1********$2", "o")
     if new_chunk then
         chunk = new_chunk
     end
 
     -- 邮箱脱敏：保留首字母和域名
     -- user@example.com -> u***@example.com
-    new_chunk, n, err = ngx.re.gsub(chunk, [[(\w)\w+@(\w+\.\w+)]], "$1***@$2", "o")
+    new_chunk, n, err = ngx.re.gsub(chunk, **(\w)\w+@(\w+\.\w+)**（见知识库）, "$1***@$2", "o")
     if new_chunk then
         chunk = new_chunk
     end
@@ -2007,7 +2007,7 @@ if content_type and string.find(content_type, "text/html") then
         -- 在 </body> 前注入脚本
         local inject_script = '<script>console.log("injected by gateway");</script>'
         -- 只在包含 </body> 的 HTML 中注入
-        local new_body, n = ngx.re.gsub(full_body, [[</body>]], inject_script .. "</body>", "io")
+        local new_body, n = ngx.re.gsub(full_body, **</body>**（见知识库）, inject_script .. "</body>", "io")
 
         if new_body and n > 0 then
             -- 替换成功：输出修改后的完整 body

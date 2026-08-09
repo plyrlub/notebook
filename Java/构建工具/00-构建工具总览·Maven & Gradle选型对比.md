@@ -5,11 +5,11 @@ tags: [构建工具, Maven, Gradle, 选型, Java, 对比]
 归属: 01-学习/Java/构建工具
 ---
 
-# 00-构建工具总览·Maven vs Gradle 选型对比
+# 00-构建工具总览·Maven & Gradle选型对比
 
-> 版本基线：Maven 3.9.x / Gradle 8.x 为主线（本机实测：Maven 3.9.16 + JDK 17；Gradle 5.1.1 + JDK 8，见 [Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md) 🧪 小节）
+> 版本基线：Maven 3.9.x / Gradle 8.x 为主线（本机实测：Maven 3.9.16 + JDK 17；Gradle 5.1.1 + JDK 8，见 [01-Gradle核心机制详解](01-Gradle核心机制详解.md) 🧪 小节）
 > 受众：Java 后端开发，已掌握至少一种构建工具的基础用法，想系统理解 Maven 与 Gradle 的差异并做选型决策。
-> 关联笔记：[Maven 学习笔记（总览）](Maven/00-Maven%20总览.md)、[Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md)
+> 关联笔记：[01-依赖与仓库](01-依赖与仓库.md)、[01-Gradle核心机制详解](01-Gradle核心机制详解.md)
 
 ## 📋 总纲
 
@@ -34,8 +34,8 @@ tags: [构建工具, Maven, Gradle, 选型, Java, 对比]
 
 ## 前置知识
 
-- [Maven 学习笔记（总览）](Maven/00-Maven%20总览.md)——Maven 的依赖配置、生命周期、插件机制
-- [Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md)——Gradle 的 Task、Configuration、DSL 机制
+- [01-依赖与仓库](01-依赖与仓库.md)——Maven 的依赖配置、生命周期、插件机制
+- [01-Gradle核心机制详解](01-Gradle核心机制详解.md)——Gradle 的 Task、Configuration、DSL 机制
 - 需掌握：Java 项目结构、依赖坐标（groupId:artifactId:version）基本概念
 
 ---
@@ -227,7 +227,7 @@ A → D → X(2.0)        版本 2.0  ← 选这个（版本更高）
 
 | 编号 | 坑 | 现象 | 解决方案 |
 |---|---|---|---|
-| #B1 | 老 Gradle 跑新 JDK | `NoClassDefFoundError: Java7` | 升级 Gradle 或换兼容 JDK（见 [Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md) #G1） |
+| #B1 | 老 Gradle 跑新 JDK | `NoClassDefFoundError: Java7` | 升级 Gradle 或换兼容 JDK（见 [01-Gradle核心机制详解](01-Gradle核心机制详解.md) #G1） |
 | #B2 | Maven 冲突结果漂移 | 换依赖顺序构建结果变 | 理解最短路径+第一声明者，用 dependencyManagement 固定 |
 | #B3 | 换工具迁移一半后悔 | 构建脚本、CI、插件全要重写 | 选型前先小范围试点验证 |
 | #B4 | 误以为 Gradle 一定快 | 小项目感受不到差距 | 增量/缓存收益在大项目才明显，小项目选熟悉的 |
@@ -243,8 +243,18 @@ A → D → X(2.0)        版本 2.0  ← 选这个（版本更高）
 
 ## 相关笔记（导航）
 
-- [Maven 学习笔记（总览）](Maven/00-Maven%20总览.md)——Maven 详细机制
-- [Gradle 学习笔记（总览）](Gradle/Gradle%20学习笔记（总览）.md)——Gradle 详细机制
+**Maven 系列**：
+- [01-依赖与仓库](01-依赖与仓库.md)——依赖配置/范围/调解 + 仓库/镜像/私服
+- [02-生命周期与插件](02-生命周期与插件.md)——三套生命周期/插件绑定 + 聚合与继承
+- [03-私服与测试](03-私服与测试.md)——Nexus 私服搭建 + surefire 测试
+- [04-版本与灵活构建](04-版本与灵活构建.md)——版本约定/发布 + 属性/Profile/Archetype
+
+**Gradle 系列**：
+- [01-Gradle核心机制详解](01-Gradle核心机制详解.md)——定位/构建脚本/DSL/Wrapper
+- [02-Gradle Task与生命周期详解](02-Gradle%20Task与生命周期详解.md)——Task DAG/增量构建/命令
+- [03-Gradle依赖管理详解](03-Gradle依赖管理详解.md)——Configuration/冲突解析/Version Catalog
+- [04-Gradle多项目构建详解](04-Gradle多项目构建详解.md)——include/子项目依赖/Composite Build
+- [05-Gradle性能优化详解](05-Gradle性能优化详解.md)——守护进程/缓存/配置缓存/实测
 
 ## 参考资料
 

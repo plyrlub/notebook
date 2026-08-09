@@ -5,13 +5,13 @@ tags: [Lua, LuaJIT, FFI, 性能, 其他语言]
 归属: 01-学习/其他语言/Lua
 ---
 
-# LuaJIT 与性能优化
+# LuaJIT与性能优化
 
-> 上一篇：[13-Lua 5.4 新特性](13-Lua 5.4 新特性.md)
+> 上一篇：[13-Lua 5.4新特性](13-Lua%205.4新特性.md)
 
 ---
 
-## 18.1 LuaJIT 是什么
+## 1. LuaJIT 是什么
 
 LuaJIT 是 Lua 的 **JIT（Just-In-Time）编译器**实现：解释执行 + 热点代码编译为机器码，性能比标准 Lua 解释器高 **10~50 倍**（接近 C 的 1/2~1/3）。**OpenResty 1.5.8.1 起默认启用 LuaJIT**——你写 Nginx Lua 跑的就是 LuaJIT，不是标准 Lua！
 
@@ -25,16 +25,14 @@ LuaJIT 是 Lua 的 **JIT（Just-In-Time）编译器**实现：解释执行 + 热
 
 **陷阱**：LuaJIT 是 5.1 语法！5.4 的 `<const>`、`//` 整除、位运算 `&|~` 在 LuaJIT 里**都没有**（位运算 LuaJIT 有自己的 `bit` 库：`bit.band`/`bit.bor`）。OpenResty 写代码要按 5.1 规范，别用 5.4 语法。
 
-## 18.2 FFI：零开销调用 C
+## 2. FFI：零开销调用 C
 
 FFI（Foreign Function Interface）是 LuaJIT 的王牌：**直接在 Lua 里声明并调用 C 函数/结构体**，无 C 绑定层，性能接近原生 C：
 
 ```lua
 local ffi = require("ffi")
-ffi.cdef[[
-    int getpid(void);
-    double sqrt(double x);
-]]
+ffi.cdef**int getpid(void);
+    double sqrt(double x);**（见知识库）
 print(ffi.C.getpid())       -- 进程号（直接调 libc）
 print(ffi.C.sqrt(16))       -- 4.0
 ```
@@ -43,7 +41,7 @@ print(ffi.C.sqrt(16))       -- 4.0
 - OpenResty 的 `lua-resty-core` 就是 FFI 封装 Nginx C API（`ngx.re`/`ngx.ctx`），性能比纯 Lua 实现高
 - **注意**：FFI 与 JIT 配合最好，纯解释模式下降级为 C 函数调用开销
 
-## 18.3 GC 与性能优化建议
+## 3. GC 与性能优化建议
 
 **GC 控制**：
 
