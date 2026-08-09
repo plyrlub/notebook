@@ -74,11 +74,17 @@ CACHE_RENAME_MAP = {
     "00-前后端缓存总览.md": "cache-00.md",
     "01-客户端缓存详解.md": "cache-01.md",
     "02-协商缓存详解.md": "cache-02.md",
+    "03-后端缓存补充·缓存更新策略.md": "cache-03.md",
+    "04-后端缓存补充·CDN 协同.md": "cache-04.md",
+    "05-后端缓存补充·缓存监控.md": "cache-05.md",
 }
 CACHE_NAV_TITLES = {
     "cache-00.md": "前后端缓存总览",
     "cache-01.md": "客户端缓存详解",
     "cache-02.md": "协商缓存详解",
+    "cache-03.md": "补充·缓存更新策略",
+    "cache-04.md": "补充·CDN 协同",
+    "cache-05.md": "补充·缓存监控",
 }
 
 # ============ 其他语言：Lua 主题（NN- 子目录系列）============
