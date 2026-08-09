@@ -115,3 +115,14 @@
 - **数据库**（Redis）：数据类型/持久化/高可用/缓存问题与锁
 - **安全框架**：Spring Security、Apache Shiro
 - **服务器问题收集**：运维小问题速查
+
+## DevOps
+
+### CI/CD
+
+- [CI/CD 学习笔记（总览）](CI-CD/00-CI-CD%20学习笔记（总览）.md)
+    10 章系统学习：认知地基/工具选型/Actions/GitLab/Jenkins/容器化/K8s 部署/DevSecOps/可观测性 + S1~S12 补充专题（Secret/SBOM/Feature Flag/开源设施部署等）+ 可运行 Demo
+- [面试题集锦](CI-CD/面试题集锦.md)
+    8 大领域 45 道题（含难度与参考答案，高频题标 🔥）
+- 系列：00-总览 → 01-认知地基 → 02-环境与前置技能 → 03-工具选型与对比 → 04-核心工具深入 → 05-构建与测试 → 06-容器化与制品管理 → 07-部署与发布策略 → 08-安全与质量门禁 → 09-监控可观测性与回滚 → 10-进阶与工程化
+- 补充专题（12 篇）：S1-Secret管理 / S2-成本与配额 / S3-DORA四指标 / S4-供应链安全SBOM / S5-流水线自身安全 / S6-数据库迁移 / S7-FeatureFlag解耦部署 / S8-Lua场景CICD / S9-质量安全扫描集成 / S10-Pipeline各环节最佳实践 / S11-包仓库Nexus-Harbor-GitLabRegistry / S12-CICD开源设施部署指南

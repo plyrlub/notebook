@@ -1,0 +1,10 @@
+# 应用依赖
+# 实际项目按需调整
+flask==3.0.3
+gunicorn==23.0.0
+redis==5.0.8
+pymysql==1.1.1
+sqlalchemy==2.0.34
+
+# 开发依赖（CI 里单独装）
+# pytest, pytest-cov, ruff 在 .gitlab-ci.yml 里单独 pip install

@@ -1,0 +1,188 @@
+# 小企业 GitLab CI + Docker 方案 - 完整 CI/CD 配置
+# 配合用户的 P1 实践：分支即环境（dev/test/stage/main = prod）
+#
+# 流程：
+#   1. merge 到任一环境分支 → 触发构建（构建一次，所有环境复用）
+#   2. 构建产物推到 GitLab 内置 Registry
+#   3. SSH 到对应部署机执行 docker-compose 拉新镜像重启
+#   4. dev/test 自动部署，stage/main 手动确认
+#
+# 关联章节：03 章 3.10.4
+# 关联实践：我的实践记录.md P1（分支即环境）
+
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+variables:
+  # 镜像 tag 用 分支名-短 SHA，可追溯
+  IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+  IMAGE: ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}
+
+# ============== 1. Lint ==============
+lint:
+  stage: lint
+  image: python:3.12-slim
+  cache:
+    key: pip-${CI_COMMIT_REF_SLUG}
+    paths: [.cache/pip]
+  before_script:
+    - pip install --cache-dir=.cache/pip ruff
+  script:
+    - ruff check app/
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(dev|test|stage|main)$/
+
+# ============== 2. 测试 ==============
+test:
+  stage: test
+  image: python:3.12-slim
+  cache:
+    key: pip-${CI_COMMIT_REF_SLUG}
+    paths: [.cache/pip]
+  before_script:
+    - pip install --cache-dir=.cache/pip -r requirements.txt pytest pytest-cov
+  script:
+    - pytest --cov=app --cov-report=xml --cov-report=term
+  coverage: '/TOTAL.*\s+(\d+\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage.xml
+    expire_in: 7 days
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(dev|test|stage|main)$/
+
+# ============== 3. 构建镜像（用 Kaniko，无 dind，更安全更快） ==============
+build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  script:
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${IMAGE}"
+      --build-arg "GIT_COMMIT=${CI_COMMIT_SHA}"
+      --build-arg "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+      --build-arg "VERSION=${IMAGE_TAG}"
+      --cache=true
+      --cache-repo "${CI_REGISTRY_IMAGE}/cache"
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(dev|test|stage|main)$/
+
+# ============== 4. 部署模板 ==============
+.deploy-template:
+  stage: deploy
+  image: alpine:3.20
+  before_script:
+    - apk add --no-cache openssh-client
+    - eval $(ssh-agent -s)
+    - echo "${SSH_PRIVATE_KEY}" | ssh-add -
+    - mkdir -p ~/.ssh
+    - echo "${SSH_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
+  script:
+    # SSH 到部署机：登录 Registry → 拉镜像 → 重启容器 → 健康检查 → 清理旧镜像
+    - |
+      ssh ${DEPLOY_USER}@${DEPLOY_HOST} "
+        set -e
+        # 登录 Registry
+        echo '${CI_REGISTRY_PASSWORD}' | docker login -u '${CI_REGISTRY_USER}' --password-stdin '${CI_REGISTRY}'
+        # 进入部署目录
+        cd /opt/app
+        # 拉新镜像
+        docker pull '${IMAGE}'
+        # 设置环境变量并重启（不重启依赖）
+        export IMAGE_TAG='${IMAGE_TAG}'
+        export APP_ENV='${APP_ENV}'
+        docker-compose up -d --no-deps --force-recreate app
+        # 等待健康检查通过
+        echo 'Waiting for healthcheck...'
+        for i in \$(seq 1 30); do
+          if docker inspect --format='{{.State.Health.Status}}' \$(docker-compose ps -q app) | grep -q healthy; then
+            echo 'App is healthy'
+            break
+          fi
+          sleep 2
+        done
+        # 健康检查失败则回滚
+        if ! docker inspect --format='{{.State.Health.Status}}' \$(docker-compose ps -q app) | grep -q healthy; then
+          echo 'Healthcheck failed, rolling back...'
+          export IMAGE_TAG='${PREVIOUS_TAG}'
+          docker-compose up -d --no-deps --force-recreate app
+          exit 1
+        fi
+        # 清理悬挂镜像
+        docker image prune -f
+      "
+  environment:
+    name: ${APP_ENV}
+
+# ============== 4.1 dev 自动部署 ==============
+deploy:dev:
+  extends: .deploy-template
+  variables:
+    DEPLOY_HOST: ${DEV_HOST}
+    DEPLOY_USER: ${DEV_USER}
+    APP_ENV: dev
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+
+# ============== 4.2 test 自动部署 ==============
+deploy:test:
+  extends: .deploy-template
+  variables:
+    DEPLOY_HOST: ${TEST_HOST}
+    DEPLOY_USER: ${TEST_USER}
+    APP_ENV: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == "test"
+
+# ============== 4.3 stage 手动部署（对应预发版） ==============
+deploy:stage:
+  extends: .deploy-template
+  variables:
+    DEPLOY_HOST: ${STAGE_HOST}
+    DEPLOY_USER: ${STAGE_USER}
+    APP_ENV: stage
+  rules:
+    - if: $CI_COMMIT_BRANCH == "stage"
+  when: manual         # 手动触发，对应 P1 实践的"环境晋升需显式 merge"
+
+# ============== 4.4 main = prod 手动部署 ==============
+deploy:prod:
+  extends: .deploy-template
+  variables:
+    DEPLOY_HOST: ${PROD_HOST}
+    DEPLOY_USER: ${PROD_USER}
+    APP_ENV: prod
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  when: manual         # 生产环境必须手动确认
+  allow_failure: false
+
+# ============== 5. Tag 发版（对应 P1.1：发版打 Tag） ==============
+# 当打 Tag 时，额外给镜像打 stable tag，方便审计和回滚
+tag-release:
+  stage: deploy
+  image: docker:24
+  services: [docker:24-dind]
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - echo "${CI_REGISTRY_PASSWORD}" | docker login -u "${CI_REGISTRY_USER}" --password-stdin "${CI_REGISTRY}"
+  script:
+    # 从 main 分支对应的镜像拷贝 tag 到正式版本号
+    - docker pull ${CI_REGISTRY_IMAGE}:main-${CI_COMMIT_SHORT_SHA}
+    - docker tag  ${CI_REGISTRY_IMAGE}:main-${CI_COMMIT_SHORT_SHA} ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+    - docker tag  ${CI_REGISTRY_IMAGE}:main-${CI_COMMIT_SHORT_SHA} ${CI_REGISTRY_IMAGE}:latest-prod
+    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+    - docker push ${CI_REGISTRY_IMAGE}:latest-prod
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+/

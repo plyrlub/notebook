@@ -180,6 +180,50 @@ def dist_nav_title(filename):
     return os.path.splitext(filename)[0]
 
 
+# ============ CI-CD：主章节（根目录 ci-NN）+ 补充专题（子目录 sp-NN）============
+CICD_SRC = os.path.join(REPO, "CI-CD")
+
+# CI-CD 根目录无编号文件 → 英文 slug（单独映射）
+CICD_ROOT_MAP = {
+    "00-CI-CD 学习笔记（总览）.md": "cicd-00.md",
+    "我的实践记录.md": "cicd-practice.md",
+    "新团队最佳实践方案.md": "cicd-newteam.md",
+    "老项目改进方案.md": "cicd-legacy.md",
+    "面试题集锦.md": "cicd-interview.md",
+    "踩坑经验集锦.md": "cicd-pitfalls.md",
+    "补充专题.md": "cicd-topics.md",
+}
+
+
+def cicd_slug(filename):
+    """CI-CD 根目录中文文件名 → 英文 slug（ci-NN.md）
+    '01-认知地基.md' → 'ci-01.md'
+    '10-进阶与工程化.md' → 'ci-10.md'
+    """
+    base = os.path.splitext(filename)[0]
+    m = re.match(r"^(\d+)-", base)
+    if m:
+        return "ci-%s.md" % m.group(1)
+    return CICD_ROOT_MAP.get(filename, filename)
+
+
+def sp_slug(filename):
+    """CI-CD 补充专题子目录中文文件名 → 英文 slug（sp-NN.md）
+    'S1-Secret管理.md' → 'sp-01.md'
+    'S12-CICD开源设施部署指南.md' → 'sp-12.md'
+    """
+    base = os.path.splitext(filename)[0]
+    m = re.match(r"^S(\d+)-", base)
+    if m:
+        return "sp-%02d.md" % int(m.group(1))
+    return filename
+
+
+def cicd_nav_title(filename):
+    """CI-CD 英文 slug → 中文导航标题（原中文文件名）"""
+    return os.path.splitext(filename)[0]
+
+
 def build_dist_map():
     """构建分布式全文件名 → 英文 slug 映射（根目录 dist-NN，Zookeeper 子目录 zk-NN）"""
     dist_map = {}
@@ -220,7 +264,7 @@ def convert_links(content, rename_map, base_dir=""):
     return re.sub(r"\[([^\]]+)\]\(([^)]+\.md[^)]*)\)", repl, content)
 
 
-def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed, dist_renamed=None):
+def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed, dist_renamed=None, cicd_renamed=None):
     """生成 mkdocs.yml（nav 两级折叠：主题 → 子域分组 → 笔记，默认收起）"""
     nav_lines = []
     nav_lines.append("nav:")
@@ -312,6 +356,21 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed,
         for en, cn in sorted(files.items()):
             nav_lines.append("        - %s: Nginx/%s/%s" % (cn, dir_cn, en))
 
+    # ===== DevOps 主题：CI/CD（主章节 ci-NN + 补充专题 sp-NN）=====
+    nav_lines.append("  - DevOps:")
+    nav_lines.append("    - CI/CD:")
+    if cicd_renamed:
+        # 根目录主章节 + 实战文档（ci-NN / cicd-*）
+        top_files = cicd_renamed.get(".", {})
+        for en, cn in sorted(top_files.items()):
+            nav_lines.append("      - %s: CI-CD/%s" % (cn, en))
+        # 补充专题子目录（sp-NN）
+        sp_files = cicd_renamed.get("补充专题", {})
+        if sp_files:
+            nav_lines.append("      - 补充专题:")
+            for en, cn in sorted(sp_files.items()):
+                nav_lines.append("        - %s: CI-CD/补充专题/%s" % (cn, en))
+
     mkdocs = """site_name: 笔记分享库
 site_description: 个人学习笔记整理
 site_url: https://plyrlub.github.io/notebook/
@@ -382,7 +441,7 @@ def prepare_source(src_dir, dst_sub, rename_map, convert, exclude_dirs=None):
                     out.write(content)
             else:
                 shutil.copy2(src_path, dst_path)
-            renamed[rel_key][dst_name] = nginx_nav_title(f) if dst_sub in ("Nginx", "其他语言", "分布式") else f
+            renamed[rel_key][dst_name] = cicd_nav_title(f) if dst_sub == "CI-CD" else (nginx_nav_title(f) if dst_sub in ("Nginx", "其他语言", "分布式") else f)
             copied += 1
     print("copied %d files to docs/%s" % (copied, dst_sub))
     return renamed
@@ -417,7 +476,7 @@ def prepare():
     src_index = os.path.join(REPO, "index.md")
     if os.path.exists(src_index):
         content = open(src_index, encoding="utf-8").read()
-        # index.md 里可能引用 Java/Nginx/构建工具/Lua/分布式 笔记，用合并映射转换
+        # index.md 里可能引用 Java/Nginx/构建工具/Lua/分布式/CI-CD 笔记，用合并映射转换
         merged_map = dict(JAVA_RENAME_MAP)
         merged_map.update(nginx_map)
         merged_map.update(BUILDTOOL_RENAME_MAP)
@@ -426,6 +485,12 @@ def prepare():
         if os.path.exists(DIST_SRC):
             dist_map = build_dist_map()
             merged_map.update(dist_map)
+        if os.path.exists(CICD_SRC):
+            for root, dirs, files in os.walk(CICD_SRC):
+                for f in files:
+                    if f.endswith(".md"):
+                        rel = os.path.relpath(root, CICD_SRC)
+                        merged_map[f] = sp_slug(f) if rel != "." else cicd_slug(f)
         content = convert_links(content, merged_map)
         with open(os.path.join(DST, "index.md"), "w", encoding="utf-8") as out:
             out.write(content)
@@ -478,8 +543,23 @@ def prepare():
     else:
         print("WARNING: 分布式/ dir not found")
 
+    # 3.8 CI-CD 目录（主章节 ci-NN + 补充专题 sp-NN）— 合并 Nginx 映射（Lua/S8 篇链接指向 Nginx）
+    cicd_renamed = {}
+    if os.path.exists(CICD_SRC):
+        cicd_map = {}
+        for root, dirs, files in os.walk(CICD_SRC):
+            for f in files:
+                if f.endswith(".md"):
+                    rel = os.path.relpath(root, CICD_SRC)
+                    cicd_map[f] = sp_slug(f) if rel != "." else cicd_slug(f)
+        cicd_merge_map = dict(cicd_map)
+        cicd_merge_map.update(nginx_map)
+        cicd_renamed = prepare_source(CICD_SRC, "CI-CD", cicd_merge_map, convert=True)
+    else:
+        print("WARNING: CI-CD/ dir not found")
+
     # 4. 生成 mkdocs.yml
-    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed, dist_renamed)
+    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed, dist_renamed, cicd_renamed)
 
 
 if __name__ == "__main__":
