@@ -180,7 +180,7 @@ get /p1
 # org.apache.zookeeper.KeeperException$NoAuthException: KeeperErrorCode = NoAuth for /p1
 ```
 
-![ACL命令示例](05-assets/ACL命令示例.png)
+![ACL命令示例](assets/ACL命令示例.png)
 
 ### 7.5 IP 方式
 

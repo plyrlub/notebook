@@ -131,7 +131,7 @@ expireTime = roundToInterval(now + timeout)
 - 检查粒度 = `expirationInterval`，以它为单位分桶
 - **会话激活**：客户端每次与服务器通信 → 会话被激活 → 超时时间重新计算 → 会话**转移到新的桶**
 
-![Session超时与自动重连](02-assets/Session超时与自动重连.png)
+![Session超时与自动重连](assets/Session超时与自动重连.png)
 
 ```mermaid
 flowchart LR
@@ -205,7 +205,7 @@ new ZooKeeper(String connectString, int sessionTimeout, Watcher watcher);  // �
 > ⚠️ 两条不变式：**EventType 变化时 KeeperState 恒为 SyncConnected；KeeperState 变化时 EventType 恒为 None。**
 > ⚠️ 通知中**只包含状态/类型/路径**，**不包含节点变化前后的内容**——旧数据自己存，新数据要重新 get。
 
-![Watch通知机制](02-assets/Watch通知机制.png)
+![Watch通知机制](assets/Watch通知机制.png)
 
 ### 2.3 Watch 四大特性
 
