@@ -258,7 +258,7 @@ def cicd_nav_title(filename):
 
 
 def build_dist_map():
-    """构建分布式全文件名 → 英文 slug 映射（00 总览 + 01-核心原理 dist-NN，Zookeeper 子目录 zk-NN）"""
+    """构建分布式全文件名 → 英文 slug 映射（00 总览 + 核心原理 dist-NN，Zookeeper 子目录 zk-NN）"""
     dist_map = {}
     if os.path.exists(DIST_SRC):
         for root, dirs, files in os.walk(DIST_SRC):
@@ -306,15 +306,15 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed,
     # ===== 分布式主题：核心原理 + ZooKeeper 子目录 =====
     if dist_renamed:
         nav_lines.append("  - 分布式:")
-        # 核心原理组 = 00 总览(根目录) + 01-核心原理 子目录(dist-NN)
+        # 核心原理组 = 00 总览(根目录) + 核心原理 子目录(dist-NN)
         core_files = {}
-        for key in (".", "01-核心原理"):
+        for key in (".", "核心原理"):
             core_files.update(dist_renamed.get(key, {}))
         if core_files:
             nav_lines.append("    - 核心原理:")
             # 00 总览排最前(文件名 dist-00 自然最前)
             for en, cn in sorted(core_files.items()):
-                prefix = "分布式/01-核心原理/" if en.startswith("dist-") and en != "dist-00.md" else "分布式/"
+                prefix = "分布式/核心原理/" if en.startswith("dist-") and en != "dist-00.md" else "分布式/"
                 nav_lines.append("      - %s: %s%s" % (cn, prefix, en))
         # ZooKeeper 子目录（zk-NN）
         zk_files = dist_renamed.get("Zookeeper", {})
