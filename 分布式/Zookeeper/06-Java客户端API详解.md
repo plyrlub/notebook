@@ -39,6 +39,20 @@ tags: [分布式, ZooKeeper, Java, API, 客户端]
 
 ---
 
+## 目录
+
+- [1. 依赖与连接](#1-依赖与连接)
+- [2. 核心 API 总览](#2-核心-api-总览)
+- [3. 创建节点](#3-创建节点)
+- [4. 更新与删除](#4-更新与删除)
+- [5. 读取 API](#5-读取-api)
+- [6. Watcher 注册四种方式](#6-watcher-注册四种方式)
+- [7. 异常处理](#7-异常处理)
+- [8. 实战案例：分布式配置中心](#8-实战案例分布式配置中心)
+- [9. 最佳实践](#9-最佳实践)
+- [10. 常见踩坑](#10-常见踩坑)
+- [11. 小结](#11-小结)
+
 ## 1. 依赖与连接
 
 ```xml
@@ -83,6 +97,22 @@ public class ZK001 {
 }
 ```
 
+**建连时序**：
+
+```mermaid
+sequenceDiagram
+    participant C as 客户端线程
+    participant ZK as ZooKeeper 实例
+    participant S as ZK 服务端
+    C->>ZK: new ZooKeeper()（立即返回）
+    Note over ZK: 状态 = CONNECTING
+    ZK->>S: 发起 TCP 连接 + 会话创建请求
+    S-->>ZK: 会话创建成功
+    ZK-->>C: 回调 watcher：SyncConnected
+    Note over ZK: 状态 = CONNECTED，会话可用
+    C->>C: countDownLatch.countDown() 放行
+```
+
 **客户端交互步骤**（规范流程）：连接并拿 SessionID → 定期心跳（否则会话过期）→ 会话活跃期内读写 znode → 完成后断开。
 
 ## 2. 核心 API 总览
@@ -98,6 +128,7 @@ public class ZK001 {
 | `sync(path)` | 把客户端连接节点的数据与 Leader 同步 |
 
 **两条通则**：
+
 1. **所有读取 API 都可带 watch**
 2. **所有更新 API 都有两个版本**：`version=-1` 无条件更新；指定 version 为条件更新（乐观锁，见 [01-数据模型与节点详解](01-数据模型与节点详解.md)）
 
@@ -153,6 +184,15 @@ zk.create(path, data, ZooDefs.Ids.CREATOR_ALL_ACL, CreateMode.PERSISTENT);
 | PERSISTENT_SEQUENTIAL | 持久有序（自动追加递增序号后缀） |
 | EPHEMERAL_SEQUENTIAL | 临时有序（分布式锁核心） |
 
+### 3.3 创建节点报错映射表
+
+| 异常 | 原因 | 解决 |
+|---|---|---|
+| `NodeExistsException` | 节点已存在 | 先 exists 判断或用 `-e` 语义；或接受冲突重试 |
+| `NoNodeException` | 父节点不存在 | 先创建父节点，或用 Curator `creatingParentsIfNeeded()` |
+| `NoAuthException` | ACL 权限不足 | 检查 addauth 认证 |
+| `InvalidACLException` | ACL 格式错误 | 检查 Id 的 scheme/id 参数 |
+
 ## 4. 更新与删除
 
 ```java
@@ -167,6 +207,16 @@ delete(path, version, AsyncCallback.VoidCallback cb, Object ctx)        // 异�
 - 异步回调中 `rc==0` 表示成功；`ctx` 是透传的上下文参数
 - 异步删除也支持 Lambda：`(rc, path, ctx) -> {...}`
 
+**同步 vs 异步对比**：
+
+| 维度 | 同步 | 异步 |
+|---|---|---|
+| 调用风格 | 直接返回结果 | 回调函数接收结果 |
+| 线程阻塞 | 阻塞直到完成 | 不阻塞 |
+| 适用场景 | 简单流程/学习 | 高并发、批量操作 |
+| 回调参数 | — | `rc`（0=成功）/ `path` / `data` / `stat` / `ctx` |
+| 易错点 | — | 回调线程执行，别在回调里阻塞 |
+
 ## 5. 读取 API
 
 ```java
@@ -178,7 +228,7 @@ void getData(String path, Watcher watcher, DataCallback cb, Object ctx)
 ```
 
 - `getChildren` 返回子节点名列表，可带 watch
-- `exists` 返回 Stat 或 null，可带 watch（也是"探测节点是否存在"的标准方式）
+- `exists` 返回 Stat 或 null，可带 watch（也是「探测节点是否存在」的标准方式）
 
 ## 6. Watcher 注册四种方式 ★
 
@@ -228,11 +278,33 @@ zk.exists("/watcher1", new Watcher() {
 
 > ⚠️ 原生 watcher 一次性触发（见 [02-会话与Watch机制](02-会话与Watch机制.md)），**持续监听必须手动重注册**——这正是 Curator 封装的价值（[07-Curator详解](07-Curator详解.md)）。
 
+**四种注册方式对比**：
+
+| 方式 | 写法 | 适用场景 |
+|---|---|---|
+| 构造时默认 watcher | `new ZooKeeper(..., watcher)` | 连接状态监听 |
+| 布尔 true 复用 | `exists(path, true)` | 复用默认 watcher |
+| 自定义 watcher | `exists(path, new Watcher(){...})` | 每个监听独立逻辑 |
+| 递归注册 | 回调里再注册自己 | 持续监听（易漏，推荐 Curator） |
+
 ## 7. 异常处理
 
 所有同步 API 可能抛两种异常：
+
 - **KeeperException**：服务端出错。子类 **ConnectionLossException** 表示与当前节点断开（网络分区/节点失败都会触发）——**发生时机可能在服务端处理请求之前或之后**，所以出现后必须检查之前的请求是否成功执行（客户端会自动重连）
 - **InterruptedException**：方法被中断（`Thread.interrupt()` 触发）
+
+**异常分支表**：
+
+| 异常 | 语义 | 处理策略 |
+|---|---|---|
+| `ConnectionLossException` | 连接断开，请求结果未知 | **重试前先查上次请求是否成功**（幂等设计） |
+| `SessionExpiredException` | 会话超时失效 | **重建 ZooKeeper 实例**（临时节点已删） |
+| `NoNodeException` | 节点不存在 | 先 exists 判断或捕获处理 |
+| `NodeExistsException` | 节点已存在 | 幂等创建：捕获后当成功 |
+| `BadVersionException` | 版本不匹配（条件更新失败） | 重读数据重试 |
+| `NoAuthException` | 无权限 | 检查 addauth 认证 |
+| `InterruptedException` | 线程中断 | 恢复中断标志 |
 
 ## 8. 实战案例：分布式配置中心
 
@@ -274,30 +346,50 @@ public class ConfigCenter implements Watcher {
 
 > 💡 案例要点：① 类实现 Watcher 直接注册自身；② getData 的 watch=true 用默认 watcher；③ 每次 NodeDataChanged 重新 initValue（又一次注册 watch = 递归注册的实战版）。生产更推荐 Curator 的 `NodeCache`（[07-Curator详解](07-Curator详解.md)）。
 
-## 最佳实践
+**配置中心发布-订阅流程**：
 
-1. 连接**统一用 CountDownLatch 等待 SyncConnected**，避免"半连接"状态下操作
+```mermaid
+sequenceDiagram
+    participant P as 配置发布方
+    participant ZK as ZooKeeper
+    participant C as 配置订阅方
+    P->>ZK: setData /config/url "new-url"
+    ZK-->>C: 通知 NodeDataChanged
+    C->>C: initValue() 重新拉取
+    C->>ZK: getData /config/url（重新注册 watch）
+    Note over C: 循环：变更 → 重载 → 再注册
+```
+
+## 9. 最佳实践
+
+1. 连接**统一用 CountDownLatch 等待 SyncConnected**，避免「半连接」状态下操作
 2. 生产**优先用 Curator**（自动重连、重试、递归 watch），原生 API 适合学习与轻量场景
 3. 写操作**带上 version** 做乐观锁；不确定版本用 -1 但要接受覆盖风险
 4. 捕获 **ConnectionLossException** 后重试前先确认上次请求结果（幂等设计）
 5. 会话 Expired 后**必须重建 ZooKeeper 实例**（旧会话的临时节点已删）
+6. 异步回调中**只做轻量逻辑**，重操作另起线程
+7. 用完 `close()` 关闭连接，避免连接泄漏（`maxClientCnxns` 超限）
+8. 多节点 connectString 逗号分隔，客户端自动选可用节点
 
-## 常见踩坑
+## 10. 常见踩坑
 
 - **不等待连接就操作**：抛 ConnectionLoss/NotConnected
 - **一次性 watch 忘记重注册**：丢通知（经典 bug，见 [02-会话与Watch机制](02-会话与Watch机制.md)）
 - **异步调用后进程退出**：回调没执行完就结束（案例里 Thread.sleep 保证回调执行）
 - **临时节点 + 会话过期**：节点被删，业务状态丢失——监控 Expired 并及时重建
 - **把 ctx 当返回值**：ctx 是透传上下文，真正结果在回调参数里（rc/path/data/stat）
+- **版本号用错**：条件更新必须用最近读到的 version，用 -1 会绕过校验（有覆盖风险）
+- **连接不关闭**：进程结束前 close()，否则 ZK 服务端连接数堆积
 
-## 小结
+## 11. 小结
 
 1. 建连是**异步**的，用 CountDownLatch 等 SyncConnected
 2. 核心 API 7 个：create/delete/exists/getData/setData/getChildren/sync；**version=-1 无条件、指定 version 乐观锁**
 3. 创建节点 4 种 ACL 方式（常量/自定义/IP/auth-digest）+ 4 种 CreateMode
 4. 同步/异步双风格：异步靠 AsyncCallback + ctx
 5. Watcher 4 种注册方式，**持续监听要递归重注册**
-6. 配置中心案例 = getData(true) + NodeDataChanged 重载，发布-订阅的经典落地
+6. 异常分两类：KeeperException（服务端，含 ConnectionLoss）与 InterruptedException（线程中断）
+7. 配置中心案例 = getData(true) + NodeDataChanged 重载，发布-订阅的经典落地
 
 ## 下一篇
 
@@ -305,4 +397,4 @@ public class ConfigCenter implements Watcher {
 - 下一篇：[07-Curator详解](07-Curator详解.md)
 
 ---
-*创建于 2026-08-09（wolai 笔记转存 + 网络查证补充）*
+*创建于 2026-08-09（wolai 笔记转存 + 网络查证补充），2026-08-11 细化（补建连时序图/报错映射表/异常分支表/同步异步对比表/配置中心时序图）*
