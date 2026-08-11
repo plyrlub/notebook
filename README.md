@@ -31,6 +31,46 @@
 - [Tomcat总览](Java/tomcat/00-Tomcat总览.md)
     基于 8.5.x：架构/Coyote/Catalina、server.xml 全标签、源码构建、启动流程、类加载、HTTPS、性能优化 7 大章 + 类加载深度篇
 
+### Spring 三件套（Spring / SpringMVC / SpringBoot）
+
+- [Spring三件套体系总览](Java/spring/00-Spring%E4%B8%89%E4%BB%B6%E5%A5%97%E4%BD%93%E7%B3%BB%E6%80%BB%E8%A7%88%C2%B7Spring%E4%B8%8ESpringMVC%E4%B8%8ESpringBoot.md)
+    三件套定位/演进/职责边界/知识域地图/学习路线
+- [Spring核心·IoC与Bean生命周期](Java/spring/01-Spring%E6%A0%B8%E5%BF%83%C2%B7IoC%E4%B8%8EBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E8%AF%A6%E8%A7%A3.md)
+    IoC/DI、Bean 生命周期、三种装配、循环依赖三级缓存、作用域
+- [SpringMVC执行流程](Java/spring/02-SpringMVC%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3.md)
+    DispatcherServlet 流程、参数绑定、拦截器、全局异常
+- [Spring与SpringMVC整合实践](Java/spring/03-Spring%E4%B8%8ESpringMVC%E6%95%B4%E5%90%88%E5%AE%9E%E8%B7%B5%E8%AF%A6%E8%A7%A3.md)
+    双容器、web.xml→Boot 演进、扫描分离坑
+- [Spring核心·AOP详解](Java/spring/04-Spring%E6%A0%B8%E5%BF%83%C2%B7AOP%E8%AF%A6%E8%A7%A3.md)
+    动态代理/CGLIB、五种通知、切点、失效场景
+- [Spring事务管理详解](Java/spring/05-Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E8%AF%A6%E8%A7%A3.md)
+    @Transactional、7 传播、隔离级别、12 类失效
+- [SpEL表达式详解](Java/spring/06-SpEL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%A6%E8%A7%A3.md)
+    SpEL 语法、注解取参、AOP 切面手动解析
+- [Spring事件驱动机制详解](Java/spring/07-Spring%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3.md)
+    观察者模式、@EventListener、@TransactionalEventListener 事务事件
+
+#### SpringBoot（重点）
+
+- [SpringBoot体系总览](Java/springboot/00-SpringBoot%E4%BD%93%E7%B3%BB%E6%80%BB%E8%A7%88.md)
+    定位/核心三大件/知识域地图/学习路线/面试考点
+- [SpringBoot启动原理与自动装配详解](Java/springboot/01-SpringBoot%E5%90%AF%E5%8A%A8%E5%8E%9F%E7%90%86%E4%B8%8E%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E8%AF%A6%E8%A7%A3.md)
+    @SpringBootApplication、自动装配、.imports、条件注解
+- [SpringBoot配置体系与外部化配置详解](Java/springboot/02-SpringBoot%E9%85%8D%E7%BD%AE%E4%BD%93%E7%B3%BB%E4%B8%8E%E5%A4%96%E9%83%A8%E5%8C%96%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3.md)
+    外部化配置优先级、@ConfigurationProperties vs @Value、profile
+- [SpringBoot模块化详解](Java/springboot/03-SpringBoot%E6%A8%A1%E5%9D%97%E5%8C%96%E8%AF%A6%E8%A7%A3.md)
+    Boot4 一个 jar→一组模块、starter 改名
+- [SpringBoot自定义Starter详解](Java/springboot/04-SpringBoot%E8%87%AA%E5%AE%9A%E4%B9%89Starter%E8%AF%A6%E8%A7%A3.md)
+    双模块、@AutoConfiguration、.imports 注册、元数据、测试
+- [SpringBoot异步与线程池详解](Java/springboot/05-SpringBoot%E5%BC%82%E6%AD%A5%E4%B8%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3.md)
+    @Async、线程池配置、CompletableFuture、失效场景
+- [SpringBoot日志配置详解](Java/springboot/06-SpringBoot%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3.md)
+    SLF4J+Logback、logback-spring.xml、滚动策略、MDC
+- [SpringBoot Actuator监控详解](Java/springboot/07-SpringBoot%20Actuator%E7%9B%91%E6%8E%A7%E8%AF%A6%E8%A7%A3.md)
+    health、Micrometer、Prometheus/Grafana、安全暴露
+- [Spring WebFlux响应式编程详解](Java/springboot/08-Spring%20WebFlux%E5%93%8D%E5%BA%94%E5%BC%8F%E7%BC%96%E7%A8%8B%E8%AF%A6%E8%A7%A3.md)
+    Mono/Flux、背压、SSE 流式输出（AI agent）、MVC vs WebFlux
+
 ### 构建工具
 
 - **构建工具总览·Maven & Gradle选型对比**（见知识库）
