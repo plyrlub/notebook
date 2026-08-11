@@ -470,6 +470,9 @@ markdown_extensions:
       permalink: true
   - tables
 
+extra_javascript:
+  - javascripts/mermaid.mjs
+
 %s
 """ % "\n".join(nav_lines)
 
@@ -570,7 +573,15 @@ def prepare():
         shutil.rmtree(DST)
     os.makedirs(DST)
 
-    # 1.0 先构建 Nginx 映射（index.md 转换需要用到）
+    # 1.0 拷贝自定义 Mermaid JS（放大图内文字）到 docs/javascripts/
+    mermaid_src = os.path.join(REPO, "custom-mermaid.mjs")
+    mermaid_dst_dir = os.path.join(DST, "javascripts")
+    os.makedirs(mermaid_dst_dir, exist_ok=True)
+    if os.path.exists(mermaid_src):
+        shutil.copy2(mermaid_src, os.path.join(mermaid_dst_dir, "mermaid.mjs"))
+        print("copied custom-mermaid.mjs -> docs/javascripts/mermaid.mjs")
+
+    # 1.1 先构建 Nginx 映射（index.md 转换需要用到）
     nginx_map = {}
     if os.path.exists(NGINX_SRC):
         for root, dirs, files in os.walk(NGINX_SRC):
