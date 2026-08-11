@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="686" font-family="PingFang SC, Heiti SC, Microsoft YaHei, sans-serif">
+<rect width="840" height="686" fill="white"/>
+<text x="420.0" y="42" text-anchor="middle" font-size="24" font-weight="bold" fill="#1a1a1a">Bean 生命周期（11 阶段）</text>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L9,3 L0,6 z" fill="#4a7ab5"/>
+  </marker>
+</defs>
+<rect x="60" y="90" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="165.0" y="129.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">1. 实例化</text>
+<text x="165.0" y="152.0" text-anchor="middle" font-size="12" fill="#555">构造方法/工厂方法</text>
+<rect x="325" y="90" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="430.0" y="129.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">2. 依赖注入</text>
+<text x="430.0" y="152.0" text-anchor="middle" font-size="12" fill="#555">setter/构造注入</text>
+<rect x="590" y="90" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="695.0" y="129.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">3. BeanNameAware</text>
+<text x="695.0" y="152.0" text-anchor="middle" font-size="12" fill="#555">setBeanName(id)</text>
+<rect x="590" y="240" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="695.0" y="279.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">4. BeanFactoryAware</text>
+<text x="695.0" y="302.0" text-anchor="middle" font-size="12" fill="#555">setBeanFactory(工厂)</text>
+<rect x="325" y="240" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="430.0" y="279.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">5. ApplicationContextAware</text>
+<text x="430.0" y="302.0" text-anchor="middle" font-size="12" fill="#555">setApplicationContext(ctx)</text>
+<rect x="60" y="240" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="165.0" y="279.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">6. 前置 BPP</text>
+<text x="165.0" y="302.0" text-anchor="middle" font-size="12" fill="#555">postProcessBeforeInit ★AOP</text>
+<rect x="60" y="390" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="165.0" y="429.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">7. InitializingBean</text>
+<text x="165.0" y="452.0" text-anchor="middle" font-size="12" fill="#555">afterPropertiesSet</text>
+<rect x="325" y="390" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="430.0" y="429.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">8. init-method</text>
+<text x="430.0" y="452.0" text-anchor="middle" font-size="12" fill="#555">自定义初始化</text>
+<rect x="590" y="390" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="695.0" y="429.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">9. 后置 BPP</text>
+<text x="695.0" y="452.0" text-anchor="middle" font-size="12" fill="#555">postProcessAfterInit</text>
+<rect x="590" y="540" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="695.0" y="579.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">10. 作用域</text>
+<text x="695.0" y="602.0" text-anchor="middle" font-size="12" fill="#555">singleton入缓存 / prototype交调用者</text>
+<rect x="60" y="540" width="210" height="86" rx="12" fill="#eef4ff" stroke="#4a7ab5" stroke-width="2"/>
+<text x="165.0" y="579.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">11. 销毁</text>
+<text x="165.0" y="602.0" text-anchor="middle" font-size="12" fill="#555">destroy / destroy-method</text>
+<line x1="270" y1="133.0" x2="325" y2="133.0" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="535" y1="133.0" x2="590" y2="133.0" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="695.0" y1="176" x2="695.0" y2="240" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="590" y1="283.0" x2="535" y2="283.0" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="325" y1="283.0" x2="270" y2="283.0" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="165.0" y1="326" x2="165.0" y2="390" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="270" y1="433.0" x2="325" y2="433.0" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="535" y1="433.0" x2="590" y2="433.0" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="695.0" y1="476" x2="695.0" y2="540" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="590" y1="583.0" x2="270" y2="583.0" stroke="#4a7ab5" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="430.0" y="575.0" text-anchor="middle" font-size="13" fill="#2e7d32" font-weight="bold">使用中</text>
+</svg>

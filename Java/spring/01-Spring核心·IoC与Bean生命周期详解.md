@@ -9,13 +9,13 @@ tags: [Java, Spring, IoC, DI, Bean, 容器, Bean生命周期, 作用域]
 
 > 版本基线：Spring 5.x/6.x、Spring Boot 2.x/3.x
 > 受众：Java 后端开发。假设已懂 Java 反射；需理解 IoC 容器如何接管对象创建。
-> 前置知识：**Java反射详解**（见知识库）（反射 getAnnotation/newInstance，容器底层）、**Java注解机制详解**（见知识库）（@Component 注解扫描）
-> 下一篇：[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)（Web 层）；关联：[04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)（代理）、[05-Spring事务管理详解](05-Spring事务管理详解.md)（事务）
+> 前置知识：[[Java反射详解]]（反射 getAnnotation/newInstance，容器底层）、[[Java注解机制详解]]（@Component 注解扫描）
+> 下一篇：[[02-SpringMVC执行流程详解]]（Web 层）；关联：[[04-Spring核心·AOP详解]]（代理）、[[05-Spring事务管理详解]]（事务）
 
 ## 📋 总纲
 
 1. IoC 与 DI：概念与为什么
-2. Bean 生命周期：实例化 → 装配 → 初始化 → 销毁（含 Mermaid）
+2. Bean 生命周期：实例化→注入→Aware→BPP→初始化→就绪→销毁（含 11 步蛇形图 + 详解）
 3. 三种装配方式：XML / 注解 / JavaConfig
 4. @Component 族与 @ComponentScan
 5. 依赖注入：@Autowired / @Qualifier / @Primary / @Resource
@@ -33,8 +33,8 @@ tags: [Java, Spring, IoC, DI, Bean, 容器, Bean生命周期, 作用域]
 
 ## 2. 前置知识
 
-- **Java反射详解**（见知识库）：容器靠反射 newInstance + setField 完成创建与注入
-- **Java注解机制详解**（见知识库）：@Component 是标记，Spring 扫描并注册为 Bean
+- [[Java反射详解]]：容器靠反射 newInstance + setField 完成创建与注入
+- [[Java注解机制详解]]：@Component 是标记，Spring 扫描并注册为 Bean
 
 ## 3. 核心知识点
 
@@ -59,29 +59,30 @@ public class OrderService {
 
 ### 3.2 Bean 生命周期 ★
 
-```mermaid
-flowchart LR
-    A[1. 实例化<br/>newInstance] --> B[2. 属性填充<br/>依赖注入]
-    B --> C[3. Aware 回调<br/>BeanNameAware等]
-    C --> D[4. BeanPostProcessor<br/>postProcessBeforeInitialization]
-    D --> E[5. 初始化<br/>@PostConstruct / InitializingBean]
-    E --> F[6. BeanPostProcessor<br/>postProcessAfterInitialization]
-    F --> G[7. 就绪·可用]
-    G -.容器关闭.-> H[8. 销毁<br/>@PreDestroy / DisposableBean]
-```
+> 🖼 **11 步蛇形图**（图即知识，扫一眼看懂流程）：
 
-| 阶段 | 触发点 | 典型用途 |
-| --- | --- | --- |
-| 实例化 | 反射 newInstance | 创建对象（无参构造） |
-| 属性填充 | 注入依赖 | @Autowired 生效 |
-| Aware 回调 | BeanNameAware/ApplicationContextAware | 拿 Bean 名/容器 |
-| 前置初始化 | BeanPostProcessor.beforeInit | 包装/修改（AOP 代理在此） |
-| 初始化 | @PostConstruct / InitializingBean | 初始化资源 |
-| 后置初始化 | BeanPostProcessor.afterInit | 生成代理对象 |
-| 就绪 | — | 可被注入使用 |
-| 销毁 | @PreDestroy / DisposableBean | 释放资源 |
+![Bean 生命周期 11 步蛇形图](assets/01-bean-lifecycle-snake.svg)
 
-> **关键**：AOP 动态代理正是在 BeanPostProcessor 的 postProcessAfterInitialization 阶段**生成代理对象替换原 Bean**（呼应 [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)）。所以 final 类无法被代理（无法生成子类）。
+#### 生命周期 11 步详解
+
+1. **实例化**：根据配置调用 Bean 的构造方法或工厂方法创建对象。
+2. **属性注入**：利用依赖注入完成 Bean 中所有属性值的配置注入（setter / 构造注入，@Autowired 生效）。
+3. **BeanNameAware**：如果 Bean 实现了 `BeanNameAware`，Spring 调用 `setBeanName(id)` 传入当前 Bean 的 id 值。
+4. **BeanFactoryAware**：如果 Bean 实现了 `BeanFactoryAware`，Spring 调用 `setBeanFactory(工厂)` 传入当前工厂实例引用。
+5. **ApplicationContextAware**：如果 Bean 实现了 `ApplicationContextAware`，Spring 调用 `setApplicationContext(ctx)` 传入当前容器实例引用。
+6. **前置 BPP**：如果 `BeanPostProcessor` 和 Bean 关联，Spring 调用 `postProcessBeforeInitialization` 对 Bean 进行加工（★ AOP 代理在此介入）。
+7. **InitializingBean**：如果 Bean 实现了 `InitializingBean`，Spring 调用 `afterPropertiesSet()`。
+8. **init-method**：如果配置文件中通过 `init-method` 指定了初始化方法，则调用该方法。
+9. **后置 BPP**：如果 `BeanPostProcessor` 和 Bean 关联，Spring 调用 `postProcessAfterInitialization`（AOP 代理在此生成）——此时 Bean 已可以被应用系统使用。
+10. **作用域**：如果 `scope="singleton"`，则将该 Bean 放入 IoC 缓存池，触发 Spring 生命周期管理；如果 `scope="prototype"`，则将该 Bean 交给调用者（Spring 不再管）。
+11. **销毁**：如果 Bean 实现了 `DisposableBean`，Spring 调用 `destroy()`；如果通过 `destroy-method` 指定了销毁方法，则调用该方法。
+
+**要点**：
+- 第 6、9 步是 **BeanPostProcessor 的两次拦截**，整个生命周期最重要的扩展点；AOP 代理在**第 9 步（后置 BPP）**生成。
+- **Aware 分两组**：BeanName/BeanFactory 等直接 Aware 由 `invokeAwareMethods()` 直接调；ApplicationContext 族（含 ResourceLoaderAware 等）由 `ApplicationContextAwareProcessor`（一个 BPP）在**第 6 步前置阶段**调。
+- **@PostConstruct 的位置**：由 `InitDestroyAnnotationBeanPostProcessor` 在**第 6 步前置 BPP**阶段触发（不是第 7 步 afterPropertiesSet）。
+
+> **关键**：AOP 动态代理正是在 BeanPostProcessor 的 postProcessAfterInitialization（第 9 步）阶段**生成代理对象替换原 Bean**（呼应 [[04-Spring核心·AOP详解]]）。所以 final 类无法被代理（无法生成子类）。
 
 ### 3.3 三种装配方式
 
@@ -113,7 +114,7 @@ public class AppConfig {
 @Controller     // Web 控制器
 ```
 
-`@ComponentScan(basePackages="com.example")` 扫描包下带 @Component 族注解的类注册为 Bean。`@SpringBootApplication` 自带 @ComponentScan（所在包及子包），见 springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)。
+`@ComponentScan(basePackages="com.example")` 扫描包下带 @Component 族注解的类注册为 Bean。`@SpringBootApplication` 自带 @ComponentScan（所在包及子包），见 springboot 域 [[01-SpringBoot启动原理与自动装配详解]]。
 
 ### 3.5 依赖注入注解
 
@@ -178,7 +179,7 @@ flowchart LR
 @Value("#{config.retry}")      // SpEL 求值
 ```
 
-外部化配置优先级、@ConfigurationProperties 结构化绑定见 springboot 域 [02-SpringBoot配置体系与外部化配置详解](../springboot/02-SpringBoot配置体系与外部化配置详解.md)。
+外部化配置优先级、@ConfigurationProperties 结构化绑定见 springboot 域 [[02-SpringBoot配置体系与外部化配置详解]]。
 
 ## 4. 最佳实践
 
@@ -193,25 +194,25 @@ flowchart LR
 - **循环依赖**：构造器注入直接报错，字段注入 Boot 默认也禁止 → 重构分层
 - **多实现歧义**：两个同类型 Bean 不配 @Primary/@Qualifier → NoUniqueBeanDefinitionException
 - **单例注入 prototype 失效**：注入的是单例持有的固定实例
-- **final 类**：AOP 代理不了（无法生成子类），见 [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)
+- **final 类**：AOP 代理不了（无法生成子类），见 [[04-Spring核心·AOP详解]]
 - **@Bean 方法里 new 的对象**：未被容器管理，无生命周期回调，须返回类型声明才被识别
 
 ## 6. 小结
 
 - IoC = 控制反转理念，DI = 注入实现；Spring 容器管对象创建与依赖。
-- Bean 生命周期：实例化→属性填充→Aware→BeanPostProcessor→初始化→后置代理→就绪→销毁。
+- Bean 生命周期 11 步：实例化→属性注入→3个Aware→前置BPP(★AOP)→InitializingBean→init-method→后置BPP→作用域→销毁；AOP 代理在第 9 步后置 BPP 生成。
 - 装配三方式：XML/注解/JavaConfig；自研 @Component，第三方 @Bean。
 - 作用域默认 singleton；多实现用 @Primary/@Qualifier。
 - 循环依赖靠三级缓存（框架层），但新项目应避免；Boot 默认禁止。
 
 ## 7. 关联笔记
 
-- 上一篇：[00-Spring三件套体系总览·Spring与SpringMVC与SpringBoot](00-Spring三件套体系总览·Spring与SpringMVC与SpringBoot.md)
-- 下一篇：[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)
-- [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)：代理在 BeanPostProcessor 后置阶段生成
-- [05-Spring事务管理详解](05-Spring事务管理详解.md)：事务切面代理
-- [06-SpEL表达式详解](06-SpEL表达式详解.md)：@Value SpEL 取参
-- springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)：Boot 如何扫描装配
+- 上一篇：[[00-Spring三件套体系总览·Spring与SpringMVC与SpringBoot]]
+- 下一篇：[[02-SpringMVC执行流程详解]]
+- [[04-Spring核心·AOP详解]]：代理在 BeanPostProcessor 后置阶段生成
+- [[05-Spring事务管理详解]]：事务切面代理
+- [[06-SpEL表达式详解]]：@Value SpEL 取参
+- springboot 域 [[01-SpringBoot启动原理与自动装配详解]]：Boot 如何扫描装配
 
 ## 8. 参考资料
 
