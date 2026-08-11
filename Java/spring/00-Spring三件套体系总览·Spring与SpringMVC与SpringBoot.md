@@ -80,15 +80,15 @@ SpringBoot
 | [05-Spring事务管理详解](05-Spring事务管理详解.md) | @Transactional/传播/隔离 | 深 |
 | [06-SpEL表达式详解](06-SpEL表达式详解.md) | 表达式语言/注解取参 | 适中 |
 | [07-Spring事件驱动机制详解](07-Spring事件驱动机制详解.md) | 观察者模式/事务事件 | 适中 |
-| springboot 域 [00-SpringBoot体系总览](springboot/00-SpringBoot体系总览.md) | Boot 体系地图 | 深 |
-| springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md) | 启动流程/自动装配 | 深（重点） |
-| springboot 域 [02-SpringBoot配置体系与外部化配置详解](springboot/02-SpringBoot配置体系与外部化配置详解.md) | 配置优先级/Properties | 深（重点） |
-| springboot 域 [03-SpringBoot模块化详解](springboot/03-SpringBoot模块化详解.md) | Boot4 模块化 | 深 |
-| springboot 域 [04-SpringBoot自定义Starter详解](springboot/04-SpringBoot自定义Starter详解.md) | 自定义 Starter 开发 | 深 |
-| springboot 域 [05-SpringBoot异步与线程池详解](springboot/05-SpringBoot异步与线程池详解.md) | @Async/线程池 | 深 |
-| springboot 域 [06-SpringBoot日志配置详解](springboot/06-SpringBoot日志配置详解.md) | 日志配置 | 深 |
-| springboot 域 [07-SpringBoot Actuator监控详解](springboot/07-SpringBoot Actuator监控详解.md) | 生产监控 | 深 |
-| springboot 域 [08-Spring WebFlux响应式编程详解](springboot/08-Spring WebFlux响应式编程详解.md) | 响应式/AI agent 流式 | 深（重点） |
+| springboot 域 [00-SpringBoot体系总览](../springboot/00-SpringBoot体系总览.md) | Boot 体系地图 | 深 |
+| springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md) | 启动流程/自动装配 | 深（重点） |
+| springboot 域 [02-SpringBoot配置体系与外部化配置详解](../springboot/02-SpringBoot配置体系与外部化配置详解.md) | 配置优先级/Properties | 深（重点） |
+| springboot 域 [03-SpringBoot模块化详解](../springboot/03-SpringBoot模块化详解.md) | Boot4 模块化 | 深 |
+| springboot 域 [04-SpringBoot自定义Starter详解](../springboot/04-SpringBoot自定义Starter详解.md) | 自定义 Starter 开发 | 深 |
+| springboot 域 [05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md) | @Async/线程池 | 深 |
+| springboot 域 [06-SpringBoot日志配置详解](../springboot/06-SpringBoot日志配置详解.md) | 日志配置 | 深 |
+| springboot 域 [07-SpringBoot Actuator监控详解](../springboot/07-SpringBoot Actuator监控详解.md) | 生产监控 | 深 |
+| springboot 域 [08-Spring WebFlux响应式编程详解](../springboot/08-Spring WebFlux响应式编程详解.md) | 响应式/AI agent 流式 | 深（重点） |
 
 **跨域关联**：
 - Web/HTTP 底层：**00-网络传输协议总览**（见知识库）、Tomcat（spring 内嵌容器）
@@ -104,8 +104,8 @@ SpringBoot
 1. **先读本总览**：建立三件套心智模型
 2. **Spring 核心**：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md) → [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md) → [05-Spring事务管理详解](05-Spring事务管理详解.md) → [07-Spring事件驱动机制详解](07-Spring事件驱动机制详解.md)（容器 → 切面 → 事务 → 事件）
 3. **SpringMVC**：[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md) → [03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md)
-4. **SpringBoot**（重点）：springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md) → [02-SpringBoot配置体系与外部化配置详解](springboot/02-SpringBoot配置体系与外部化配置详解.md) → [03-SpringBoot模块化详解](springboot/03-SpringBoot模块化详解.md) → [04-SpringBoot自定义Starter详解](springboot/04-SpringBoot自定义Starter详解.md) → [05-SpringBoot异步与线程池详解](springboot/05-SpringBoot异步与线程池详解.md) → [06-SpringBoot日志配置详解](springboot/06-SpringBoot日志配置详解.md) → [07-SpringBoot Actuator监控详解](springboot/07-SpringBoot Actuator监控详解.md)
-5. 补件：[06-SpEL表达式详解](06-SpEL表达式详解.md)（随 AOP/缓存用到再读）、[08-Spring WebFlux响应式编程详解](springboot/08-Spring WebFlux响应式编程详解.md)（AI agent/高并发 IO）
+4. **SpringBoot**（重点）：springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md) → [02-SpringBoot配置体系与外部化配置详解](../springboot/02-SpringBoot配置体系与外部化配置详解.md) → [03-SpringBoot模块化详解](../springboot/03-SpringBoot模块化详解.md) → [04-SpringBoot自定义Starter详解](../springboot/04-SpringBoot自定义Starter详解.md) → [05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md) → [06-SpringBoot日志配置详解](../springboot/06-SpringBoot日志配置详解.md) → [07-SpringBoot Actuator监控详解](../springboot/07-SpringBoot Actuator监控详解.md)
+5. 补件：[06-SpEL表达式详解](06-SpEL表达式详解.md)（随 AOP/缓存用到再读）、[08-Spring WebFlux响应式编程详解](../springboot/08-Spring WebFlux响应式编程详解.md)（AI agent/高并发 IO）
 
 ## 6. 面试考点索引
 

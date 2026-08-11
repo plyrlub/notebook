@@ -10,7 +10,7 @@ tags: [Java, SpringBoot, 配置, 外部化配置, ConfigurationProperties, Value
 > 版本基线：Spring Boot 2.x/3.x（外部化配置机制稳定）
 > 受众：Java 后端开发。假设已懂 @SpringBootApplication 与自动装配（见 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)）；本篇讲清"配置从哪来、优先级怎么排、如何结构化绑定"。
 > 前置知识：[01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)（启动/装配）
-> 关联笔记：spring 域 [06-SpEL表达式详解](spring/06-SpEL表达式详解.md)（@Value SpEL）、[01-Spring核心·IoC与Bean生命周期详解](spring/01-Spring核心·IoC与Bean生命周期详解.md)（@Value 占位）
+> 关联笔记：spring 域 [06-SpEL表达式详解](../spring/06-SpEL表达式详解.md)（@Value SpEL）、[01-Spring核心·IoC与Bean生命周期详解](../spring/01-Spring核心·IoC与Bean生命周期详解.md)（@Value 占位）
 
 ## 📋 总纲
 
@@ -33,8 +33,8 @@ tags: [Java, SpringBoot, 配置, 外部化配置, ConfigurationProperties, Value
 ## 2. 前置知识
 
 - [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)：配置类如何被装配
-- [01-Spring核心·IoC与Bean生命周期详解](spring/01-Spring核心·IoC与Bean生命周期详解.md)：@Value 注入
-- [06-SpEL表达式详解](spring/06-SpEL表达式详解.md)：@Value 支持 SpEL
+- [01-Spring核心·IoC与Bean生命周期详解](../spring/01-Spring核心·IoC与Bean生命周期详解.md)：@Value 注入
+- [06-SpEL表达式详解](../spring/06-SpEL表达式详解.md)：@Value 支持 SpEL
 
 ## 3. 核心知识点
 
@@ -219,8 +219,8 @@ class CacheTest { ... }
 
 - 上一篇：[01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)
 - 下一篇：[03-SpringBoot模块化详解](03-SpringBoot模块化详解.md)
-- [01-Spring核心·IoC与Bean生命周期详解](spring/01-Spring核心·IoC与Bean生命周期详解.md)：@Value 注入
-- [06-SpEL表达式详解](spring/06-SpEL表达式详解.md)：@Value SpEL
+- [01-Spring核心·IoC与Bean生命周期详解](../spring/01-Spring核心·IoC与Bean生命周期详解.md)：@Value 注入
+- [06-SpEL表达式详解](../spring/06-SpEL表达式详解.md)：@Value SpEL
 - orm 域 **07-Spring Boot集成与配置详解**（见知识库）：mybatis.* 配置前缀实际绑定
 
 ## 8. 参考资料

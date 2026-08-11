@@ -10,7 +10,7 @@ tags: [Java, Spring, 事件, 事件驱动, 观察者模式, EventListener, Trans
 > 版本基线：Spring Framework 4.2+/5.x/6.x
 > 受众：Java 后端开发。事件驱动是 Spring 核心能力之一（观察者模式），面试中高频，生产用于模块解耦。假设已懂 IoC（见 [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)）与事务（见 [05-Spring事务管理详解](05-Spring事务管理详解.md)）。
 > 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（Bean 注册）、[05-Spring事务管理详解](05-Spring事务管理详解.md)（@Transactional 事务生命周期）
-> 关联笔记：[05-SpringBoot异步与线程池详解](springboot/05-SpringBoot异步与线程池详解.md)（@Async 异步）、[03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md)（容器）
+> 关联笔记：[05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md)（@Async 异步）、[03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md)（容器）
 
 ## 📋 总纲
 
@@ -116,7 +116,7 @@ public class NotifyListener {
 }
 ```
 
-**异步坑**：@Async 监听器异常不外抛（"蒸发"），必须方法内 try-catch 或配置 `AsyncUncaughtExceptionHandler`（见 [05-SpringBoot异步与线程池详解](springboot/05-SpringBoot异步与线程池详解.md)）。
+**异步坑**：@Async 监听器异常不外抛（"蒸发"），必须方法内 try-catch 或配置 `AsyncUncaughtExceptionHandler`（见 [05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md)）。
 
 ### 3.5 @TransactionalEventListener 事务事件 ★
 
@@ -186,10 +186,10 @@ public void onUserEvent(BaseEvent<User> event) { ... }   // 只处理 User 类�
 ## 7. 关联笔记
 
 - 上一篇：[06-SpEL表达式详解](06-SpEL表达式详解.md)
-- 下一篇：springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md)
+- 下一篇：springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)
 - [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)：监听器 Bean 管理
 - [05-Spring事务管理详解](05-Spring事务管理详解.md)：事务阶段
-- [05-SpringBoot异步与线程池详解](springboot/05-SpringBoot异步与线程池详解.md)：@Async 异步监听
+- [05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md)：@Async 异步监听
 
 ## 8. 参考资料
 

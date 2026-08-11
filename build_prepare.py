@@ -297,7 +297,7 @@ def convert_links(content, rename_map, base_dir=""):
     return re.sub(r"\[([^\]]+)\]\(([^)]+\.md[^)]*)\)", repl, content)
 
 
-def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed, dist_renamed=None, cicd_renamed=None, sprotect_renamed=None, linux_renamed=None):
+def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed, dist_renamed=None, cicd_renamed=None, sprotect_renamed=None, linux_renamed=None, spring_renamed=None, springboot_renamed=None):
     """生成 mkdocs.yml（nav 两级折叠：主题 → 子域分组 → 笔记，默认收起）"""
     nav_lines = []
     nav_lines.append("nav:")
@@ -370,6 +370,18 @@ def generate_mkdocs_yml(java_renamed, nginx_renamed, lua_renamed, cache_renamed,
                "tomcat-classloader-deepdive.md", "tomcat-https.md", "tomcat-performance-tuning.md"]:
         if en in JAVA_NAV_TITLES:
             nav_lines.append("      - %s: Java/tomcat/%s" % (JAVA_NAV_TITLES[en], en))
+
+    # Spring 三件套：spring（Spring/SpringMVC）+ springboot（重点）
+    if spring_renamed and spring_renamed.get("."):
+        nav_lines.append("    - Spring 三件套（Spring/SpringMVC）:")
+        for en, cn in sorted(spring_renamed.get(".", {}).items()):
+            title = cn[:-3] if cn.endswith(".md") else cn
+            nav_lines.append("      - %s: Java/spring/%s" % (title, en))
+    if springboot_renamed and springboot_renamed.get("."):
+        nav_lines.append("    - Spring Boot（重点）:")
+        for en, cn in sorted(springboot_renamed.get(".", {}).items()):
+            title = cn[:-3] if cn.endswith(".md") else cn
+            nav_lines.append("      - %s: Java/springboot/%s" % (title, en))
 
     # Java 构建工具（Maven 系列 + Gradle 系列 + 00 总览）
     nav_lines.append("    - 构建工具:")
@@ -496,6 +508,49 @@ def prepare_source(src_dir, dst_sub, rename_map, convert, exclude_dirs=None):
     return renamed
 
 
+# ============ Spring 三件套：spring（Spring/SpringMVC）+ springboot（重点）子目录 ============
+SPRING_SRC = os.path.join(REPO, "Java", "spring")
+SPRINGBOOT_SRC = os.path.join(REPO, "Java", "springboot")
+
+
+def spring_slug(filename):
+    """spring 子目录中文文件名 → 英文 slug（spring-NN.md）
+    '00-Spring三件套体系总览·Spring与SpringMVC与SpringBoot.md' → 'spring-00.md'
+    '04-Spring核心·AOP详解.md' → 'spring-04.md'
+    """
+    base = os.path.splitext(filename)[0]
+    m = re.match(r"^(\d+)-", base)
+    if m:
+        return "spring-%s.md" % m.group(1)
+    return filename
+
+
+def sb_slug(filename):
+    """springboot 子目录中文文件名 → 英文 slug（sb-NN.md）
+    '01-SpringBoot启动原理与自动装配详解.md' → 'sb-01.md'
+    '08-Spring WebFlux响应式编程详解.md' → 'sb-08.md'
+    """
+    base = os.path.splitext(filename)[0]
+    m = re.match(r"^(\d+)-", base)
+    if m:
+        return "sb-%s.md" % m.group(1)
+    return filename
+
+
+def build_spring_map():
+    """构建 spring + springboot 全文件名 → 英文 slug 映射（两子目录合并，链接可跨域互转）"""
+    spring_map = {}
+    if os.path.exists(SPRING_SRC):
+        for f in os.listdir(SPRING_SRC):
+            if f.endswith(".md"):
+                spring_map[f] = spring_slug(f)
+    if os.path.exists(SPRINGBOOT_SRC):
+        for f in os.listdir(SPRINGBOOT_SRC):
+            if f.endswith(".md"):
+                spring_map[f] = sb_slug(f)
+    return spring_map
+
+
 def prepare():
     # 1. 清理旧 docs
     if os.path.exists(DST):
@@ -552,11 +607,26 @@ def prepare():
     else:
         print("WARNING: index.md not found in repo root")
 
-    # 2. Java 目录（排除独立处理的"构建工具"子目录）
+    # 2. Java 目录（排除独立处理的"构建工具"/"spring"/"springboot"子目录）
+    spring_map = build_spring_map()  # 先构建 spring+springboot 映射（跨域链接转换用）
     if os.path.exists(JAVA_SRC):
-        prepare_source(JAVA_SRC, "Java", JAVA_RENAME_MAP, convert=True, exclude_dirs=["构建工具"])
+        prepare_source(JAVA_SRC, "Java", JAVA_RENAME_MAP, convert=True, exclude_dirs=["构建工具", "spring", "springboot"])
     else:
         print("WARNING: Java/ dir not found")
+
+    # 2.1 spring 子目录（Spring/SpringMVC）
+    spring_renamed = {}
+    if os.path.exists(SPRING_SRC):
+        spring_renamed = prepare_source(SPRING_SRC, "Java/spring", spring_map, convert=True)
+    else:
+        print("WARNING: Java/spring dir not found")
+
+    # 2.2 springboot 子目录（SpringBoot，重点）
+    springboot_renamed = {}
+    if os.path.exists(SPRINGBOOT_SRC):
+        springboot_renamed = prepare_source(SPRINGBOOT_SRC, "Java/springboot", spring_map, convert=True)
+    else:
+        print("WARNING: Java/springboot dir not found")
 
     # 2.5 构建工具目录（Java 下二级分组）
     if os.path.exists(BUILDTOOL_SRC):
@@ -638,7 +708,7 @@ def prepare():
         print("WARNING: Linux/ dir not found")
 
     # 4. 生成 mkdocs.yml
-    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed, dist_renamed, cicd_renamed, sprotect_renamed, linux_renamed)
+    generate_mkdocs_yml(None, nginx_renamed, lua_renamed, cache_renamed, dist_renamed, cicd_renamed, sprotect_renamed, linux_renamed, spring_renamed, springboot_renamed)
 
 
 if __name__ == "__main__":

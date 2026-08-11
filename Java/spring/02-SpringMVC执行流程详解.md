@@ -10,7 +10,7 @@ tags: [Java, SpringMVC, DispatcherServlet, 控制器, 拦截器, 参数绑定, �
 > 版本基线：Spring MVC 5.x/6.x（Spring Boot 内嵌）
 > 受众：Java 后端开发。假设已懂 Spring 核心（IoC/AOP）；需理解 HTTP 请求如何在 SpringMVC 里被路由、绑定、返回。
 > 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（容器/Bean）、**Java反射详解**（见知识库）（参数绑定底层）、**00-网络传输协议总览**（见知识库）（HTTP）
-> 关联笔记：[03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md)（传统整合）、springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md)（自动装配 DispatcherServlet）
+> 关联笔记：[03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md)（传统整合）、springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)（自动装配 DispatcherServlet）
 
 ## 📋 总纲
 
@@ -40,7 +40,7 @@ tags: [Java, SpringMVC, DispatcherServlet, 控制器, 拦截器, 参数绑定, �
 
 ### 3.1 DispatcherServlet 定位与启动
 
-**DispatcherServlet 是所有请求的前端控制器（Front Controller）**：接收所有 HTTP 请求，委托给各组件处理。启动：在 Servlet 容器（Tomcat）初始化时创建，Spring Boot 通过自动装配注册（见 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md)）。
+**DispatcherServlet 是所有请求的前端控制器（Front Controller）**：接收所有 HTTP 请求，委托给各组件处理。启动：在 Servlet 容器（Tomcat）初始化时创建，Spring Boot 通过自动装配注册（见 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)）。
 
 ### 3.2 请求全流程 ★
 
@@ -232,7 +232,7 @@ public class ApiController {
 - 下一篇：[03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md)
 - **Java参数校验详解**（见知识库）：@Valid 参数校验
 - 安全域 **01-Spring Security核心架构详解**（见知识库）：Spring Security 基于 MVC 过滤链
-- springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md)：Boot 自动装配 DispatcherServlet
+- springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)：Boot 自动装配 DispatcherServlet
 
 ## 8. 参考资料
 

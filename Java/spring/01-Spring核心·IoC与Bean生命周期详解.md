@@ -113,7 +113,7 @@ public class AppConfig {
 @Controller     // Web 控制器
 ```
 
-`@ComponentScan(basePackages="com.example")` 扫描包下带 @Component 族注解的类注册为 Bean。`@SpringBootApplication` 自带 @ComponentScan（所在包及子包），见 springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md)。
+`@ComponentScan(basePackages="com.example")` 扫描包下带 @Component 族注解的类注册为 Bean。`@SpringBootApplication` 自带 @ComponentScan（所在包及子包），见 springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)。
 
 ### 3.5 依赖注入注解
 
@@ -178,7 +178,7 @@ flowchart LR
 @Value("#{config.retry}")      // SpEL 求值
 ```
 
-外部化配置优先级、@ConfigurationProperties 结构化绑定见 springboot 域 [02-SpringBoot配置体系与外部化配置详解](springboot/02-SpringBoot配置体系与外部化配置详解.md)。
+外部化配置优先级、@ConfigurationProperties 结构化绑定见 springboot 域 [02-SpringBoot配置体系与外部化配置详解](../springboot/02-SpringBoot配置体系与外部化配置详解.md)。
 
 ## 4. 最佳实践
 
@@ -211,7 +211,7 @@ flowchart LR
 - [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)：代理在 BeanPostProcessor 后置阶段生成
 - [05-Spring事务管理详解](05-Spring事务管理详解.md)：事务切面代理
 - [06-SpEL表达式详解](06-SpEL表达式详解.md)：@Value SpEL 取参
-- springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md)：Boot 如何扫描装配
+- springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)：Boot 如何扫描装配
 
 ## 8. 参考资料
 

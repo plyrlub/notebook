@@ -9,7 +9,7 @@ tags: [Java, SpringBoot, 自动装配, 启动原理, EnableAutoConfiguration, �
 
 > 版本基线：Spring Boot 2.x/3.x（3.x 为主，明确标注 2.x 差异）
 > 受众：Java 后端开发。假设已懂 Spring 核心（IoC/@Configuration/@Import）。本篇是 SpringBoot 域最核心的篇目，讲清"@SpringBootApplication 到底做了什么、自动装配如何按需生效"。
-> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](spring/01-Spring核心·IoC与Bean生命周期详解.md)（容器/BeanPostProcessor）、**Java注解机制详解**（见知识库）（@Import/ImportSelector）
+> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](../spring/01-Spring核心·IoC与Bean生命周期详解.md)（容器/BeanPostProcessor）、**Java注解机制详解**（见知识库）（@Import/ImportSelector）
 > 关联笔记：[02-SpringBoot配置体系与外部化配置详解](02-SpringBoot配置体系与外部化配置详解.md)（配置）、[03-SpringBoot模块化详解](03-SpringBoot模块化详解.md)（Boot4 演进）、orm 域 **07-Spring Boot集成与配置详解**（见知识库）
 
 ## 📋 总纲
@@ -34,9 +34,9 @@ tags: [Java, SpringBoot, 自动装配, 启动原理, EnableAutoConfiguration, �
 
 ## 2. 前置知识
 
-- [01-Spring核心·IoC与Bean生命周期详解](spring/01-Spring核心·IoC与Bean生命周期详解.md)：@Configuration/@ComponentScan/@Bean
+- [01-Spring核心·IoC与Bean生命周期详解](../spring/01-Spring核心·IoC与Bean生命周期详解.md)：@Configuration/@ComponentScan/@Bean
 - **Java注解机制详解**（见知识库）：@Import 导入配置类、ImportSelector 动态选择
-- [04-Spring核心·AOP详解](spring/04-Spring核心·AOP详解.md)：BeanPostProcessor（自动装配后置）
+- [04-Spring核心·AOP详解](../spring/04-Spring核心·AOP详解.md)：BeanPostProcessor（自动装配后置）
 
 ## 3. 核心知识点
 
@@ -238,7 +238,7 @@ public class MyProperties { private String url; /* getter/setter */ }
 - 上一篇：[00-SpringBoot体系总览](00-SpringBoot体系总览.md)
 - 下一篇：[02-SpringBoot配置体系与外部化配置详解](02-SpringBoot配置体系与外部化配置详解.md)
 - [03-SpringBoot模块化详解](03-SpringBoot模块化详解.md)：Boot4 自动装配打包方式改变
-- [01-Spring核心·IoC与Bean生命周期详解](spring/01-Spring核心·IoC与Bean生命周期详解.md)：容器基础
+- [01-Spring核心·IoC与Bean生命周期详解](../spring/01-Spring核心·IoC与Bean生命周期详解.md)：容器基础
 - **Java注解机制详解**（见知识库）：@Import/ImportSelector 机制
 - orm 域 **07-Spring Boot集成与配置详解**（见知识库）：具体集成自动配置示例
 

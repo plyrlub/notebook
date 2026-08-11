@@ -10,7 +10,7 @@ tags: [Java, Spring, SpringMVC, 整合, web.xml, 双容器, JavaConfig, 框架]
 > 版本基线：传统 Spring XML/注解整合 + 与 SpringBoot 对比
 > 受众：Java 后端开发。假设已懂 [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md) 与 [02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)；本篇解决"Spring 和 SpringMVC 怎么手动整合起来"以及"为什么 Boot 不用配了"。
 > 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（IoC/装配）、[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)（MVC 流程）
-> 关联笔记：springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md)（Boot 如何省掉这些配置）
+> 关联笔记：springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)（Boot 如何省掉这些配置）
 
 ## 📋 总纲
 
@@ -170,7 +170,7 @@ SpringBoot 的自动装配做了三件事：
 2. 自动注册 DispatcherServlet + 配置 WebMvc 默认组件（不再需要 web.xml/初始化器）
 3. 自动创建"父容器"（ApplicationContext）扫描启动类所在包及子包——**统一单容器**，Controller/Service 一个容器管，双容器边界和重复扫描的坑直接消失
 
-> 所以 Boot 项目里你看不到 web.xml、看不到双容器、不用配 DispatcherServlet——这些被 `@SpringBootApplication` + 自动装配吞掉了。详见 springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md)。
+> 所以 Boot 项目里你看不到 web.xml、看不到双容器、不用配 DispatcherServlet——这些被 `@SpringBootApplication` + 自动装配吞掉了。详见 springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)。
 
 ## 4. 最佳实践
 
@@ -196,7 +196,7 @@ SpringBoot 的自动装配做了三件事：
 ## 7. 关联笔记
 
 - 上一篇：[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)
-- 下一篇（进入 Boot）：springboot 域 [01-SpringBoot启动原理与自动装配详解](springboot/01-SpringBoot启动原理与自动装配详解.md)
+- 下一篇（进入 Boot）：springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)
 - [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)：事务切面代理（父容器配置相关）
 - [05-Spring事务管理详解](05-Spring事务管理详解.md)：DataSourceTransactionManager
 

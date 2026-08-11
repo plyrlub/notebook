@@ -8,9 +8,9 @@ tags: [Java, SpringBoot, 异步, @Async, 线程池, TaskExecutor, EnableAsync, �
 # SpringBoot异步与线程池详解
 
 > 版本基线：Spring Boot 2.x/3.x、Spring Framework 5.x/6.x
-> 受众：Java 后端开发。假设已懂 AOP 代理机制（见 [04-Spring核心·AOP详解](spring/04-Spring核心·AOP详解.md)）——@Async 本质就是一个切面。本篇讲清异步执行、线程池配置与失效场景。
-> 前置知识：[04-Spring核心·AOP详解](spring/04-Spring核心·AOP详解.md)（动态代理/自调用失效）、**01-Java线程池原理与参数详解**（见知识库）（线程池核心参数）
-> 关联笔记：[05-Spring事务管理详解](spring/05-Spring事务管理详解.md)（@Transactional 与 @Async 同属代理注解，失效原因相通）、[06-SpringBoot日志配置详解](06-SpringBoot日志配置详解.md)（异步日志线程池）
+> 受众：Java 后端开发。假设已懂 AOP 代理机制（见 [04-Spring核心·AOP详解](../spring/04-Spring核心·AOP详解.md)）——@Async 本质就是一个切面。本篇讲清异步执行、线程池配置与失效场景。
+> 前置知识：[04-Spring核心·AOP详解](../spring/04-Spring核心·AOP详解.md)（动态代理/自调用失效）、**01-Java线程池原理与参数详解**（见知识库）（线程池核心参数）
+> 关联笔记：[05-Spring事务管理详解](../spring/05-Spring事务管理详解.md)（@Transactional 与 @Async 同属代理注解，失效原因相通）、[06-SpringBoot日志配置详解](06-SpringBoot日志配置详解.md)（异步日志线程池）
 
 ## 📋 总纲
 
@@ -33,7 +33,7 @@ tags: [Java, SpringBoot, 异步, @Async, 线程池, TaskExecutor, EnableAsync, �
 
 ## 2. 前置知识
 
-- [04-Spring核心·AOP详解](spring/04-Spring核心·AOP详解.md)：动态代理、自调用失效（@Async 失效同因）
+- [04-Spring核心·AOP详解](../spring/04-Spring核心·AOP详解.md)：动态代理、自调用失效（@Async 失效同因）
 - 线程池基础：核心线程数/最大线程数/队列/拒绝策略
 
 ## 3. 核心知识点
@@ -59,7 +59,7 @@ tags: [Java, SpringBoot, 异步, @Async, 线程池, TaskExecutor, EnableAsync, �
           └─ 主线程立即返回（同步调用时返回）
 ```
 
-关键：**@Async 与 [04-Spring核心·AOP详解](spring/04-Spring核心·AOP详解.md) 里的 @Transactional 同理**——都要靠代理对象触发，自调用（this.xxx()）会失效（见 3.6）。
+关键：**@Async 与 [04-Spring核心·AOP详解](../spring/04-Spring核心·AOP详解.md) 里的 @Transactional 同理**——都要靠代理对象触发，自调用（this.xxx()）会失效（见 3.6）。
 
 ### 3.3 @EnableAsync 开启异步
 
@@ -146,7 +146,7 @@ public class OrderService {
 ⑤ **对象没进容器**：new 出来的不经过代理。
 ⑥ **同一类里 @Async 方法互相调用**：同上自调用。
 
-**根本原因**：@Async 靠 AOP 代理，代理外调用（this/自调用/new）直接调原始对象，切面不触发——与 [04-Spring核心·AOP详解](spring/04-Spring核心·AOP详解.md)、[05-Spring事务管理详解](spring/05-Spring事务管理详解.md) 的失效原因完全同源。
+**根本原因**：@Async 靠 AOP 代理，代理外调用（this/自调用/new）直接调原始对象，切面不触发——与 [04-Spring核心·AOP详解](../spring/04-Spring核心·AOP详解.md)、[05-Spring事务管理详解](../spring/05-Spring事务管理详解.md) 的失效原因完全同源。
 
 ### 3.7 事务与异步结合
 
@@ -159,9 +159,9 @@ public void biz() {
 ```
 
 **要点**：
-- @Async 在新线程执行，**事务绑定线程**（见 [05-Spring事务管理详解](spring/05-Spring事务管理详解.md) ThreadLocal）——主线程事务不影响异步子线程
+- @Async 在新线程执行，**事务绑定线程**（见 [05-Spring事务管理详解](../spring/05-Spring事务管理详解.md) ThreadLocal）——主线程事务不影响异步子线程
 - 异步方法若要事务，需方法内部自己 @Transactional（会开新事务）
-- 结合事件异步见 [07-Spring事件驱动机制详解](spring/07-Spring事件驱动机制详解.md)（@Async + @EventListener / @TransactionalEventListener）
+- 结合事件异步见 [07-Spring事件驱动机制详解](../spring/07-Spring事件驱动机制详解.md)（@Async + @EventListener / @TransactionalEventListener）
 
 ### 3.8 常见坑
 
@@ -198,9 +198,9 @@ public void biz() {
 ## 7. 关联笔记
 
 - 上一篇：[04-SpringBoot自定义Starter详解](04-SpringBoot自定义Starter详解.md)
-- [04-Spring核心·AOP详解](spring/04-Spring核心·AOP详解.md)：代理机制（@Async 失效根源）
-- [05-Spring事务管理详解](spring/05-Spring事务管理详解.md)：事务线程绑定
-- [07-Spring事件驱动机制详解](spring/07-Spring事件驱动机制详解.md)：异步事件监听
+- [04-Spring核心·AOP详解](../spring/04-Spring核心·AOP详解.md)：代理机制（@Async 失效根源）
+- [05-Spring事务管理详解](../spring/05-Spring事务管理详解.md)：事务线程绑定
+- [07-Spring事件驱动机制详解](../spring/07-Spring事件驱动机制详解.md)：异步事件监听
 - [06-SpringBoot日志配置详解](06-SpringBoot日志配置详解.md)：异步日志线程池
 
 ## 8. 参考资料
