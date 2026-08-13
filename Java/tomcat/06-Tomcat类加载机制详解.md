@@ -3,7 +3,6 @@ tags: [Java, Tomcat, 类加载, 双亲委派, WebAppClassLoader, 容器]
 创建日期: 2026-08-07
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
-来源: wolai 笔记转存第 5 章深度展开（[05-Tomcat类加载机制剖析](05-Tomcat类加载机制剖析.md)）
 ---
 
 # Tomcat类加载机制详解（双亲委派的打破与类隔离）
@@ -179,4 +178,4 @@ WebAppClassLoader.loadClass(name):
 ## 参考
 
 - Tomcat 官方架构文档（Class Loader HOW-TO）
-- 关联笔记：**Java类加载机制与双亲委派详解**（见知识库）（JDK 侧机制）、**Java SPI机制详解**（见知识库）（另一种打破方式：线程上下文类加载器）
+- 关联笔记：**Java类加载机制与双亲委派详解**（见知识库）（JDK 侧机制）、[Java SPI机制详解](../Java SPI机制详解.md)（另一种打破方式：线程上下文类加载器）

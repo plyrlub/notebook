@@ -3,12 +3,11 @@ tags: [Java, Tomcat, 源码, 构建, IDE, Bootstrap]
 创建日期: 2026-08-08
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
-来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
 ---
 
 # Tomcat源码构建
 
-> 本文是 Tomcat 学习笔记第 3 章（wolai 转存整理）。记录从源码下载到 IDE 运行 Tomcat 的全过程，便于后续源码级学习。
+> 本文是 Tomcat 学习笔记第 3 章。记录从源码下载到 IDE 运行 Tomcat 的全过程，便于后续源码级学习。
 > 关联笔记：[00-Tomcat总览](00-Tomcat总览.md)、[04-Tomcat核心流程剖析](04-Tomcat核心流程剖析.md)、[01-Tomcat系统架构与原理剖析](01-Tomcat系统架构与原理剖析.md)
 
 ## 📋 总纲
@@ -121,6 +120,3 @@ tomcat-src/
 
 答：源码运行用 IDE 里的 Bootstrap main 方法直接启动，方便断点调试；成品 Tomcat 通过 startup.sh 启动。两者加载的配置、类路径本质相同，源码运行更适合学习源码流程（见 [04-Tomcat核心流程剖析](04-Tomcat核心流程剖析.md)）。
 
----
-
-*来源：wolai 笔记转存（Apache Tomcat 学习笔记第 3 章），2026-08-08 整理*

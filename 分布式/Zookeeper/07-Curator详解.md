@@ -3,7 +3,7 @@ tags: [分布式, ZooKeeper, Curator, 分布式锁, 客户端]
 创建日期: 2026-08-09
 状态: ✅ 已归档（01-学习/分布式/Zookeeper）
 归属: 01-学习/分布式/Zookeeper
-来源: wolai 笔记转存 + 网络查证补充
+来源: 
 ---
 
 # Curator详解
@@ -15,7 +15,7 @@ tags: [分布式, ZooKeeper, Curator, 分布式锁, 客户端]
 ## 版本基线
 
 - Curator 4.x：支持 ZK 3.4 软兼容（需排除自带 ZK 依赖）；**Curator 5.x 要求 ZooKeeper 3.5+**
-- 示例基于 Curator 4/5（Fluent API 一致）；wolai 原笔记用 2.12.0，代码模式通用
+- 示例基于 Curator 4/5（Fluent API 一致）；，代码模式通用
 - 当前稳定版 5.x（2026-08 查证）
 
 ## 受众声明
@@ -387,6 +387,3 @@ selector.start();
 
 - 上一篇：[06-Java客户端API详解](06-Java客户端API详解.md)
 - 下一篇：[08-运维与监控专题](08-运维与监控专题.md)
-
----
-*创建于 2026-08-09（wolai 笔记转存 + 网络查证补充），2026-08-11 细化（补技术栈图/Cache 三件套对比图/锁时序图/LeaderLatch vs LeaderSelector 对比/Recipes 全家桶表）*

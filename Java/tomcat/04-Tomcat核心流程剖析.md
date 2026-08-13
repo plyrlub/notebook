@@ -3,12 +3,11 @@ tags: [Java, Tomcat, 源码, 启动流程, Bootstrap, 请求流程]
 创建日期: 2026-08-08
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
-来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
 ---
 
 # Tomcat核心流程剖析
 
-> 本文是 Tomcat 学习笔记第 4 章（wolai 转存整理）。剖析 Tomcat 的启动流程与请求处理流程，配合源码跟踪理解。
+> 本文是 Tomcat 学习笔记第 4 章。剖析 Tomcat 的启动流程与请求处理流程，配合源码跟踪理解。
 > 关联笔记：[00-Tomcat总览](00-Tomcat总览.md)、[01-Tomcat系统架构与原理剖析](01-Tomcat系统架构与原理剖析.md)、[03-Tomcat源码构建](03-Tomcat源码构建.md)
 
 ## 📋 总纲
@@ -127,6 +126,3 @@ http://localhost:8080/web_demo/hello
 
 答：统一管理复杂组件的**生命周期**（init→start→stop→destroy），实现优雅启动/关闭、按层级传播状态，避免每个组件自己管理启动逻辑。
 
----
-
-*来源：wolai 笔记转存（Apache Tomcat 学习笔记第 4 章），2026-08-08 整理*

@@ -3,12 +3,11 @@ tags: [Java, Tomcat, 类加载, 双亲委派, WebAppClassLoader]
 创建日期: 2026-08-08
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
-来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
 ---
 
 # Tomcat类加载机制剖析
 
-> 本文是 Tomcat 学习笔记第 5 章（wolai 转存整理）。wolai 原文仅列了 JDK 三大类加载器，未展开 Tomcat 特有的类加载体系。
+> 本文是 Tomcat 学习笔记第 5 章。原笔记仅列了 JDK 三大类加载器，未展开 Tomcat 特有的类加载体系。
 > **深度展开见 [06-Tomcat类加载机制详解](06-Tomcat类加载机制详解.md)**（WebAppClassLoader 与双亲委派的打破、类隔离、热部署原理，已单独成篇）。
 > 关联笔记：[00-Tomcat总览](00-Tomcat总览.md)、**Java类加载机制与双亲委派详解**（见知识库）
 
@@ -35,7 +34,7 @@ Tomcat 基于 JDK 的类加载器体系：
 
 ## 2. 补充：Tomcat 类加载器体系全貌
 
-> 原文到此为止。wolai 笔记对类加载只做了引出，**完整机制（为什么打破双亲委派、WebAppClassLoader 加载顺序、java.* 保护、热部署原理、易错点、面试 Q&A）已整理在 [06-Tomcat类加载机制详解](06-Tomcat类加载机制详解.md)**，本节仅列体系骨架：
+> 原文到此为止。原笔记对类加载只做了引出，**完整机制（为什么打破双亲委派、WebAppClassLoader 加载顺序、java.* 保护、热部署原理、易错点、面试 Q&A）已整理在 [06-Tomcat类加载机制详解](06-Tomcat类加载机制详解.md)**，本节仅列体系骨架：
 
 ```
 Bootstrap（JVM 自带，java.* 核心类）
@@ -66,4 +65,4 @@ Bootstrap（JVM 自带，java.* 核心类）
 
 ---
 
-*来源：wolai 笔记转存（Apache Tomcat 学习笔记第 5 章），深度内容并入 [06-Tomcat类加载机制详解](06-Tomcat类加载机制详解.md)，2026-08-08 整理*
+> 深度内容并入 [06-Tomcat类加载机制详解](06-Tomcat类加载机制详解.md)

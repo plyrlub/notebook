@@ -3,7 +3,7 @@ tags: [分布式, ZooKeeper, Session, Watch, 会话, 监听]
 创建日期: 2026-08-09
 状态: ✅ 已归档（01-学习/分布式/Zookeeper）
 归属: 01-学习/分布式/Zookeeper
-来源: wolai 笔记转存 + 网络查证补充
+来源: 
 ---
 
 # 会话与Watch机制
@@ -323,6 +323,3 @@ zooKeeper.addWatch(path, watcher, AddWatchMode.PERSISTENT);
 
 - 上一篇：[01-数据模型与节点详解](01-数据模型与节点详解.md)
 - 下一篇：[03-集群与Leader选举](03-集群与Leader选举.md)
-
----
-*创建于 2026-08-09（wolai 笔记转存 + 网络查证补充），2026-08-11 细化（补会话状态机图/分桶策略图/EventThread 模型图/监听矩阵解读/面试追问）*

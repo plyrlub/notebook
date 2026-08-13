@@ -80,6 +80,53 @@ public class LogAspect {
 
 @Around 中调用 `pjp.proceed()` 才执行真实方法；不调用则"短路"（幂等拦截重复请求就是靠不 proceed 直接抛异常）。
 
+### 执行顺序模型
+
+五种通知的真实执行结构（Spring 生成的代理方法，即"壳"，**不是原方法**，原方法字节码一行未动）：
+
+```java
+// ===== 原业务方法（一个字节没改）=====
+public Object realMethod(Object argN) {
+    // a
+    // b
+    return "ab";
+}
+
+// ===== Spring 为其生成的代理方法（壳）=====
+public Object wrapped(Object[] args) throws Throwable {
+    // —— 实参到此（pjp.getArgs()，同一引用，全程一份），但方法体一行没跑；可读可改 args[] ——
+
+    // ===== around 前半段 =====
+    try {
+        // ==== before ====（仍在外层，未进方法体）
+        before(args);
+
+        Object result;
+        try {
+            // ★ proceed：此刻才真正执行方法体里的 a → b → return "ab"
+            result = realMethod(args[0]);
+            afterReturning(result);           // ==== afterReturning：正常流 ====
+        } catch (Throwable e) {
+            afterThrowing(e);                 // ==== afterThrowing：异常流，与正常流互斥 ====
+            throw e;                          // ★ 必须重抛，链才能继续
+        } finally {
+            after(args);                      // ==== after：finally 语义，成败都走 ====
+        }
+
+        // ===== around 后半段（正常收尾）=====
+        return result;
+    } catch (Throwable e) {
+        // ===== around 后半段（异常收尾，可包装/重抛）=====
+        throw new BusinessException("around: " + e.getMessage());
+    }
+}
+```
+
+三条铁律：
+1. **before 在方法体外**：`// a` 才是方法体内第一行，排在 before 之后。
+2. **成功/异常互斥**：`afterReturning` 与 `afterThrowing` 是**同一节点的两个分支，无先后关系**；`after` 永远执行（finally 语义）。
+3. **proceed 是唯一入口**：`args` 在壳入口即已就绪、可读写，但方法体只在此刻才真正执行（实参按**引用**传递，改 args[] 会同步到 realMethod）。
+
 ## 四、切点表达式
 
 | 表达式 | 匹配 | 示例 |
@@ -138,7 +185,7 @@ public class IdempotentAspect {
 }
 ```
 
-要点：@Around 的"短路"能力（不调 proceed）是拦截类功能的根基；SpEL 取参细节见 [06-SpEL表达式详解](06-SpEL表达式详解.md)；幂等原理与四大实现见 **05-分布式ID与幂等设计详解**（见知识库）（跨语言），本段是其 Spring 注解式落地。
+要点：@Around 的"短路"能力（不调 proceed）是拦截类功能的根基；SpEL 取参细节见 [06-SpEL表达式详解](06-SpEL表达式详解.md)；幂等原理与四大实现见 [05-分布式ID与幂等设计详解](../../分布式/核心原理/05-分布式ID与幂等设计详解.md)（跨语言），本段是其 Spring 注解式落地。
 
 ## 六、Spring AOP vs AspectJ
 

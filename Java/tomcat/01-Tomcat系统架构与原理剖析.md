@@ -3,12 +3,11 @@ tags: [Java, Tomcat, 架构, Coyote, Catalina, Container, Servlet]
 创建日期: 2026-08-08
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
-来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
 ---
 
 # Tomcat系统架构与原理剖析
 
-> 本文是 Tomcat 学习笔记第 1 章（wolai 转存整理）。围绕「浏览器如何访问服务器」「Tomcat 两大核心组件（Coyote 连接器 + Catalina 容器）」展开。
+> 本文是 Tomcat 学习笔记第 1 章。围绕「浏览器如何访问服务器」「Tomcat 两大核心组件（Coyote 连接器 + Catalina 容器）」展开。
 > 关联笔记：[00-Tomcat总览](00-Tomcat总览.md)、[02-Tomcat服务器核心配置详解](02-Tomcat服务器核心配置详解.md)、[06-Tomcat类加载机制详解](06-Tomcat类加载机制详解.md)
 
 ## 📋 总纲
@@ -202,6 +201,3 @@ Engine（引擎）
 
 答：BIO 每个请求一个线程，高并发下线程数爆炸、上下文切换开销大；NIO 基于事件驱动（Selector），少量线程可处理大量连接，性能和扩展性显著提升。Tomcat 8 起默认 NIO。
 
----
-
-*来源：wolai 笔记转存（Apache Tomcat 学习笔记第 1 章），2026-08-08 整理*

@@ -405,6 +405,4 @@ A：① 配置文件路径/文件名错 → 静默不加载，难排查；② �
 A：① 约定配置目录（如 META-INF/ext/接口名）；② 加载器：ClassLoader.getResources 扫描 + 类名解析 + 反射实例化；③ 按名获取：配置用 key=value 支持别名；④ 缓存单例扩展实例；⑤ 可选：自适应代理（按运行时参数路由）、依赖注入、排序、包装增强 —— 即 Dubbo ExtensionLoader 的简化版。
 
 ---
-- 关联笔记：**01-代码混淆详解**（见知识库）（SPI 的 META-INF/services 写全限定类名，混淆重命名后服务发现失败，实现类需 keep）、[Java反射详解](Java反射详解.md)（SPI 加载本质是反射实例化）、**Java注解机制详解**（见知识库）（APT 与 SPI 的异同）
-
-*来源：Hermes 会话整理（2026-08-06，JDK/Spring/Dubbo/Servlet 四机制全覆盖，含手写 Demo）*
+- 关联笔记：[01-代码混淆详解](../通用技术/软件保护/01-代码混淆详解.md)（SPI 的 META-INF/services 写全限定类名，混淆重命名后服务发现失败，实现类需 keep）、[Java反射详解](Java反射详解.md)（SPI 加载本质是反射实例化）、**Java注解机制详解**（见知识库）（APT 与 SPI 的异同）

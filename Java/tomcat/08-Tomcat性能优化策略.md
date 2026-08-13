@@ -3,12 +3,11 @@ tags: [Java, Tomcat, 性能优化, JVM, GC, 线程池, Connector, 调优]
 创建日期: 2026-08-08
 状态: ✅ 已归档（01-学习/Java/框架/tomcat）
 归属: 01-学习/Java/框架/tomcat
-来源: wolai 笔记转存（https://www.wolai.com/plyr/wq9uk2MQqaTtbaJMX3H6YA）
 ---
 
 # Tomcat性能优化策略
 
-> 本文是 Tomcat 学习笔记第 7 章（wolai 转存整理）。从 **JVM 层** 和 **Tomcat 配置层** 两个维度讲解性能优化。
+> 本文是 Tomcat 学习笔记第 7 章。从 **JVM 层** 和 **Tomcat 配置层** 两个维度讲解性能优化。
 > 性能优化的衡量指标：**响应时间**（执行某个操作的耗时）和**吞吐量**（系统在给定时间内能够支持的事务数量，单位 TPS，Transaction Per Second；一个事务 = 客户机发送请求到服务器做出反应的过程）。
 > 关联笔记：[00-Tomcat总览](00-Tomcat总览.md)、**JVM调优实战**（见知识库）、[02-Tomcat服务器核心配置详解](02-Tomcat服务器核心配置详解.md)
 
@@ -198,6 +197,3 @@ JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC -XX:ParallelGCThreads=4"
 
 答：相等可以避免堆在运行中反复扩容/缩容（每次扩容都伴随 Full GC 和停顿）。建议 Xms=Xmx=可用内存 80%，并配合合适的 GC 收集器。
 
----
-
-*来源：wolai 笔记转存（Apache Tomcat 学习笔记第 7 章），2026-08-08 整理*
