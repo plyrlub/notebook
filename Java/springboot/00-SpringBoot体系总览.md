@@ -50,9 +50,9 @@ SpringBoot 不是替代 Spring/SpringMVC，而是**让它们开箱即用的整�
 | [06-SpringBoot日志配置详解](06-SpringBoot日志配置详解.md) | logging/Logback/滚动/异步日志 | 深 |
 | [07-SpringBoot Actuator监控详解](07-SpringBoot Actuator监控详解.md) | health/metrics/Micrometer/Prometheus | 深 |
 | [08-Spring WebFlux响应式编程详解](08-Spring WebFlux响应式编程详解.md) | Mono/Flux/背压/SSE（AI agent） | 深（重点） |
-| **Java AOP详解**（见知识库）（迁 spring） | 见 spring 域 [04-Spring核心·AOP详解](../spring/04-Spring核心·AOP详解.md) | — |
-| **Spring事务管理详解**（见知识库）（迁 spring） | 见 spring 域 [05-Spring事务管理详解](../spring/05-Spring事务管理详解.md) | — |
-| **SpEL表达式详解**（见知识库）（迁 spring） | 见 spring 域 [06-SpEL表达式详解](../spring/06-SpEL表达式详解.md) | — |
+| [07-Spring核心·AOP详解](../spring/07-Spring核心·AOP详解.md)（自 Java 迁入） | 见 spring 域 [07-Spring核心·AOP详解](../spring/07-Spring核心·AOP详解.md) | — |
+| [09-Spring事务管理详解](../spring/09-Spring事务管理详解.md)（自 Java 迁入） | 见 spring 域 [09-Spring事务管理详解](../spring/09-Spring事务管理详解.md) | — |
+| [11-SpEL表达式详解](../spring/11-SpEL表达式详解.md)（自 Java 迁入） | 见 spring 域 [11-SpEL表达式详解](../spring/11-SpEL表达式详解.md) | — |
 
 > 注：原 springboot 域的 AOP/事务/SpEL 已按"属 Spring 核心"迁至 spring 域（见 [00-Spring三件套体系总览·Spring与SpringMVC与SpringBoot](../spring/00-Spring三件套体系总览·Spring与SpringMVC与SpringBoot.md)），本目录仅保留 Boot 专属内容。
 

@@ -8,7 +8,7 @@ tags: [Java, Spring, AOP, 切面, 动态代理, CGLIB, 切点, 通知]
 # Java AOP详解
 
 > 前置知识：**Java注解机制详解**（见知识库）（注解如何被处理）、**Java代理详解**（见知识库）（动态代理基础）
-> 关联笔记：[05-Spring事务管理详解](05-Spring事务管理详解.md)（AOP 的典型应用）、**Java Agent与字节码增强详解**（见知识库）（另一种增强方式）
+> 关联笔记：[09-Spring事务管理详解](09-Spring事务管理详解.md)（AOP 的典型应用）、**Java Agent与字节码增强详解**（见知识库）（另一种增强方式）
 
 ## 📋 总纲
 
@@ -50,7 +50,7 @@ Spring AOP 的本质：**为匹配切点的 Bean 创建代理对象，替代原�
 
 ### 代理链
 
-多个切面命中同一方法时组成**责任链**：按 @Order 排序（数值小优先，默认无序），@Around 通知层层包裹，最内层执行真实方法。@Transactional 本身就是一个内置切面（Ordered.LOWEST_PRECEDENCE 附近），所以自定义切面与其顺序由 @Order 决定（见 [05-Spring事务管理详解](05-Spring事务管理详解.md)）。
+多个切面命中同一方法时组成**责任链**：按 @Order 排序（数值小优先，默认无序），@Around 通知层层包裹，最内层执行真实方法。@Transactional 本身就是一个内置切面（Ordered.LOWEST_PRECEDENCE 附近），所以自定义切面与其顺序由 @Order 决定（见 [09-Spring事务管理详解](09-Spring事务管理详解.md)）。
 
 ## 三、五种通知类型与执行顺序
 
@@ -159,7 +159,7 @@ public Object around(ProceedingJoinPoint pjp, LogExec logExec) throws Throwable 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)      // 必须 RUNTIME
 public @interface Idempotent {
-    String key();                         // SpEL 表达式计算幂等键（见 [[06-SpEL表达式详解]]）
+    String key();                         // SpEL 表达式计算幂等键（见 [[11-SpEL表达式详解]]）
     int expireSeconds() default 10;
 }
 
@@ -185,7 +185,7 @@ public class IdempotentAspect {
 }
 ```
 
-要点：@Around 的"短路"能力（不调 proceed）是拦截类功能的根基；SpEL 取参细节见 [06-SpEL表达式详解](06-SpEL表达式详解.md)；幂等原理与四大实现见 [05-分布式ID与幂等设计详解](../../分布式/核心原理/05-分布式ID与幂等设计详解.md)（跨语言），本段是其 Spring 注解式落地。
+要点：@Around 的"短路"能力（不调 proceed）是拦截类功能的根基；SpEL 取参细节见 [11-SpEL表达式详解](11-SpEL表达式详解.md)；幂等原理与四大实现见 [05-分布式ID与幂等设计详解](../../分布式/核心原理/05-分布式ID与幂等设计详解.md)（跨语言），本段是其 Spring 注解式落地。
 
 ## 六、Spring AOP vs AspectJ
 
@@ -219,3 +219,7 @@ public class IdempotentAspect {
 - [Spring AOP 实现原理（阿里云开发者社区）](https://developer.aliyun.com/article/1662505)，查询日期：2026-08-08
 - [深度解析 Spring AOP 核心原理与源码（腾讯云）](https://cloud.tencent.com/developer/article/2560612)，查询日期：2026-08-08
 - 关联：**Java代理详解**（见知识库）（JDK 动态代理/CGLIB 原理）、**Java注解机制详解**（见知识库）（注解如何被切面读取）
+
+---
+- 上一篇：[06-Spring与SpringMVC整合实践](06-Spring与SpringMVC整合实践.md)
+- 下一篇：[08-Spring核心·AOP实践](08-Spring核心·AOP实践.md)（本知识点代码实盀）

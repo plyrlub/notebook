@@ -10,7 +10,7 @@ tags: [Java, SpringBoot, WebFlux, 响应式, Reactor, Mono, Flux, 背压, SSE, A
 > 版本基线：Project Reactor 3.x、Spring WebFlux 5.x/6.x
 > 受众：Java 后端开发，尤其做 AI agent / 高并发 IO 场景。响应式编程是 WebFlux/Reactor 的基础，AI agent 流式输出（SSE）依赖此思想。本篇讲清响应式原理、Mono/Flux、背压、操作符与 WebFlux 应用。
 > 前置知识：[05-SpringBoot异步与线程池详解](05-SpringBoot异步与线程池详解.md)（异步基础）、Java 8 函数式（lambda/Stream）、**01-Java线程池原理与参数详解**（见知识库）
-> 关联笔记：[07-SpringBoot Actuator监控详解](07-SpringBoot Actuator监控详解.md)（响应式指标）、[02-SpringMVC执行流程详解](../spring/02-SpringMVC执行流程详解.md)（对比 MVC）
+> 关联笔记：[07-SpringBoot Actuator监控详解](07-SpringBoot Actuator监控详解.md)（响应式指标）、[03-SpringMVC执行流程详解](../spring/03-SpringMVC执行流程详解.md)（对比 MVC）
 
 ## 📋 总纲
 
@@ -37,7 +37,7 @@ tags: [Java, SpringBoot, WebFlux, 响应式, Reactor, Mono, Flux, 背压, SSE, A
 
 - [05-SpringBoot异步与线程池详解](05-SpringBoot异步与线程池详解.md)：异步执行
 - Java lambda/Stream、CompletableFuture、**01-Java线程池原理与参数详解**（见知识库）
-- [02-SpringMVC执行流程详解](../spring/02-SpringMVC执行流程详解.md)：对比的阻塞模型
+- [03-SpringMVC执行流程详解](../spring/03-SpringMVC执行流程详解.md)：对比的阻塞模型
 
 ## 3. 核心知识点
 
@@ -220,7 +220,7 @@ public Flux<ServerSentEvent<String>> chatStream(String prompt) {
 ## 7. 关联笔记
 
 - 上一篇：[07-SpringBoot Actuator监控详解](07-SpringBoot Actuator监控详解.md)
-- [02-SpringMVC执行流程详解](../spring/02-SpringMVC执行流程详解.md)：对比的阻塞模型
+- [03-SpringMVC执行流程详解](../spring/03-SpringMVC执行流程详解.md)：对比的阻塞模型
 - [05-SpringBoot异步与线程池详解](05-SpringBoot异步与线程池详解.md)：异步与线程池
 - [07-SpringBoot Actuator监控详解](07-SpringBoot Actuator监控详解.md)：响应式指标监控
 - AI 相关：LLM-AI 域（AI agent 流式输出）

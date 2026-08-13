@@ -10,7 +10,7 @@ tags: [Java, Spring, IoC, DI, Bean, 容器, Bean生命周期, 作用域]
 > 版本基线：Spring 5.x/6.x、Spring Boot 2.x/3.x
 > 受众：Java 后端开发。假设已懂 Java 反射；需理解 IoC 容器如何接管对象创建。
 > 前置知识：[Java反射详解](../Java反射详解.md)（反射 getAnnotation/newInstance，容器底层）、**Java注解机制详解**（见知识库）（@Component 注解扫描）
-> 下一篇：[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)（Web 层）；关联：[04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)（代理）、[05-Spring事务管理详解](05-Spring事务管理详解.md)（事务）
+> 下一篇：[03-SpringMVC执行流程详解](03-SpringMVC执行流程详解.md)（Web 层）；关联：[07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)（代理）、[09-Spring事务管理详解](09-Spring事务管理详解.md)（事务）
 
 ## 📋 总纲
 
@@ -82,7 +82,7 @@ public class OrderService {
 - **Aware 分两组**：BeanName/BeanFactory 等直接 Aware 由 `invokeAwareMethods()` 直接调；ApplicationContext 族（含 ResourceLoaderAware 等）由 `ApplicationContextAwareProcessor`（一个 BPP）在**第 6 步前置阶段**调。
 - **@PostConstruct 的位置**：由 `InitDestroyAnnotationBeanPostProcessor` 在**第 6 步前置 BPP**阶段触发（不是第 7 步 afterPropertiesSet）。
 
-> **关键**：AOP 动态代理正是在 BeanPostProcessor 的 postProcessAfterInitialization（第 9 步）阶段**生成代理对象替换原 Bean**（呼应 [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)）。所以 final 类无法被代理（无法生成子类）。
+> **关键**：AOP 动态代理正是在 BeanPostProcessor 的 postProcessAfterInitialization（第 9 步）阶段**生成代理对象替换原 Bean**（呼应 [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)）。所以 final 类无法被代理（无法生成子类）。
 
 ### 3.3 三种装配方式
 
@@ -192,7 +192,7 @@ public class TaskRunner { ... }
 
 一句话记忆：**第三级 = 把「AOP 代理目标对象的确定」延迟到真被需要的瞬间**。
 
-> 关联 [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)：代理生成在第 9 步后置 BPP。三级缓存的意义正是与这一时机配合——早期引用不能把「还没决定是否被代理的对象」固定下来。
+> 关联 [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)：代理生成在第 9 步后置 BPP。三级缓存的意义正是与这一时机配合——早期引用不能把「还没决定是否被代理的对象」固定下来。
 
 #### ③ A↔B 完整解决流程（setter/字段注入）★
 
@@ -255,7 +255,7 @@ public class TaskRunner { ... }
 - **循环依赖**：构造器注入直接报错，字段注入 Boot 默认也禁止 → 重构分层
 - **多实现歧义**：两个同类型 Bean 不配 @Primary/@Qualifier → NoUniqueBeanDefinitionException
 - **单例注入 prototype 失效**：注入的是单例持有的固定实例
-- **final 类**：AOP 代理不了（无法生成子类），见 [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)
+- **final 类**：AOP 代理不了（无法生成子类），见 [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)
 - **@Bean 方法里 new 的对象**：未被容器管理，无生命周期回调，须返回类型声明才被识别
 
 ## 6. 小结
@@ -269,10 +269,10 @@ public class TaskRunner { ... }
 ## 7. 关联笔记
 
 - 上一篇：[00-Spring三件套体系总览·Spring与SpringMVC与SpringBoot](00-Spring三件套体系总览·Spring与SpringMVC与SpringBoot.md)
-- 下一篇：[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)
-- [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)：代理在 BeanPostProcessor 后置阶段生成
-- [05-Spring事务管理详解](05-Spring事务管理详解.md)：事务切面代理
-- [06-SpEL表达式详解](06-SpEL表达式详解.md)：@Value SpEL 取参
+- 下一篇：[02-Spring核心·IoC与Bean生命周期实践](02-Spring核心·IoC与Bean生命周期实践.md)（本知识点的代码/配置实盀）
+- [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)：代理在 BeanPostProcessor 后置阶段生成
+- [09-Spring事务管理详解](09-Spring事务管理详解.md)：事务切面代理
+- [11-SpEL表达式详解](11-SpEL表达式详解.md)：@Value SpEL 取参
 - springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)：Boot 如何扫描装配
 
 ## 8. 参考资料

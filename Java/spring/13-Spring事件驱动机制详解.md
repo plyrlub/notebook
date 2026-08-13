@@ -8,9 +8,9 @@ tags: [Java, Spring, 事件, 事件驱动, 观察者模式, EventListener, Trans
 # Spring事件驱动机制详解
 
 > 版本基线：Spring Framework 4.2+/5.x/6.x
-> 受众：Java 后端开发。事件驱动是 Spring 核心能力之一（观察者模式），面试中高频，生产用于模块解耦。假设已懂 IoC（见 [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)）与事务（见 [05-Spring事务管理详解](05-Spring事务管理详解.md)）。
-> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（Bean 注册）、[05-Spring事务管理详解](05-Spring事务管理详解.md)（@Transactional 事务生命周期）
-> 关联笔记：[05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md)（@Async 异步）、[03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md)（容器）
+> 受众：Java 后端开发。事件驱动是 Spring 核心能力之一（观察者模式），面试中高频，生产用于模块解耦。假设已懂 IoC（见 [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)）与事务（见 [09-Spring事务管理详解](09-Spring事务管理详解.md)）。
+> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（Bean 注册）、[09-Spring事务管理详解](09-Spring事务管理详解.md)（@Transactional 事务生命周期）
+> 关联笔记：[05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md)（@Async 异步）、[05-Spring与SpringMVC整合详解](05-Spring与SpringMVC整合详解.md)（容器）
 
 ## 📋 总纲
 
@@ -33,7 +33,7 @@ tags: [Java, Spring, 事件, 事件驱动, 观察者模式, EventListener, Trans
 ## 2. 前置知识
 
 - [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)：监听器是容器管理的 Bean
-- [05-Spring事务管理详解](05-Spring事务管理详解.md)：事务传播/提交回滚阶段
+- [09-Spring事务管理详解](09-Spring事务管理详解.md)：事务传播/提交回滚阶段
 
 ## 3. 核心知识点
 
@@ -95,7 +95,7 @@ public class NotifyListener {
 public void onOrder(OrderCreatedEvent event) { ... }
 ```
 
-> 与 [06-SpEL表达式详解](06-SpEL表达式详解.md) 呼应：condition 用 SpEL 在方法参数上求值。
+> 与 [11-SpEL表达式详解](11-SpEL表达式详解.md) 呼应：condition 用 SpEL 在方法参数上求值。
 
 ### 3.4 同步 vs 异步事件
 
@@ -185,13 +185,17 @@ public void onUserEvent(BaseEvent<User> event) { ... }   // 只处理 User 类�
 
 ## 7. 关联笔记
 
-- 上一篇：[06-SpEL表达式详解](06-SpEL表达式详解.md)
+- 上一篇：[11-SpEL表达式详解](11-SpEL表达式详解.md)
 - 下一篇：springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)
 - [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)：监听器 Bean 管理
-- [05-Spring事务管理详解](05-Spring事务管理详解.md)：事务阶段
+- [09-Spring事务管理详解](09-Spring事务管理详解.md)：事务阶段
 - [05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md)：@Async 异步监听
 
 ## 8. 参考资料
 
 - [Spring 官方文档：Transaction-bound Events](https://docs.spring.io/spring-framework/reference/data-access/transaction/event.html)，查询日期 2026-08-11
 - [Spring 官方 API：@EventListener](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/event/EventListener.html)，查询日期 2026-08-11
+
+---
+- 上一篇：[12-SpEL表达式实践](12-SpEL表达式实践.md)
+- 下一篇：[14-Spring事件驱动机制实践](14-Spring事件驱动机制实践.md)（本知识点代码实盀）

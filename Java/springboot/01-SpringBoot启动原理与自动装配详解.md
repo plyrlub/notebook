@@ -36,7 +36,7 @@ tags: [Java, SpringBoot, 自动装配, 启动原理, EnableAutoConfiguration, �
 
 - [01-Spring核心·IoC与Bean生命周期详解](../spring/01-Spring核心·IoC与Bean生命周期详解.md)：@Configuration/@ComponentScan/@Bean
 - **Java注解机制详解**（见知识库）：@Import 导入配置类、ImportSelector 动态选择
-- [04-Spring核心·AOP详解](../spring/04-Spring核心·AOP详解.md)：BeanPostProcessor（自动装配后置）
+- [07-Spring核心·AOP详解](../spring/07-Spring核心·AOP详解.md)：BeanPostProcessor（自动装配后置）
 
 ## 3. 核心知识点
 

@@ -5,11 +5,11 @@ tags: [Java, Spring, SpringMVC, 整合, web.xml, 双容器, JavaConfig, 框架]
 归属: 01-学习/Java/框架/spring
 ---
 
-# Spring与SpringMVC整合实践详解
+# Spring与SpringMVC整合详解
 
 > 版本基线：传统 Spring XML/注解整合 + 与 SpringBoot 对比
-> 受众：Java 后端开发。假设已懂 [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md) 与 [02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)；本篇解决"Spring 和 SpringMVC 怎么手动整合起来"以及"为什么 Boot 不用配了"。
-> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（IoC/装配）、[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)（MVC 流程）
+> 受众：Java 后端开发。假设已懂 [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md) 与 [03-SpringMVC执行流程详解](03-SpringMVC执行流程详解.md)；本篇解决"Spring 和 SpringMVC 怎么手动整合起来"以及"为什么 Boot 不用配了"。
+> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（IoC/装配）、[03-SpringMVC执行流程详解](03-SpringMVC执行流程详解.md)（MVC 流程）
 > 关联笔记：springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)（Boot 如何省掉这些配置）
 
 ## 📋 总纲
@@ -33,7 +33,7 @@ tags: [Java, Spring, SpringMVC, 整合, web.xml, 双容器, JavaConfig, 框架]
 ## 2. 前置知识
 
 - [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)：@Component/@Bean 装配
-- [02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)：DispatcherServlet 是 MVC 前端控制器
+- [03-SpringMVC执行流程详解](03-SpringMVC执行流程详解.md)：DispatcherServlet 是 MVC 前端控制器
 
 ## 3. 核心知识点
 
@@ -195,10 +195,10 @@ SpringBoot 的自动装配做了三件事：
 
 ## 7. 关联笔记
 
-- 上一篇：[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md)
-- 下一篇（进入 Boot）：springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)
-- [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)：事务切面代理（父容器配置相关）
-- [05-Spring事务管理详解](05-Spring事务管理详解.md)：DataSourceTransactionManager
+- 上一篇：[04-SpringMVC执行流程实践](04-SpringMVC执行流程实践.md)
+- 下一篇：[06-Spring与SpringMVC整合实践](06-Spring与SpringMVC整合实践.md)（本知识点双容器实盀）
+- [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)：事务切面代理（父容器配置相关）
+- [09-Spring事务管理详解](09-Spring事务管理详解.md)：DataSourceTransactionManager
 
 ## 8. 参考资料
 

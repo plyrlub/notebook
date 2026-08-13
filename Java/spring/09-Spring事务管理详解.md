@@ -7,7 +7,7 @@ tags: [Java, Spring, 事务, Transactional, 传播行为, 回滚, AOP]
 
 # Spring事务管理详解
 
-> 前置知识：[04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)（@Transactional 本质是一个 AOP 切面）、**Java注解机制详解**（见知识库）（注解如何被处理）
+> 前置知识：[07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)（@Transactional 本质是一个 AOP 切面）、**Java注解机制详解**（见知识库）（注解如何被处理）
 > 关联笔记：**Java代理详解**（见知识库）（代理机制）、**Java参数校验详解**（见知识库）（同属 springboot 框架知识域）
 
 ## 📋 总纲
@@ -161,11 +161,15 @@ public void bad() {
 - **推荐标在实现类方法上**：标接口方法上，JDK 动态代理能识别，但 CGLIB 代理（Boot 默认）对接口注解的识别依赖 Spring 的注解查找逻辑，易出"注解不生效"的模糊问题；标实现类最稳。
 - 事务方法里**长事务**：一个事务里做多次远程调用/大循环，长时间持有数据库连接 → 用 REQUIRES_NEW 或拆分事务。
 - 事务与锁：先查后更（check-then-act）要配合悲观锁（SELECT FOR UPDATE）或乐观锁版本号，事务本身不解决并发覆盖。
-- @Transactional 与自定义切面顺序：事务切面默认优先级最低（LOWEST_PRECEDENCE），自定义 @Order 数值小于它时自定义通知在事务内执行（见 [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)）。
+- @Transactional 与自定义切面顺序：事务切面默认优先级最低（LOWEST_PRECEDENCE），自定义 @Order 数值小于它时自定义通知在事务内执行（见 [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)）。
 
 ## 参考资料
 
 - [Spring 官方文档：Transaction Management](https://docs.spring.io/spring-framework/reference/data-access/transaction.html)，查询日期：2026-08-08
 - [Spring 事务实现机制传播行为与常见失效场景深度解析（阿里云）](https://developer.aliyun.com/article/1666013)，查询日期：2026-08-08
 - [一口气说出 6 种 @Transactional 注解的失效场景](https://www.cnblogs.com/chengxy-nds/p/12523241.html)，查询日期：2026-08-08
-- 关联：[04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)（事务切面原理）、**Java注解机制详解**（见知识库）（注解扫描机制）
+- 关联：[07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)（事务切面原理）、**Java注解机制详解**（见知识库）（注解扫描机制）
+
+---
+- 上一篇：[08-Spring核心·AOP实践](08-Spring核心·AOP实践.md)
+- 下一篇：[10-Spring事务管理实践](10-Spring事务管理实践.md)（本知识点代码实盀）

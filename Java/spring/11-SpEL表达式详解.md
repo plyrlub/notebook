@@ -8,8 +8,8 @@ tags: [Java, Spring, SpEL, 表达式, 注解, AOP]
 
 # SpEL表达式详解
 
-> 前置知识：**Java注解机制详解**（见知识库）（注解元数据 + 处理者）、[04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)（@annotation 切点读注解）
-> 关联笔记：[Java反射详解](../Java反射详解.md)（反射取参名）、[06-SpEL表达式详解](06-SpEL表达式详解.md)（本文）实际是被注解取参场景引用
+> 前置知识：**Java注解机制详解**（见知识库）（注解元数据 + 处理者）、[07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)（@annotation 切点读注解）
+> 关联笔记：[Java反射详解](../Java反射详解.md)（反射取参名）、[11-SpEL表达式详解](11-SpEL表达式详解.md)（本文）实际是被注解取参场景引用
 > 主题范围：SpEL 语法基础、在 Spring 注解（@Cacheable/@Idempotent）中取参、在 AOP 切面中手动解析 SpEL、与 OGNL/JSP EL 对比
 
 ## 📋 总纲
@@ -32,7 +32,7 @@ tags: [Java, Spring, SpEL, 表达式, 注解, AOP]
 ## 2. 前置知识
 
 - **Java注解机制详解**（见知识库）：理解注解只是元数据、处理者赋予意义（SpEL 就是注解 key 的处理者）
-- [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)：@annotation 切点把注解实例绑定进切面
+- [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)：@annotation 切点把注解实例绑定进切面
 
 ## 3. 核心知识点
 
@@ -123,7 +123,7 @@ public class IdempotentAspect {
 }
 ```
 
-> **要点**：① 切面拿不到方法参数值，得 `pjp.getArgs()`；② 参数名要 `DefaultParameterNameDiscoverer` 从字节码或 -parameters 取；③ `StandardEvaluationContext.setVariable` 把参数以 `#参数名` 注入；④ `parseExpression().getValue(ctx, String.class)` 求值转 String。完整幂等闭环见 [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md) 知识点五。
+> **要点**：① 切面拿不到方法参数值，得 `pjp.getArgs()`；② 参数名要 `DefaultParameterNameDiscoverer` 从字节码或 -parameters 取；③ `StandardEvaluationContext.setVariable` 把参数以 `#参数名` 注入；④ `parseExpression().getValue(ctx, String.class)` 求值转 String。完整幂等闭环见 [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md) 知识点五。
 
 ### 3.5 上下文变量与返回值
 
@@ -169,7 +169,7 @@ public class IdempotentAspect {
 
 ## 7. 关联笔记
 
-- [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)：@Idempotent 注解 + 切面完整落地（本文是其 SpEL 取参支撑）
+- [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)：@Idempotent 注解 + 切面完整落地（本文是其 SpEL 取参支撑）
 - **Java注解机制详解**（见知识库）：注解元数据 + 处理者概念
 - [Java反射详解](../Java反射详解.md)：反射 getAnnotation / 参数名获取
 - [05-分布式ID与幂等设计详解](../../分布式/核心原理/05-分布式ID与幂等设计详解.md)：幂等原理（跨语言）
@@ -178,3 +178,7 @@ public class IdempotentAspect {
 
 - [Spring 官方文档：Spring Expression Language](https://docs.spring.io/spring-framework/reference/core/expressions.html)，查询日期 2026-08-08
 - [Spring SpEL 语法详解（个人/社区整理）]，查询日期 2026-08-08
+
+---
+- 上一篇：[10-Spring事务管理实践](10-Spring事务管理实践.md)
+- 下一篇：[12-SpEL表达式实践](12-SpEL表达式实践.md)（本知识点代码实盀）

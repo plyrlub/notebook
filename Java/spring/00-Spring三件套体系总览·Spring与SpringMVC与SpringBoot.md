@@ -73,13 +73,20 @@ SpringBoot
 
 | 本域篇目 | 内容 | 深度 |
 | --- | --- | --- |
-| [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md) | IoC/Bean 生命周期/装配 | 适中偏使用 |
-| [02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md) | 请求全流程/参数绑定/拦截器 | 适中偏使用 |
-| [03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md) | 传统整合/双容器/注解驱动 | 适中 |
-| [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md) | 切面/动态代理/通知 | 深 |
-| [05-Spring事务管理详解](05-Spring事务管理详解.md) | @Transactional/传播/隔离 | 深 |
-| [06-SpEL表达式详解](06-SpEL表达式详解.md) | 表达式语言/注解取参 | 适中 |
-| [07-Spring事件驱动机制详解](07-Spring事件驱动机制详解.md) | 观察者模式/事务事件 | 适中 |
+| [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md) | IoC/Bean 生命周期/三级缓存/装配 | 深 |
+| [02-Spring核心·IoC与Bean生命周期实践](02-Spring核心·IoC与Bean生命周期实践.md) | IoC：XML/注解/JavaConfig 装配 + 配置值含义 | 实操 |
+| [03-SpringMVC执行流程详解](03-SpringMVC执行流程详解.md) | 请求全流程/参数绑定/拦截器 | 深 |
+| [04-SpringMVC执行流程实践](04-SpringMVC执行流程实践.md) | web.xml/控制器/传参 代码 | 实操 |
+| [05-Spring与SpringMVC整合详解](05-Spring与SpringMVC整合详解.md) | 双容器/父子容器/扫描切分 | 深 |
+| [06-Spring与SpringMVC整合实践](06-Spring与SpringMVC整合实践.md) | 双容器 web.xml 完整清单 | 实操 |
+| [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md) | 切面/动态代理/五通知 | 深 |
+| [08-Spring核心·AOP实践](08-Spring核心·AOP实践.md) | 切面代码/切点表达式/失效场景 | 实操 |
+| [09-Spring事务管理详解](09-Spring事务管理详解.md) | @Transactional/传播/隔离/失效 | 深 |
+| [10-Spring事务管理实践](10-Spring事务管理实践.md) | 事务配置/属性值/自调用坑 | 实操 |
+| [11-SpEL表达式详解](11-SpEL表达式详解.md) | 表达式语言/注解取参 | 深 |
+| [12-SpEL表达式实践](12-SpEL表达式实践.md) | @Value ${}#{} 用法 | 实操 |
+| [13-Spring事件驱动机制详解](13-Spring事件驱动机制详解.md) | 观察者模式/事务事件 | 深 |
+| [14-Spring事件驱动机制实践](14-Spring事件驱动机制实践.md) | 事件/监听器/发布代码 | 实操 |
 | springboot 域 [00-SpringBoot体系总览](../springboot/00-SpringBoot体系总览.md) | Boot 体系地图 | 深 |
 | springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md) | 启动流程/自动装配 | 深（重点） |
 | springboot 域 [02-SpringBoot配置体系与外部化配置详解](../springboot/02-SpringBoot配置体系与外部化配置详解.md) | 配置优先级/Properties | 深（重点） |
@@ -99,13 +106,13 @@ SpringBoot
 
 ## 5. 学习路线
 
-按"从地基到装配"顺序读：
+按「详解 → 实践」交错读（每个知识点先懂原理、再上手代码）：
 
 1. **先读本总览**：建立三件套心智模型
-2. **Spring 核心**：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md) → [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md) → [05-Spring事务管理详解](05-Spring事务管理详解.md) → [07-Spring事件驱动机制详解](07-Spring事件驱动机制详解.md)（容器 → 切面 → 事务 → 事件）
-3. **SpringMVC**：[02-SpringMVC执行流程详解](02-SpringMVC执行流程详解.md) → [03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md)
+2. **Spring 核心**：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)→[02-Spring核心·IoC与Bean生命周期实践](02-Spring核心·IoC与Bean生命周期实践.md)→[07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)→[08-Spring核心·AOP实践](08-Spring核心·AOP实践.md)→[09-Spring事务管理详解](09-Spring事务管理详解.md)→[10-Spring事务管理实践](10-Spring事务管理实践.md)→[13-Spring事件驱动机制详解](13-Spring事件驱动机制详解.md)→[14-Spring事件驱动机制实践](14-Spring事件驱动机制实践.md)（容器→切面→事务→事件）
+3. **SpringMVC**：[03-SpringMVC执行流程详解](03-SpringMVC执行流程详解.md)→[04-SpringMVC执行流程实践](04-SpringMVC执行流程实践.md)→[05-Spring与SpringMVC整合详解](05-Spring与SpringMVC整合详解.md)→[06-Spring与SpringMVC整合实践](06-Spring与SpringMVC整合实践.md)
 4. **SpringBoot**（重点）：springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md) → [02-SpringBoot配置体系与外部化配置详解](../springboot/02-SpringBoot配置体系与外部化配置详解.md) → [03-SpringBoot模块化详解](../springboot/03-SpringBoot模块化详解.md) → [04-SpringBoot自定义Starter详解](../springboot/04-SpringBoot自定义Starter详解.md) → [05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md) → [06-SpringBoot日志配置详解](../springboot/06-SpringBoot日志配置详解.md) → [07-SpringBoot Actuator监控详解](../springboot/07-SpringBoot Actuator监控详解.md)
-5. 补件：[06-SpEL表达式详解](06-SpEL表达式详解.md)（随 AOP/缓存用到再读）、[08-Spring WebFlux响应式编程详解](../springboot/08-Spring WebFlux响应式编程详解.md)（AI agent/高并发 IO）
+5. 补件：[11-SpEL表达式详解](11-SpEL表达式详解.md)→[12-SpEL表达式实践](12-SpEL表达式实践.md)（随 AOP/缓存用到再读）、[08-Spring WebFlux响应式编程详解](../springboot/08-Spring WebFlux响应式编程详解.md)（AI agent/高并发 IO）
 
 ## 6. 面试考点索引
 
