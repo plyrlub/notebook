@@ -37,7 +37,7 @@ AOP（Aspect Oriented Programming，面向切面编程）：把**横切关注点
 
 Spring AOP 的本质：**为匹配切点的 Bean 创建代理对象，替代原始 Bean 注入容器**。调用方法时先走代理，代理按切点匹配执行通知链，再调用真实方法。
 
-### JDK 动态代理 vs CGLIB
+### 2.1 JDK 动态代理 vs CGLIB
 
 | 维度 | JDK 动态代理 | CGLIB |
 | --- | --- | --- |
@@ -48,7 +48,7 @@ Spring AOP 的本质：**为匹配切点的 Bean 创建代理对象，替代原�
 
 注意：Spring Boot 2.x 起默认 `spring.aop.proxy-target-class=true`（CGLIB），不再依赖接口——因此**自调用失效**问题在 Boot 项目里普遍存在（见下文误区）。
 
-### 代理链
+### 2.2 代理链
 
 多个切面命中同一方法时组成**责任链**：按 @Order 排序（数值小优先，默认无序），@Around 通知层层包裹，最内层执行真实方法。@Transactional 本身就是一个内置切面（Ordered.LOWEST_PRECEDENCE 附近），所以自定义切面与其顺序由 @Order 决定（见 [09-Spring事务管理详解](09-Spring事务管理详解.md)）。
 
@@ -80,7 +80,7 @@ public class LogAspect {
 
 @Around 中调用 `pjp.proceed()` 才执行真实方法；不调用则"短路"（幂等拦截重复请求就是靠不 proceed 直接抛异常）。
 
-### 执行顺序模型
+### 3.1 执行顺序模型
 
 五种通知的真实执行结构（Spring 生成的代理方法，即"壳"，**不是原方法**，原方法字节码一行未动）：
 

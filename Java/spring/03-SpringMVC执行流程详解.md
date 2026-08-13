@@ -9,8 +9,8 @@ tags: [Java, SpringMVC, DispatcherServlet, 控制器, 拦截器, 参数绑定, �
 
 > 版本基线：Spring MVC 5.x/6.x（Spring Boot 内嵌）
 > 受众：Java 后端开发。假设已懂 Spring 核心（IoC/AOP）；需理解 HTTP 请求如何在 SpringMVC 里被路由、绑定、返回。
-> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（容器/Bean）、[Java反射详解](Java反射详解.md)（参数绑定底层）、[00-网络传输协议总览](00-网络传输协议总览.md)（HTTP）
-> 关联笔记：[05-Spring与SpringMVC整合详解](05-Spring与SpringMVC整合详解.md)（传统整合）、springboot 域 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)（自动装配 DispatcherServlet）
+> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（容器/Bean）、[Java反射详解](../Java反射详解.md)（参数绑定底层）、**00-网络传输协议总览**（见知识库）（HTTP）
+> 关联笔记：[05-Spring与SpringMVC整合详解](05-Spring与SpringMVC整合详解.md)（传统整合）、springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)（自动装配 DispatcherServlet）
 
 ## 📋 总纲
 
@@ -34,13 +34,13 @@ tags: [Java, SpringMVC, DispatcherServlet, 控制器, 拦截器, 参数绑定, �
 ## 2. 前置知识
 
 - [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)：@Controller 是 @Component 族，控制器是容器管理的 Bean
-- [Java反射详解](Java反射详解.md)：HandlerAdapter 用反射调用控制器方法 + 参数转换
+- [Java反射详解](../Java反射详解.md)：HandlerAdapter 用反射调用控制器方法 + 参数转换
 
 ## 3. 核心知识点
 
 ### 3.1 DispatcherServlet 定位与启动
 
-**DispatcherServlet 是所有请求的前端控制器（Front Controller）**：接收所有 HTTP 请求，委托给各组件处理。启动：在 Servlet 容器（Tomcat）初始化时创建，Spring Boot 通过自动装配注册（见 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)）。
+**DispatcherServlet 是所有请求的前端控制器（Front Controller）**：接收所有 HTTP 请求，委托给各组件处理。启动：在 Servlet 容器（Tomcat）初始化时创建，Spring Boot 通过自动装配注册（见 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)）。
 
 ### 3.2 请求全流程 ★
 
@@ -179,7 +179,7 @@ public class GlobalExceptionHandler {
         String msg = messageSource.getMessage(String.valueOf(e.getErrorCode()), e.getArgs(), locale);
         return BaseResponse.error(e.getErrorCode(), msg);
     }
-    @ExceptionHandler(Exception.class)   // 兜底
+    @ExceptionHandler(Exception.class)   // 竞底
     public ResponseEntity<BaseResponse<Void>> handleAll(Exception e) {
         return BaseResponse.error(50000, "system error");
     }
@@ -188,13 +188,19 @@ public class GlobalExceptionHandler {
 
 **一句话记忆**：`@ControllerAdvice` 全局接管异常；`BusinessException` + 错误码；`MessageSource` 按 `Locale` 加载多语言文案（`spring.messages.basename`）。
 
-> 完整方案（`BaseResponse` 统一响应体 / 数字分段错误码规范 / MessageSource 与 `LocaleResolver` 机制 / 参数校验异常联动 / 常见坑）→ [17-全局异常与国际化详解](17-全局异常与国际化详解.md)。
+> 完整方案（`BaseResponse` 统一响应体 / 数字分段错误码规范 / MessageSource 与 `LocaleResolver` 机制 / 参数校验异常联动 / 常见坑）→ **[17-全局异常与国际化详解](17-全局异常与国际化详解.md)**。
 
 ### 3.8 静态资源 / 视图解析 / CORS
 
-**静态资源**：Spring Boot 默认映射 `classpath:/static/`，放 `static/index.html` 等即可访问。
-**视图解析**：返回视图名时 ViewResolver 解析（JSP 的 InternalResourceViewResolver），现代 JSON 接口几乎不用。
-**CORS**（跨域）：
+#### 3.8.1 静态资源
+
+Spring Boot 默认映射 `classpath:/static/`，放 `static/index.html` 等即可访问。
+
+#### 3.8.2 视图解析
+
+返回视图名时 ViewResolver 解析（JSP 的 InternalResourceViewResolver），现代 JSON 接口几乎不用。
+
+#### 3.8.3 CORS（跨域）
 
 ```java
 @RestController
@@ -236,11 +242,10 @@ public class ApiController {
 - 上一篇：[02-Spring核心·IoC与Bean生命周期实践](02-Spring核心·IoC与Bean生命周期实践.md)
 - 下一篇：[04-SpringMVC执行流程实践](04-SpringMVC执行流程实践.md)（本知识点的代码实盀）
 - **Java参数校验详解**（见知识库）：@Valid 参数校验
-- 安全域 [01-Spring Security核心架构详解](01-Spring Security核心架构详解.md)：Spring Security 基于 MVC 过滤链
-- springboot 域 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)：Boot 自动装配 DispatcherServlet
+- 安全域 **01-Spring Security核心架构详解**（见知识库）：Spring Security 基于 MVC 过滤链
+- springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)：Boot 自动装配 DispatcherServlet
 
 ## 8. 参考资料
 
 - [Spring 官方文档：Web MVC](https://docs.spring.io/spring-framework/reference/web/webmvc.html)，查询日期 2026-08-11
 - [SpringMVC 执行流程详解（社区）]，查询日期 2026-08-11
-
