@@ -200,6 +200,12 @@ public void bad() {
 - 事务与锁：先查后更（check-then-act）要配合悲观锁（SELECT FOR UPDATE）或乐观锁版本号，事务本身不解决并发覆盖。
 - @Transactional 与自定义切面顺序：事务切面默认优先级最低（LOWEST_PRECEDENCE），自定义 @Order 数值小于它时自定义通知在事务内执行（见 [[07-Spring核心·AOP详解#三、五种通知类型与执行顺序]]）。
 
+## 八、边界：单服务 vs 分布式事务
+
+本篇（@Transactional + 传播行为）只覆盖**单服务内部同一调用链**（同线程/同数据源）。一旦跨服务、跨数据源或跨进程，ThreadLocal 共享事务的机制即断，传播行为不再适用，进入**分布式事务**领域（XA/2PC、TCC、SAGA/本地消息表等），且很多跨服务场景可用最终一致替代强一致。
+
+> 指引：[04-分布式事务详解](../../分布式/核心原理/04-分布式事务详解.md)（理论/模型/Seata）、**Seata分布式事务框架详解**（见知识库）
+
 ## 参考资料
 
 - [Spring 官方文档：Transaction Management](https://docs.spring.io/spring-framework/reference/data-access/transaction.html)，查询日期：2026-08-08
