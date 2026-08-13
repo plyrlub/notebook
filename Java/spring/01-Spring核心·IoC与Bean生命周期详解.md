@@ -196,37 +196,21 @@ public class TaskRunner { ... }
 
 #### ③ A↔B 完整解决流程（setter/字段注入）★
 
-以两个 Service 互相注入为例，`getSingleton()` 三级查找 + `addSingletonFactory()` 入三级的完整时序：
+以两个 Service 互相注入为例，看 Bean 在三级缓存里的完整流转（③=工厂→②=半成品暂存→①=成品）：
 
-```mermaid
-sequenceDiagram
-    participant C as 容器/DefaultSingletonBeanRegistry
-    participant A as Bean A
-    participant B as Bean B
-    participant L3 as 三级工厂(singletonFactories)
-    C->>A: getBean(A) 各级都无 → 实例化 A
-    C->>L3: addSingletonFactory(A) 注册A工厂(待命)
-    C->>A: 填充A属性 → 发现依赖B
-    C->>B: getBean(B) 各级都无 → 实例化 B
-    C->>L3: addSingletonFactory(B) 注册B工厂
-    C->>B: 填充B属性 → 发现依赖A
-    Note over C,L3: 查A: 一级无→二级无→三级有!
-    C->>L3: A工厂.getObject() → 拿到A早期引用(可能被代理)
-    C->>C: 升二级 earlySingletonObjects[A]，删三级A工厂
-    C->>B: 把A早期引用 注入B
-    C->>B: B初始化完成 → 升一级 singletonObjects[B]
-    C->>A: 回A，注入B(成品)
-    C->>A: A初始化完成(后置BPP在此生成AOP代理)
-    C->>C: 升一级 singletonObjects[A]，删二级A
-```
+> 📖 **主导看图**：下面 SVG 用「A/B 两个实体 + 底部三级缓存三框 + ①~⑥ 编号路径」讲清流转；灰色小字只是底层方法名，属补充说明。
 
-逐步骤对照（同一语义）：
+![A↔B 循环依赖：三级缓存流转](assets/04-spring-循环依赖三级缓存流转.svg)
 
-1. **getBean(A)**：三级缓存都无 A → 标记「A 创建中」（`singletonsCurrentlyInCreation`）→ 实例化 A（`new A()`，此时属性为空）→ **先注册 A 的工厂进三级** `singletonFactories`（此时还未注入、未初始化）。
-2. **填充 A 属性**需要 B → `getBean(B)` → 各级无 B → 实例化 B → 注册 B 工厂进三级 → 填充 B 属性需要 A。
-3. **B 求 A**：查一级无 → 查二级无 → 查**三级**命中 A 工厂 → 调用 `A.getObject()` 得 A 的早期引用（若 A 需 AOP，此时返回代理对象）→ **存入二级** `earlySingletonObjects` ≠ **移除三级** A 工厂（工厂一次性）→ 把早期引用注入 B。
-4. **B 完成初始化** → 升级为成品入一级 `singletonObjects`（B 完整）。
-5. **回到 A**：A 的 setter 此时拿到的是**已完成的 B**（从一级），注入 → A 完成后置 BPP（此步 AOP 代理生成）→ 升级为成品入一级 `singletonObjects`，清除二级残留。
+**①~⑥ 主流程（只看流转，先不管细节方法）**：
+
+1. **① A 进三级**：A 实例化完（仍是「半成品」，未注入/未初始化）→ 登记进 **③**（A 工厂）。
+2. **② B 也进三级**：A 填充属性需要 B → B 被创建，同样登记进 **③**（B 工厂）。
+3. **③④ B 拿到 A 早期**：B 填充属性需要 A → 查缓存 ①② 都无 → 命中 **③** 的 A 工厂 → 产出 **A 的早期引用** → 暂存 **②**。
+4. **⑤ B 完成**：A 早期引用注入 B → B 完整 → B 升为**① 成品**。
+5. **⑥ A 完成**：回 A，注入完整的 B → A 也完整 → 升为**① 成品**。（A 全程是同一实例，只是此刻才补全属性）
+
+> 方法名补充（对应上面 ①~⑥，可配合 debugger 在 `DefaultSingletonBeanRegistry.getSingleton` 打断点看）：`addSingletonFactory` 实例化后登记工厂入③ → ③工厂调 `getObject`/`getEarlyBeanReference` 产出早期引用 → 早期引用写入 `earlySingletonObjects`(②) 并移除③中该工厂 → 完成后写入 `singletonObjects`(①)。构造器注入无法用这套（必须先产完整对象），见 ④ 场景矩阵。
 
 **流程口诀**：`实例化→提前暴露三级→需要时升到二级→完成的进一级`。核心就一个动作——**提前暴露**：实例化完还没初始化，就把引用交出去，等被依赖方完整后回填。
 
