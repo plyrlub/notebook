@@ -88,15 +88,15 @@ sequenceDiagram
 
 ### 3.4 REST 注解族与参数绑定
 
-| 注解 | 位置 | 绑定来源 | 示例 |
-| --- | --- | --- | --- |
-| `@RequestMapping` | 类/方法 | 通用映射 | 父注解 |
-| `@GetMapping/@PostMapping/@PutMapping/@DeleteMapping` | 方法 | 简化写法 | `@GetMapping("/user/{id}")` |
-| `@PathVariable` | 参数 | URL 路径片段 | `@PathVariable("id") Long id` |
-| `@RequestParam` | 参数 | 查询串/表单 | `@RequestParam(required=false) String name` |
-| `@RequestBody` | 参数 | JSON 体（需 HttpMessageConverter） | `@RequestBody User user` |
-| `@ModelAttribute` | 参数 | 表单对象绑定 | `@ModelAttribute User user` |
-| `@RequestHeader` | 参数 | 请求头 | `@RequestHeader("Authorization") String token` |
+| 注解                                                    | 位置   | 绑定来源                           | 示例                                             |
+| ----------------------------------------------------- | ---- | ------------------------------ | ---------------------------------------------- |
+| `@RequestMapping`                                     | 类/方法 | 通用映射                           | 父注解                                            |
+| `@GetMapping/@PostMapping/@PutMapping/@DeleteMapping` | 方法   | 简化写法                           | `@GetMapping("/user/{id}")`                    |
+| `@PathVariable`                                       | 参数   | URL 路径片段                       | `@PathVariable("id") Long id`                  |
+| `@RequestParam`                                       | 参数   | 查询串/表单                         | `@RequestParam(required=false) String name`    |
+| `@RequestBody`                                        | 参数   | JSON 体（需 HttpMessageConverter） | `@RequestBody User user`                       |
+| `@ModelAttribute`                                     | 参数   | 表单对象绑定                         | `@ModelAttribute User user`                    |
+| `@RequestHeader`                                      | 参数   | 请求头                            | `@RequestHeader("Authorization") String token` |
 
 ```java
 @RestController
@@ -166,26 +166,92 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 > 深入：完整写法/顺序/响应式对照见 [15-Filter过滤器详解与三层对比](15-Filter过滤器详解与三层对比.md)、[16-拦截器Interceptor详解](16-拦截器Interceptor详解.md)。
 
-### 3.7 全局异常 @ControllerAdvice
+### 3.7 全局异常 @ControllerAdvice + BusinessException（配置化错误码·多语言）
+
+**思路**：错误码与描述信息放在**配置文件**（多语言 properties），业务抛 `BusinessException`（只带错误码），全局处理器通过 **MessageSource** 按请求 Locale 加载描述返回。这样业务层不带硬编码文案，天然支持多语言。
+
+**① 多语言错误消息配置** `src/main/resources/`
+
+```properties
+# messages_zh.properties（中文）
+user.notFound=用户不存在
+order.locked=订单已被锁定
+sys.error=系统繁忙，请稍后再试
+
+# messages_en.properties（英文，默认 en）
+user.notFound=User not found
+order.locked=Order is locked
+sys.error=System busy, try again later
+```
+
+**② 错误码常量**（稳定引用，避免魔法字符串）
+
+```java
+public final class ErrorCode {
+    public static final String USER_NOT_FOUND = "user.notFound";
+    public static final String ORDER_LOCKED   = "order.locked";
+    public static final String SYS_ERROR      = "sys.error";
+}
+```
+
+**③ BusinessException**：只持错误码 + 占位参数，不持具体文案
+
+```java
+public class BusinessException extends RuntimeException {
+    private final String errorCode;   // 错误码（对应配置文件 key）
+    private final Object[] args;      // 占位参数，如 user.notFound 带用户名
+
+    public BusinessException(String errorCode, Object... args) {
+        super(errorCode);
+        this.errorCode = errorCode;
+        this.args = args;
+    }
+    public String getErrorCode() { return errorCode; }
+    public Object[] getArgs() { return args; }
+}
+```
+
+**④ 全局异常处理器**：MessageSource 按 Locale 加载描述返回
 
 ```java
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private final MessageSource messageSource;
+
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;      // Spring Boot 自动注入（默认读 messages*.properties）
+    }
+
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<?> handleBiz(BusinessException e) {
-        return ResponseEntity.badRequest().body(Map.of("msg", e.getMessage()));
+    public ResponseEntity<Map<String, Object>> handleBiz(BusinessException e, Locale locale) {
+        String msg = messageSource.getMessage(e.getErrorCode(), e.getArgs(), locale);  // 按 Locale 取描述
+        return ResponseEntity.badRequest().body(Map.of("code", e.getErrorCode(), "msg", msg));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleAll(Exception e) {
-        return ResponseEntity.status(500).body(Map.of("msg", "system error"));
+    public ResponseEntity<Map<String, Object>> handleAll(Exception e) {
+        return ResponseEntity.status(500)
+                .body(Map.of("code", ErrorCode.SYS_ERROR, "msg", "system error"));
     }
 }
 ```
 
-- `@ControllerAdvice` 全局拦截所有 Controller 抛出的异常
-- `@ExceptionHandler(X.class)` 指定处理某异常（精确匹配优先）
-- 覆盖默认错误处理，统一返回格式
+**⑤ 多语言生效配置** `application.yml`
+
+```yaml
+spring:
+  messages:
+    basename: messages       # 默认值，读 messages*.properties（可改为 config/errors）
+    encoding: UTF-8
+  # Locale 切换：默认按请求头 Accept-Language，或配 CookieLocaleResolver/SessionLocaleResolver；URL 参数 ?lang=zh 需自配 LocaleChangeInterceptor
+```
+
+- `@ControllerAdvice` / `@RestControllerAdvice`：全局拦截所有 Controller 抛出的异常
+- `@ExceptionHandler(X.class)`：指定处理某异常（精确匹配优先）
+- `BusinessException` 按错误码抛，处理器用 `MessageSource.getMessage(code, args, locale)` 从多语言配置文件取描述——**错误码+描述集中在配置，可多语言，业务层无硬编码文案**
+- 兜底 `Exception.class` 处理未预期异常，统一返回码格式
+
+> 扩展：完整多语言/i18n 与 MessageSource 机制见 **Java参数校验详解**（见知识库）的多语言小节；校验参数错误也常在 `@RestControllerAdvice` 里统一处理（MethodArgumentNotValidException）。
 
 ### 3.8 静态资源 / 视图解析 / CORS
 
@@ -207,7 +273,7 @@ public class ApiController {
 ## 4. 最佳实践
 
 - 前后端分离用 @RestController + @ResponseBody JSON
-- 参数校验用 Bean Validation（@Valid + 校验注解），见 [Java参数校验详解](Java参数校验详解.md)
+- 参数校验用 Bean Validation（@Valid + 校验注解），见 **Java参数校验详解**（见知识库）
 - 全局异常用 @RestControllerAdvice 统一格式，业务异常自定义类
 - 鉴权用拦截器/Spring Security（见安全域），Filter 只做通用处理
 - CORS 集中配置，别每个方法散写
@@ -232,7 +298,7 @@ public class ApiController {
 
 - 上一篇：[02-Spring核心·IoC与Bean生命周期实践](02-Spring核心·IoC与Bean生命周期实践.md)
 - 下一篇：[04-SpringMVC执行流程实践](04-SpringMVC执行流程实践.md)（本知识点的代码实盀）
-- [Java参数校验详解](Java参数校验详解.md)：@Valid 参数校验
+- **Java参数校验详解**（见知识库）：@Valid 参数校验
 - 安全域 [01-Spring Security核心架构详解](01-Spring Security核心架构详解.md)：Spring Security 基于 MVC 过滤链
 - springboot 域 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)：Boot 自动装配 DispatcherServlet
 
