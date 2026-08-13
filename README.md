@@ -53,6 +53,8 @@
     Servlet规范、三方法、两种配置、为何Boot少用、Filter/拦截器/AOP三层对比、响应式 Netty/WebFilter
 - [拦截器Interceptor详解](Java/spring/16-%E6%8B%A6%E6%88%AA%E5%99%A8Interceptor%E8%AF%A6%E8%A7%A3.md)
     HandlerInterceptor 三方法、HandlerMethod、注册鉴权、vs Filter/AOP、常见坑
+- [全局异常与国际化详解](Java/spring/17-%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E4%B8%8E%E5%9B%BD%E9%99%85%E5%8C%96%E8%AF%A6%E8%A7%A3.md)
+    @ControllerAdvice、BusinessException、数字分段错误码、MessageSource/i18n、LocaleResolver
 
 #### SpringBoot（重点）
 

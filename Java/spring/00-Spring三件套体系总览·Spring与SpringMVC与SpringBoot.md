@@ -89,6 +89,7 @@ SpringBoot
 | [14-Spring事件驱动机制实践](14-Spring事件驱动机制实践.md) | 事件/监听器/发布代码 | 实操 |
 | [15-Filter过滤器详解与三层对比](15-Filter过滤器详解与三层对比.md) | 过滤器/容器级/与拦截器·AOP对比 | 深 |
 | [16-拦截器Interceptor详解](16-拦截器Interceptor详解.md) | 拦截器（HandlerInterceptor） | 深 |
+| [17-全局异常与国际化详解](17-全局异常与国际化详解.md) | 全局异常/错误码/MessageSource/i18n | 深 |
 | springboot 域 [00-SpringBoot体系总览](00-SpringBoot体系总览.md) | Boot 体系地图 | 深 |
 | springboot 域 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md) | 启动流程/自动装配 | 深（重点） |
 | springboot 域 [02-SpringBoot配置体系与外部化配置详解](02-SpringBoot配置体系与外部化配置详解.md) | 配置优先级/Properties | 深（重点） |
@@ -114,7 +115,7 @@ SpringBoot
 2. **Spring 核心**：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)→[02-Spring核心·IoC与Bean生命周期实践](02-Spring核心·IoC与Bean生命周期实践.md)→[07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)→[08-Spring核心·AOP实践](08-Spring核心·AOP实践.md)→[09-Spring事务管理详解](09-Spring事务管理详解.md)→[10-Spring事务管理实践](10-Spring事务管理实践.md)→[13-Spring事件驱动机制详解](13-Spring事件驱动机制详解.md)→[14-Spring事件驱动机制实践](14-Spring事件驱动机制实践.md)（容器→切面→事务→事件）
 3. **SpringMVC**：[03-SpringMVC执行流程详解](03-SpringMVC执行流程详解.md)→[04-SpringMVC执行流程实践](04-SpringMVC执行流程实践.md)→[05-Spring与SpringMVC整合详解](05-Spring与SpringMVC整合详解.md)→[06-Spring与SpringMVC整合实践](06-Spring与SpringMVC整合实践.md)
 4. **SpringBoot**（重点）：springboot 域 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md) → [02-SpringBoot配置体系与外部化配置详解](02-SpringBoot配置体系与外部化配置详解.md) → [03-SpringBoot模块化详解](03-SpringBoot模块化详解.md) → [04-SpringBoot自定义Starter详解](04-SpringBoot自定义Starter详解.md) → [05-SpringBoot异步与线程池详解](05-SpringBoot异步与线程池详解.md) → [06-SpringBoot日志配置详解](06-SpringBoot日志配置详解.md) → [07-SpringBoot Actuator监控详解](07-SpringBoot Actuator监控详解.md)
-5. 补件：[11-SpEL表达式详解](11-SpEL表达式详解.md)→[12-SpEL表达式实践](12-SpEL表达式实践.md)（随 AOP/缓存用到再读）、[15-Filter过滤器详解与三层对比](15-Filter过滤器详解与三层对比.md)→[16-拦截器Interceptor详解](16-拦截器Interceptor详解.md)（请求横切链）、[08-Spring WebFlux响应式编程详解](../springboot/08-Spring WebFlux响应式编程详解.md)（AI agent/高并发 IO）
+5. 补件：[11-SpEL表达式详解](11-SpEL表达式详解.md)→[12-SpEL表达式实践](12-SpEL表达式实践.md)（随 AOP/缓存用到再读）、[15-Filter过滤器详解与三层对比](15-Filter过滤器详解与三层对比.md)→[16-拦截器Interceptor详解](16-拦截器Interceptor详解.md)（请求横切链）→[17-全局异常与国际化详解](17-全局异常与国际化详解.md)（异常+多语言）、[08-Spring WebFlux响应式编程详解](../springboot/08-Spring WebFlux响应式编程详解.md)（AI agent/高并发 IO）
 
 ## 6. 面试考点索引
 
