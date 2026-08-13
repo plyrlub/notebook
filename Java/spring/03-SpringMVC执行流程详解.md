@@ -9,8 +9,8 @@ tags: [Java, SpringMVC, DispatcherServlet, 控制器, 拦截器, 参数绑定, �
 
 > 版本基线：Spring MVC 5.x/6.x（Spring Boot 内嵌）
 > 受众：Java 后端开发。假设已懂 Spring 核心（IoC/AOP）；需理解 HTTP 请求如何在 SpringMVC 里被路由、绑定、返回。
-> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（容器/Bean）、[Java反射详解](../Java反射详解.md)（参数绑定底层）、**00-网络传输协议总览**（见知识库）（HTTP）
-> 关联笔记：[05-Spring与SpringMVC整合详解](05-Spring与SpringMVC整合详解.md)（传统整合）、springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)（自动装配 DispatcherServlet）
+> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（容器/Bean）、[Java反射详解](Java反射详解.md)（参数绑定底层）、[00-网络传输协议总览](00-网络传输协议总览.md)（HTTP）
+> 关联笔记：[05-Spring与SpringMVC整合详解](05-Spring与SpringMVC整合详解.md)（传统整合）、springboot 域 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)（自动装配 DispatcherServlet）
 
 ## 📋 总纲
 
@@ -34,13 +34,13 @@ tags: [Java, SpringMVC, DispatcherServlet, 控制器, 拦截器, 参数绑定, �
 ## 2. 前置知识
 
 - [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)：@Controller 是 @Component 族，控制器是容器管理的 Bean
-- [Java反射详解](../Java反射详解.md)：HandlerAdapter 用反射调用控制器方法 + 参数转换
+- [Java反射详解](Java反射详解.md)：HandlerAdapter 用反射调用控制器方法 + 参数转换
 
 ## 3. 核心知识点
 
 ### 3.1 DispatcherServlet 定位与启动
 
-**DispatcherServlet 是所有请求的前端控制器（Front Controller）**：接收所有 HTTP 请求，委托给各组件处理。启动：在 Servlet 容器（Tomcat）初始化时创建，Spring Boot 通过自动装配注册（见 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)）。
+**DispatcherServlet 是所有请求的前端控制器（Front Controller）**：接收所有 HTTP 请求，委托给各组件处理。启动：在 Servlet 容器（Tomcat）初始化时创建，Spring Boot 通过自动装配注册（见 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)）。
 
 ### 3.2 请求全流程 ★
 
@@ -164,6 +164,8 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 **关系**：Filter 先于 DispatcherServlet，Interceptor 在 DispatcherServlet 内、Controller 前。两者可叠加（Filter 做通用、Interceptor 做 Spring 感知）。
 
+> 深入：完整写法/顺序/响应式对照见 [15-Filter过滤器详解与三层对比](15-Filter过滤器详解与三层对比.md)、[16-拦截器Interceptor详解](16-拦截器Interceptor详解.md)。
+
 ### 3.7 全局异常 @ControllerAdvice
 
 ```java
@@ -205,7 +207,7 @@ public class ApiController {
 ## 4. 最佳实践
 
 - 前后端分离用 @RestController + @ResponseBody JSON
-- 参数校验用 Bean Validation（@Valid + 校验注解），见 **Java参数校验详解**（见知识库）
+- 参数校验用 Bean Validation（@Valid + 校验注解），见 [Java参数校验详解](Java参数校验详解.md)
 - 全局异常用 @RestControllerAdvice 统一格式，业务异常自定义类
 - 鉴权用拦截器/Spring Security（见安全域），Filter 只做通用处理
 - CORS 集中配置，别每个方法散写
@@ -230,11 +232,12 @@ public class ApiController {
 
 - 上一篇：[02-Spring核心·IoC与Bean生命周期实践](02-Spring核心·IoC与Bean生命周期实践.md)
 - 下一篇：[04-SpringMVC执行流程实践](04-SpringMVC执行流程实践.md)（本知识点的代码实盀）
-- **Java参数校验详解**（见知识库）：@Valid 参数校验
-- 安全域 **01-Spring Security核心架构详解**（见知识库）：Spring Security 基于 MVC 过滤链
-- springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)：Boot 自动装配 DispatcherServlet
+- [Java参数校验详解](Java参数校验详解.md)：@Valid 参数校验
+- 安全域 [01-Spring Security核心架构详解](01-Spring Security核心架构详解.md)：Spring Security 基于 MVC 过滤链
+- springboot 域 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md)：Boot 自动装配 DispatcherServlet
 
 ## 8. 参考资料
 
 - [Spring 官方文档：Web MVC](https://docs.spring.io/spring-framework/reference/web/webmvc.html)，查询日期 2026-08-11
 - [SpringMVC 执行流程详解（社区）]，查询日期 2026-08-11
+

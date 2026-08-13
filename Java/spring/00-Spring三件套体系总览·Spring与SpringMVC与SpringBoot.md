@@ -9,7 +9,7 @@ tags: [Java, Spring, SpringMVC, SpringBoot, 总览, 框架]
 
 > 版本基线：2026-08 整理，覆盖 Spring 核心 / SpringMVC / SpringBoot 三件套的定位、演进与知识域地图
 > 受众：Java 后端开发。假设已懂 Java 基础；需理解三件套各自解决什么问题、如何演进、如何配套使用。
-> 关联笔记：spring 域（01-03 新篇 + 04 AOP + 05 事务 + 06 SpEL）、springboot 域（00-03）
+> 关联笔记：spring 域（01-03 新篇 + 04 AOP + 05 事务 + 06 SpEL + 15 Filter + 16 拦截器）、springboot 域（00-03）
 
 ## 📋 总纲
 
@@ -87,22 +87,24 @@ SpringBoot
 | [12-SpEL表达式实践](12-SpEL表达式实践.md) | @Value ${}#{} 用法 | 实操 |
 | [13-Spring事件驱动机制详解](13-Spring事件驱动机制详解.md) | 观察者模式/事务事件 | 深 |
 | [14-Spring事件驱动机制实践](14-Spring事件驱动机制实践.md) | 事件/监听器/发布代码 | 实操 |
-| springboot 域 [00-SpringBoot体系总览](../springboot/00-SpringBoot体系总览.md) | Boot 体系地图 | 深 |
-| springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md) | 启动流程/自动装配 | 深（重点） |
-| springboot 域 [02-SpringBoot配置体系与外部化配置详解](../springboot/02-SpringBoot配置体系与外部化配置详解.md) | 配置优先级/Properties | 深（重点） |
-| springboot 域 [03-SpringBoot模块化详解](../springboot/03-SpringBoot模块化详解.md) | Boot4 模块化 | 深 |
-| springboot 域 [04-SpringBoot自定义Starter详解](../springboot/04-SpringBoot自定义Starter详解.md) | 自定义 Starter 开发 | 深 |
-| springboot 域 [05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md) | @Async/线程池 | 深 |
-| springboot 域 [06-SpringBoot日志配置详解](../springboot/06-SpringBoot日志配置详解.md) | 日志配置 | 深 |
-| springboot 域 [07-SpringBoot Actuator监控详解](../springboot/07-SpringBoot Actuator监控详解.md) | 生产监控 | 深 |
+| [15-Filter过滤器详解与三层对比](15-Filter过滤器详解与三层对比.md) | 过滤器/容器级/与拦截器·AOP对比 | 深 |
+| [16-拦截器Interceptor详解](16-拦截器Interceptor详解.md) | 拦截器（HandlerInterceptor） | 深 |
+| springboot 域 [00-SpringBoot体系总览](00-SpringBoot体系总览.md) | Boot 体系地图 | 深 |
+| springboot 域 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md) | 启动流程/自动装配 | 深（重点） |
+| springboot 域 [02-SpringBoot配置体系与外部化配置详解](02-SpringBoot配置体系与外部化配置详解.md) | 配置优先级/Properties | 深（重点） |
+| springboot 域 [03-SpringBoot模块化详解](03-SpringBoot模块化详解.md) | Boot4 模块化 | 深 |
+| springboot 域 [04-SpringBoot自定义Starter详解](04-SpringBoot自定义Starter详解.md) | 自定义 Starter 开发 | 深 |
+| springboot 域 [05-SpringBoot异步与线程池详解](05-SpringBoot异步与线程池详解.md) | @Async/线程池 | 深 |
+| springboot 域 [06-SpringBoot日志配置详解](06-SpringBoot日志配置详解.md) | 日志配置 | 深 |
+| springboot 域 [07-SpringBoot Actuator监控详解](07-SpringBoot Actuator监控详解.md) | 生产监控 | 深 |
 | springboot 域 [08-Spring WebFlux响应式编程详解](../springboot/08-Spring WebFlux响应式编程详解.md) | 响应式/AI agent 流式 | 深（重点） |
 
 **跨域关联**：
-- Web/HTTP 底层：**00-网络传输协议总览**（见知识库）、Tomcat（spring 内嵌容器）
-- 安全：**00-安全框架选型总览·Spring Security & Apache Shiro**（见知识库）（Spring Security 是 MVC 过滤链的典型应用）
-- 数据：**00-ORM全家桶总览与选型**（见知识库）（Spring 集成 MyBatis/JPA）
-- 分布式：[05-分布式ID与幂等设计详解](../../分布式/核心原理/05-分布式ID与幂等设计详解.md)（幂等落地示例）
-- 测试：**05-Spring Boot测试与Testcontainers**（见知识库）
+- Web/HTTP 底层：[00-网络传输协议总览](00-网络传输协议总览.md)、Tomcat（spring 内嵌容器）
+- 安全：[00-安全框架选型总览·Spring Security & Apache Shiro](00-安全框架选型总览·Spring Security & Apache Shiro.md)（Spring Security 是 MVC 过滤链的典型应用）
+- 数据：[00-ORM全家桶总览与选型](00-ORM全家桶总览与选型.md)（Spring 集成 MyBatis/JPA）
+- 分布式：[05-分布式ID与幂等设计详解](05-分布式ID与幂等设计详解.md)（幂等落地示例）
+- 测试：[05-Spring Boot测试与Testcontainers](05-Spring Boot测试与Testcontainers.md)
 
 ## 5. 学习路线
 
@@ -111,16 +113,17 @@ SpringBoot
 1. **先读本总览**：建立三件套心智模型
 2. **Spring 核心**：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)→[02-Spring核心·IoC与Bean生命周期实践](02-Spring核心·IoC与Bean生命周期实践.md)→[07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)→[08-Spring核心·AOP实践](08-Spring核心·AOP实践.md)→[09-Spring事务管理详解](09-Spring事务管理详解.md)→[10-Spring事务管理实践](10-Spring事务管理实践.md)→[13-Spring事件驱动机制详解](13-Spring事件驱动机制详解.md)→[14-Spring事件驱动机制实践](14-Spring事件驱动机制实践.md)（容器→切面→事务→事件）
 3. **SpringMVC**：[03-SpringMVC执行流程详解](03-SpringMVC执行流程详解.md)→[04-SpringMVC执行流程实践](04-SpringMVC执行流程实践.md)→[05-Spring与SpringMVC整合详解](05-Spring与SpringMVC整合详解.md)→[06-Spring与SpringMVC整合实践](06-Spring与SpringMVC整合实践.md)
-4. **SpringBoot**（重点）：springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md) → [02-SpringBoot配置体系与外部化配置详解](../springboot/02-SpringBoot配置体系与外部化配置详解.md) → [03-SpringBoot模块化详解](../springboot/03-SpringBoot模块化详解.md) → [04-SpringBoot自定义Starter详解](../springboot/04-SpringBoot自定义Starter详解.md) → [05-SpringBoot异步与线程池详解](../springboot/05-SpringBoot异步与线程池详解.md) → [06-SpringBoot日志配置详解](../springboot/06-SpringBoot日志配置详解.md) → [07-SpringBoot Actuator监控详解](../springboot/07-SpringBoot Actuator监控详解.md)
-5. 补件：[11-SpEL表达式详解](11-SpEL表达式详解.md)→[12-SpEL表达式实践](12-SpEL表达式实践.md)（随 AOP/缓存用到再读）、[08-Spring WebFlux响应式编程详解](../springboot/08-Spring WebFlux响应式编程详解.md)（AI agent/高并发 IO）
+4. **SpringBoot**（重点）：springboot 域 [01-SpringBoot启动原理与自动装配详解](01-SpringBoot启动原理与自动装配详解.md) → [02-SpringBoot配置体系与外部化配置详解](02-SpringBoot配置体系与外部化配置详解.md) → [03-SpringBoot模块化详解](03-SpringBoot模块化详解.md) → [04-SpringBoot自定义Starter详解](04-SpringBoot自定义Starter详解.md) → [05-SpringBoot异步与线程池详解](05-SpringBoot异步与线程池详解.md) → [06-SpringBoot日志配置详解](06-SpringBoot日志配置详解.md) → [07-SpringBoot Actuator监控详解](07-SpringBoot Actuator监控详解.md)
+5. 补件：[11-SpEL表达式详解](11-SpEL表达式详解.md)→[12-SpEL表达式实践](12-SpEL表达式实践.md)（随 AOP/缓存用到再读）、[15-Filter过滤器详解与三层对比](15-Filter过滤器详解与三层对比.md)→[16-拦截器Interceptor详解](16-拦截器Interceptor详解.md)（请求横切链）、[08-Spring WebFlux响应式编程详解](../springboot/08-Spring WebFlux响应式编程详解.md)（AI agent/高并发 IO）
 
 ## 6. 面试考点索引
 
 - Spring：Bean 生命周期、三级缓存循环依赖、IoC/DI 区别、AOP 原理、事务传播、事件机制
-- SpringMVC：DispatcherServlet 流程、拦截器 vs Filter、参数绑定、全局异常
+- SpringMVC：DispatcherServlet 流程、[拦截器 vs Filter](15-Filter过滤器详解与三层对比.md)、参数绑定、全局异常
 - SpringBoot：自动装配原理、@SpringBootApplication 组合注解、条件注解、外部化配置优先级、starter、@Async 异步、日志、Actuator 监控、WebFlux 响应式
 
 ## 7. 参考资料
 
 - 下一篇：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（进入 Spring 核心）
 - Spring 官方：https://spring.io/projects/spring-boot
+
