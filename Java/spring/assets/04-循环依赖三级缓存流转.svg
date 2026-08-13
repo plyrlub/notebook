@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg baseProfile="full" height="1480" version="1.1" width="1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a" markerHeight="11" markerWidth="11" orient="auto" refX="9" refY="5">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/>
+    </marker>
+    <marker id="b" markerHeight="11" markerWidth="11" orient="auto" refX="9" refY="5">
+      <path d="M0,0 L10,5 L0,10 z" fill="#d97706"/>
+    </marker>
+    <marker id="p" markerHeight="11" markerWidth="11" orient="auto" refX="9" refY="5">
+      <path d="M0,0 L10,5 L0,10 z" fill="#be185d"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1200" height="1480" fill="#ffffff"/>
+  <text fill="#111827" font-family="PingFang SC, Heiti SC" font-size="30" font-weight="bold" text-anchor="middle" x="600.0" y="52" style="white-space: pre;">循环依赖 × 三级缓存：与 Bean 生命周期对照</text>
+  <text style="fill: rgb(185, 28, 28); font-family: &quot;PingFang SC&quot;, &quot;Heiti SC&quot;; font-size: 23px; font-weight: 700; text-anchor: middle; white-space: pre;" x="603.393" y="826.108">关键：依赖注入(b) 发生在 AOP 代理生成(d) 之前 → 早期只能给「真实对象(半成品)」引用，不能给代理对象</text>
+  <rect fill="#dbeafe" height="112" rx="14" stroke="#1d4ed8" stroke-width="2.6" width="330" x="120" y="124"/>
+  <text fill="#1f2937" font-family="PingFang SC, Heiti SC" font-size="27" font-weight="bold" text-anchor="middle" x="285.0" y="170" style="white-space: pre;">A</text>
+  <text fill="#374151" font-family="PingFang SC, Heiti SC" font-size="15" text-anchor="middle" x="285.0" y="200" style="white-space: pre;">a✓实例化 → b注入(卡住)</text>
+  <rect fill="#fef3c7" height="112" rx="14" stroke="#d97706" stroke-width="2.6" width="330" x="730" y="124"/>
+  <text fill="#1f2937" font-family="PingFang SC, Heiti SC" font-size="27" font-weight="bold" text-anchor="middle" x="895.0" y="170" style="white-space: pre;">B</text>
+  <text fill="#374151" font-family="PingFang SC, Heiti SC" font-size="15" text-anchor="middle" x="895.0" y="200" style="white-space: pre;">a✓实例化 → b注入(卡住)</text>
+  <text fill="#1e40af" font-family="PingFang SC, Heiti SC" font-size="16" font-weight="bold" text-anchor="middle" x="566.779" y="768.896" style="white-space: pre; font-size: 16px;">生命周期粗略阶段： a=实例化 · b=依赖注入 · c=Aware · d=AOP代理+init · e=IoC管理 · g=销毁</text>
+  <rect fill="#f8fafc" height="479.294" rx="16" stroke="#cbd5e1" stroke-width="2.4" width="1132" x="34" y="245.72" style=""/>
+  <text fill="#1e3a8a" font-family="PingFang SC, Heiti SC" font-size="21" font-weight="bold" text-anchor="middle" x="563.872" y="702.841" style="white-space: pre; font-size: 21px;">Spring 三级缓存（DefaultSingletonBeanRegistry）</text>
+  <text fill="#0f766e" font-family="PingFang SC, Heiti SC" font-size="15" font-weight="normal" text-anchor="middle" x="569.673" y="651.038" style="white-space: pre; font-size: 15px;">从左到右：外层工厂③ → 半成品② → 成品①（查缓存顺序 ①→②→③）</text>
+  <rect fill="#fce7f3" height="138.354" rx="14" stroke="#be185d" stroke-width="2.6" width="300" x="80" y="404" style=""/>
+  <text fill="#1f2937" font-family="PingFang SC, Heiti SC" font-size="24" font-weight="bold" text-anchor="middle" x="230.0" y="456" style="white-space: pre;">③</text>
+  <text fill="#374151" font-family="PingFang SC, Heiti SC" font-size="15" text-anchor="middle" x="230.0" y="486" style="white-space: pre;">ObjectFactory 工厂<tspan x="230" dy="1em">​</tspan></text>
+  <rect fill="#ede9fe" height="133.409" rx="14" stroke="#7c3aed" stroke-width="2.6" width="300" x="456.056" y="405.751" style=""/>
+  <text fill="#1f2937" font-family="PingFang SC, Heiti SC" font-size="24" font-weight="bold" text-anchor="middle" x="606.056" y="457.751" style="white-space: pre; font-size: 24px;">②</text>
+  <text fill="#374151" font-family="PingFang SC, Heiti SC" font-size="15" text-anchor="middle" x="606.056" y="487.751" style="white-space: pre; font-size: 15px;">A 半成品
+（真实对象，未走d）</text>
+  <rect fill="#dcfce7" height="134.624" rx="14" stroke="#15803d" stroke-width="2.6" width="338.065" x="795.935" y="404" style=""/>
+  <text fill="#1f2937" font-family="PingFang SC, Heiti SC" font-size="24" font-weight="bold" text-anchor="middle" x="965.533" y="444.066" style="white-space: pre; font-size: 24px;">①</text>
+  <text fill="#374151" font-family="PingFang SC, Heiti SC" font-size="15" text-anchor="middle" x="971.162" y="483.599" style="white-space: pre; font-size: 15px;">成品 Bean
+（走完 b→d→e）</text>
+  <text fill="#6b7280" font-family="PingFang SC, Heiti SC" font-size="14" font-weight="normal" text-anchor="middle" x="224.499" y="562.138" style="white-space: pre; font-size: 14px;">注: 存 ObjectFactory 工厂</text>
+  <text fill="#6b7280" font-family="PingFang SC, Heiti SC" font-size="14" font-weight="normal" text-anchor="middle" x="600.437" y="562.832" style="white-space: pre; font-size: 14px;">注: 真实对象 非代理</text>
+  <text fill="#6b7280" font-family="PingFang SC, Heiti SC" font-size="14" font-weight="normal" text-anchor="middle" x="968.782" y="562.655" style="white-space: pre; font-size: 14px;">注: 被 AOP 代理过的成品</text>
+  <polyline fill="none" marker-end="url(#a)" points="152,236 152,404" stroke="#1d4ed8" stroke-width="3.8"/>
+  <circle cx="152" cy="266" fill="#1d4ed8" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="152" y="273.98" style="white-space: pre;">1</text>
+  <polyline fill="none" marker-end="url(#b)" points="781.853 236.078 781.853 323.252 195.837 323.252 195.837 398.804" stroke="#d97706" stroke-width="3.8" style=""/>
+  <circle cx="785.769" cy="265.051" fill="#d97706" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="785.769" y="273.033" style="white-space: pre; font-size: 20px;">2</text>
+  <polyline fill="none" marker-end="url(#p)" points="892.363 236 892.363 344 308.219 344 308.219 404" stroke="#be185d" stroke-dasharray="8,6" stroke-width="3.2" style=""/>
+  <circle cx="894.96" cy="268.589" fill="#be185d" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="894.96" y="276.569" style="white-space: pre; font-size: 20px;">3</text>
+  <polyline fill="none" marker-end="url(#p)" points="380 470 451.267 470" stroke="#be185d" stroke-width="3.8" style=""/>
+  <circle cx="401.477" cy="502.943" fill="#be185d" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="401.477" y="510.923" style="white-space: pre; font-size: 20px;">4</text>
+  <polyline fill="none" marker-end="url(#b)" points="1020,236 1020,404" stroke="#d97706" stroke-width="3.8"/>
+  <circle cx="1022.145" cy="329.896" fill="#d97706" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="1022.145" y="337.876" style="white-space: pre; font-size: 20px;">5</text>
+  <polyline fill="none" marker-end="url(#a)" points="438 236 438 616.393 973.333 616.393 973.333 567.718" stroke="#1d4ed8" stroke-width="3.8" style=""/>
+  <circle cx="771.133" cy="596.204" fill="#1d4ed8" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="771.133" y="604.184" style="white-space: pre; font-size: 20px;">6</text>
+  <rect fill="#fffbf0" height="544.706" rx="16" stroke="#fbbf24" stroke-width="2.4" width="1132" x="34" y="838.211" style=""/>
+  <text fill="#92400e" font-family="PingFang SC, Heiti SC" font-size="22" font-weight="bold" text-anchor="middle" x="600.0" y="882" style="white-space: pre;">①~⑥ 流程详解（与 Bean 生命周期 a→e 对照，一眼记下）</text>
+  <circle cx="88" cy="932" fill="#b45309" r="18" stroke="#fff" stroke-width="2"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="19" font-weight="bold" text-anchor="middle" x="88" y="940" style="white-space: pre;">1</text>
+  <text fill="#44403c" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="930" style="white-space: pre;">A：a(实例化)✓ → 进入 b(依赖注入) 发现需要 B</text>
+  <text fill="#6b7280" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="954" style="white-space: pre;">一级/二级/三级都没有 B → b 未完成 → 先把 A 工厂存进③</text>
+  <circle cx="88" cy="1010" fill="#b45309" r="18" stroke="#fff" stroke-width="2"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="19" font-weight="bold" text-anchor="middle" x="88" y="1018" style="white-space: pre;">2</text>
+  <text fill="#44403c" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1008" style="white-space: pre;">B：a(实例化)✓ → 进入 b(依赖注入) 发现需要 A</text>
+  <text fill="#6b7280" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1032" style="white-space: pre;">一级、二级里都没有 A</text>
+  <circle cx="88" cy="1088" fill="#b45309" r="18" stroke="#fff" stroke-width="2"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="19" font-weight="bold" text-anchor="middle" x="88" y="1096" style="white-space: pre;">3</text>
+  <text fill="#44403c" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1086" style="white-space: pre;">③ 命中 A 工厂 → 工厂交付引用，图中对应  </text>
+  <text fill="#6b7280" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1110" style="white-space: pre;">这里只能给「A 半成品(真实对象)」——因为 aop 代理 d 还没生成 → 先暂存②</text>
+  <circle cx="88" cy="1166" fill="#b45309" r="18" stroke="#fff" stroke-width="2"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="19" font-weight="bold" text-anchor="middle" x="88" y="1174" style="white-space: pre;">4</text>
+  <text fill="#44403c" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1164" style="white-space: pre;">B 拿到 A 半成品引用 → 继续走完 b → 走到 d(生成B的AOP代理)，图中对应</text>
+  <text fill="#6b7280" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1188" style="white-space: pre;">B 完整 → 升进①(成品) → 进入 e 由 IoC 管理</text>
+  <circle cx="88" cy="1244" fill="#b45309" r="18" stroke="#fff" stroke-width="2"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="19" font-weight="bold" text-anchor="middle" x="88" y="1252" style="white-space: pre;">5</text>
+  <text fill="#44403c" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1242" style="white-space: pre;">回到 A 的 b 流程：此刻①已有完整的 B，图中对应</text>
+  <text fill="#6b7280" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1266" style="white-space: pre;">A 拿完整 B → 走完 b → d(生成A的AOP代理) → 升进① → e</text>
+  <circle cx="88" cy="1322" fill="#b45309" r="18" stroke="#fff" stroke-width="2"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="19" font-weight="bold" text-anchor="middle" x="88" y="1330" style="white-space: pre;">6</text>
+  <text fill="#44403c" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1320" style="white-space: pre;">本质：依赖注入 b 发生在 AOP 代理 d 之前</text>
+  <text fill="#6b7280" font-family="PingFang SC, Heiti SC" font-size="17" text-anchor="start" x="122" y="1344" style="white-space: pre;">所以循环依赖暴露的是「真实对象」，不是代理 → 因此需要三级缓冲时机</text>
+  <circle cx="474.918" cy="1078.61" fill="#be185d" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="474.918" y="1086.59" style="white-space: pre; font-size: 20px;">3</text>
+  <circle cx="515.183" cy="1078.083" fill="#be185d" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="515.183" y="1086.063" style="white-space: pre; font-size: 20px;">4</text>
+  <circle cx="726.231" cy="1159.145" fill="#d97706" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="726.231" y="1167.125" style="white-space: pre; font-size: 20px;">5</text>
+  <circle cx="530.293" cy="1231.535" fill="#1d4ed8" r="19" stroke="#fff" stroke-width="2.4"/>
+  <text fill="#fff" font-family="PingFang SC, Heiti SC" font-size="20" font-weight="bold" text-anchor="middle" x="530.293" y="1239.515" style="white-space: pre; font-size: 20px;">6</text>
+</svg>
