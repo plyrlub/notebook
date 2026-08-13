@@ -7,8 +7,8 @@ tags: [Java, Spring, 事务, Transactional, 传播行为, 回滚, AOP]
 
 # Spring事务管理详解
 
-> 前置知识：[07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)（@Transactional 本质是一个 AOP 切面）、**Java注解机制详解**（见知识库）（注解如何被处理）
-> 关联笔记：**Java代理详解**（见知识库）（代理机制）、**Java参数校验详解**（见知识库）（同属 springboot 框架知识域）
+> 前置知识：[[07-Spring核心·AOP详解]]（@Transactional 本质是一个 AOP 切面）、[[Java注解机制详解]]（注解如何被处理）
+> 关联笔记：[[Java代理详解]]（代理机制）、[[Java参数校验详解]]（同属 springboot 框架知识域）
 
 ## 📋 总纲
 
@@ -29,7 +29,7 @@ tags: [Java, Spring, 事务, Transactional, 传播行为, 回滚, AOP]
 | 编程式 | TransactionTemplate / PlatformTransactionManager 手动 begin/commit/rollback | 灵活控制、动态边界 |
 | 声明式 | @Transactional 注解（AOP 自动管理） | 默认首选，声明即生效 |
 
-Spring 声明式事务的核心：**@Transactional 只是一个标记，真正生效靠 AOP 代理**（呼应 **Java注解机制详解**（见知识库）："注解只是元数据，处理者赋予意义"）。
+Spring 声明式事务的核心：**@Transactional 只是一个标记，真正生效靠 AOP 代理**（呼应 [[Java注解机制详解]]："注解只是元数据，处理者赋予意义"）。
 
 ## 二、@Transactional 原理
 
@@ -53,6 +53,43 @@ Spring 声明式事务的核心：**@Transactional 只是一个标记，真正�
 **为何 @Transactional 不依赖 @Inherited**：Spring 自己扫描目标类及其父类/接口方法上的注解（Spring 5.3+ 默认注解继承查找包括接口），而不是靠 Java 的 @Inherited（那只对类级别生效）。所以子类方法、甚至接口方法上的 @Transactional 都可能被识别——但**实际建议标在实现类方法上**（见第七节）。
 
 ## 三、传播行为（7 种）
+
+### 3.1 前提：什么叫"已有事务"
+
+**"已有事务" = 当前线程进入此方法时，已被更外层 `@Transactional` 方法新建并绑定的那本事务包裹着**。它是传播行为表格中"已有事务时"列的判断前提。
+
+**判断来源——事务同步管理器 `TransactionSynchronizationManager`**：用 **ThreadLocal** 保存"当前线程正在执行的事务资源"。只要有事务方法开了一道门，当前线程就被标记为"已有事务"；没有则视作"无事务"。
+
+- 当前线程若无事务资源 → 视为"无事务"（最外层时）
+- 当前线程若已被外层事务方法绑定 → 视为"已有事务"（嵌套时）
+- 事务资源随事务方法**返回而释放**，不赖在当前线程上
+
+**事务生命周期（方法级，不是线程级）**：
+
+| 维度 | 线程 | 事务 |
+| --- | --- | --- |
+| 生命周期 | 贯穿整个请求/任务 | **仅在最外层 `@Transactional` 方法执行期间** |
+| 谁创建/结束 | 容器/线程池持有 | 进入事务方法新建、返回即提交/回滚 |
+| 绑定 | 线程存在就有 | 方法执行期间才绑 ThreadLocal，返回即解除 |
+
+**何时"有门" vs "没门"**：
+
+```java
+@Transactional
+public void A() {          // 进入：无事务 → 新建 T，绑定当前线程
+    dao.update();          // 处于 T 门内
+}                          // A() 返回 → 提交/回滚 T，解除绑定（门关）
+
+public void B() {          // 普通方法（无 @Transactional）
+    // 当前线程已"没门"：A() 虽然刚返回，B() 也看不到任何事务
+}
+```
+
+门只跟着"最外层事务方法"走，不是跟着方法数量：在一个事务方法没返回期间，内部调用的所有普通方法都处于该事务门内；一旦最外层事务方法返回，门即关闭，后续调用全是普通方法——除非再进一个新的 `@Transactional` 方法重新开门。
+
+> ⚠️ 自助调失效关系：若内层 `@Transactional` 因**同类 `this` 自调用**而没走代理，它不会新建事务，而是直接加入外层已有事务（见失效场景 ⑥）。
+
+### 3.2 七种传播行为
 
 | 传播行为 | 已有事务时 | 无事务时 | 场景 |
 | --- | --- | --- | --- |
@@ -161,15 +198,15 @@ public void bad() {
 - **推荐标在实现类方法上**：标接口方法上，JDK 动态代理能识别，但 CGLIB 代理（Boot 默认）对接口注解的识别依赖 Spring 的注解查找逻辑，易出"注解不生效"的模糊问题；标实现类最稳。
 - 事务方法里**长事务**：一个事务里做多次远程调用/大循环，长时间持有数据库连接 → 用 REQUIRES_NEW 或拆分事务。
 - 事务与锁：先查后更（check-then-act）要配合悲观锁（SELECT FOR UPDATE）或乐观锁版本号，事务本身不解决并发覆盖。
-- @Transactional 与自定义切面顺序：事务切面默认优先级最低（LOWEST_PRECEDENCE），自定义 @Order 数值小于它时自定义通知在事务内执行（见 [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)）。
+- @Transactional 与自定义切面顺序：事务切面默认优先级最低（LOWEST_PRECEDENCE），自定义 @Order 数值小于它时自定义通知在事务内执行（见 [[07-Spring核心·AOP详解#三、五种通知类型与执行顺序]]）。
 
 ## 参考资料
 
 - [Spring 官方文档：Transaction Management](https://docs.spring.io/spring-framework/reference/data-access/transaction.html)，查询日期：2026-08-08
 - [Spring 事务实现机制传播行为与常见失效场景深度解析（阿里云）](https://developer.aliyun.com/article/1666013)，查询日期：2026-08-08
 - [一口气说出 6 种 @Transactional 注解的失效场景](https://www.cnblogs.com/chengxy-nds/p/12523241.html)，查询日期：2026-08-08
-- 关联：[07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)（事务切面原理）、**Java注解机制详解**（见知识库）（注解扫描机制）
+- 关联：[[07-Spring核心·AOP详解]]（事务切面原理）、[[Java注解机制详解]]（注解扫描机制）
 
 ---
-- 上一篇：[08-Spring核心·AOP实践](08-Spring核心·AOP实践.md)
-- 下一篇：[10-Spring事务管理实践](10-Spring事务管理实践.md)（本知识点代码实盀）
+- 上一篇：[[08-Spring核心·AOP实践]]
+- 下一篇：[[10-Spring事务管理实践]]（本知识点代码实盀）
