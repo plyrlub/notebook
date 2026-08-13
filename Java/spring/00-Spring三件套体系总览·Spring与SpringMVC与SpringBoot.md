@@ -94,7 +94,7 @@ SpringBoot
 - Web/HTTP 底层：**00-网络传输协议总览**（见知识库）、Tomcat（spring 内嵌容器）
 - 安全：**00-安全框架选型总览·Spring Security & Apache Shiro**（见知识库）（Spring Security 是 MVC 过滤链的典型应用）
 - 数据：**00-ORM全家桶总览与选型**（见知识库）（Spring 集成 MyBatis/JPA）
-- 分布式：**05-分布式ID与幂等设计详解**（见知识库）（幂等落地示例）
+- 分布式：[05-分布式ID与幂等设计详解](../../分布式/核心原理/05-分布式ID与幂等设计详解.md)（幂等落地示例）
 - 测试：**05-Spring Boot测试与Testcontainers**（见知识库）
 
 ## 5. 学习路线

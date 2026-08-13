@@ -251,7 +251,7 @@ A → D → X(2.0)        版本 2.0  ← 选这个（版本更高）
 
 **Gradle 系列**：
 - [01-Gradle核心机制详解](Gradle/01-Gradle核心机制详解.md)——定位/构建脚本/DSL/Wrapper
-- **02-Gradle Task与生命周期详解**（见知识库）——Task DAG/增量构建/命令
+- [02-Gradle Task与生命周期详解](Gradle/02-Gradle Task与生命周期详解.md)——Task DAG/增量构建/命令
 - [03-Gradle依赖管理详解](Gradle/03-Gradle依赖管理详解.md)——Configuration/冲突解析/Version Catalog
 - [04-Gradle多项目构建详解](Gradle/04-Gradle多项目构建详解.md)——include/子项目依赖/Composite Build
 - [05-Gradle性能优化详解](Gradle/05-Gradle性能优化详解.md)——守护进程/缓存/配置缓存/实测

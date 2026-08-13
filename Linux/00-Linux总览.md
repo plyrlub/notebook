@@ -53,5 +53,5 @@ tags: [Linux, 服务器, 学习笔记, 索引]
 ## 4. 相关参考
 
 - Nginx 笔记（[00-Nginx总览](../Nginx/00-Nginx总览.md)）：Linux 之上的 Web 服务器实践
-- CI/CD 笔记（[00-CI-CD 学习笔记（总览）](../CI-CD/00-CI-CD%20学习笔记（总览）.md)）：部署流水线中的 Linux 操作场景
+- CI/CD 笔记（[00-CI-CD 学习笔记（总览）](../CI-CD/00-CI-CD 学习笔记（总览）.md)）：部署流水线中的 Linux 操作场景
 - Docker：容器内同样是 Linux，本系列命令全部适用

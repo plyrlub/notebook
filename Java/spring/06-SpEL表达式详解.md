@@ -9,7 +9,7 @@ tags: [Java, Spring, SpEL, 表达式, 注解, AOP]
 # SpEL表达式详解
 
 > 前置知识：**Java注解机制详解**（见知识库）（注解元数据 + 处理者）、[04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)（@annotation 切点读注解）
-> 关联笔记：**Java反射详解**（见知识库）（反射取参名）、[06-SpEL表达式详解](06-SpEL表达式详解.md)（本文）实际是被注解取参场景引用
+> 关联笔记：[Java反射详解](../Java反射详解.md)（反射取参名）、[06-SpEL表达式详解](06-SpEL表达式详解.md)（本文）实际是被注解取参场景引用
 > 主题范围：SpEL 语法基础、在 Spring 注解（@Cacheable/@Idempotent）中取参、在 AOP 切面中手动解析 SpEL、与 OGNL/JSP EL 对比
 
 ## 📋 总纲
@@ -171,8 +171,8 @@ public class IdempotentAspect {
 
 - [04-Spring核心·AOP详解](04-Spring核心·AOP详解.md)：@Idempotent 注解 + 切面完整落地（本文是其 SpEL 取参支撑）
 - **Java注解机制详解**（见知识库）：注解元数据 + 处理者概念
-- **Java反射详解**（见知识库）：反射 getAnnotation / 参数名获取
-- **05-分布式ID与幂等设计详解**（见知识库）：幂等原理（跨语言）
+- [Java反射详解](../Java反射详解.md)：反射 getAnnotation / 参数名获取
+- [05-分布式ID与幂等设计详解](../../分布式/核心原理/05-分布式ID与幂等设计详解.md)：幂等原理（跨语言）
 
 ## 8. 参考资料
 

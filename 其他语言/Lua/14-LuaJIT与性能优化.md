@@ -7,7 +7,7 @@ tags: [Lua, LuaJIT, FFI, 性能, 其他语言]
 
 # LuaJIT与性能优化
 
-> 上一篇：[13-Lua 5.4新特性](13-Lua%205.4新特性.md)
+> 上一篇：[13-Lua 5.4新特性](13-Lua 5.4新特性.md)
 
 ---
 
@@ -31,8 +31,10 @@ FFI（Foreign Function Interface）是 LuaJIT 的王牌：**直接在 Lua 里声
 
 ```lua
 local ffi = require("ffi")
-ffi.cdef**int getpid(void);
-    double sqrt(double x);**（见知识库）
+ffi.cdef[[
+    int getpid(void);
+    double sqrt(double x);
+]]
 print(ffi.C.getpid())       -- 进程号（直接调 libc）
 print(ffi.C.sqrt(16))       -- 4.0
 ```

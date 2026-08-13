@@ -33,7 +33,7 @@ tags: [Gradle, 构建工具, 多项目, 组合构建, Composite Build, include]
 ## 前置知识
 
 - [03-Gradle依赖管理详解](03-Gradle依赖管理详解.md)——依赖声明基础
-- [02-Gradle Task与生命周期详解](02-Gradle%20Task与生命周期详解.md)——理解"配置阶段全量执行"
+- [02-Gradle Task与生命周期详解](02-Gradle Task与生命周期详解.md)——理解"配置阶段全量执行"
 
 ---
 

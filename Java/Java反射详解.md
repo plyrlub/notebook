@@ -470,7 +470,7 @@ public class LambdaFactoryInvoker {
 | 9+ | 模块系统：跨模块强封装，`--add-opens` 开放；`sun.reflect.inflationThreshold` 移除 |
 | 17+ | 强封装默认启用；`Class.newInstance()` 废弃（JDK 9 起）改用 `getDeclaredConstructor().newInstance()`；`java.lang.reflect.Proxy` 等 API 有性能改进，MethodHandle 表现整体优于早期版本 |
 
-- 关联笔记：**01-代码混淆详解**（见知识库）（混淆会重命名反射目标类/方法，反射场景必须 keep）、**Java注解机制详解**（见知识库）（反射读取注解）、**Java Agent与字节码增强详解**（见知识库）（运行期动态机制对比）
+- 关联笔记：[01-代码混淆详解](../通用技术/软件保护/01-代码混淆详解.md)（混淆会重命名反射目标类/方法，反射场景必须 keep）、**Java注解机制详解**（见知识库）（反射读取注解）、**Java Agent与字节码增强详解**（见知识库）（运行期动态机制对比）
 
 ---
 

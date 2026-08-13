@@ -9,7 +9,7 @@ tags: [Gradle, 构建工具, 性能优化, Build Cache, Configuration Cache, 守
 
 > 版本基线：Gradle 8.x 为主线，标注 5.x 差异（本机实测 Gradle 5.1.1 + JDK 8）
 > 受众：想提升 Gradle 构建速度、理解性能三大武器 + 配置缓存的后端开发。
-> 关联笔记：[04-Gradle多项目构建详解](04-Gradle多项目构建详解.md)、**00-构建工具总览·Maven & Gradle选型对比**（见知识库）
+> 关联笔记：[04-Gradle多项目构建详解](04-Gradle多项目构建详解.md)、[00-构建工具总览·Maven & Gradle选型对比](../00-构建工具总览·Maven & Gradle选型对比.md)
 
 ## 📋 总纲
 
@@ -32,7 +32,7 @@ tags: [Gradle, 构建工具, 性能优化, Build Cache, Configuration Cache, 守
 
 ## 前置知识
 
-- [02-Gradle Task与生命周期详解](02-Gradle%20Task与生命周期详解.md)——理解三阶段生命周期（配置 vs 执行）
+- [02-Gradle Task与生命周期详解](02-Gradle Task与生命周期详解.md)——理解三阶段生命周期（配置 vs 执行）
 
 ---
 
@@ -52,7 +52,7 @@ tags: [Gradle, 构建工具, 性能优化, Build Cache, Configuration Cache, 守
 
 ### 2.1 什么是配置缓存
 
-Gradle 的构建分**配置阶段**和**执行阶段**（见 [02-Gradle Task与生命周期详解](02-Gradle%20Task与生命周期详解.md)）。传统上每次构建都要重新执行配置阶段（解析所有 build.gradle）。
+Gradle 的构建分**配置阶段**和**执行阶段**（见 [02-Gradle Task与生命周期详解](02-Gradle Task与生命周期详解.md)）。传统上每次构建都要重新执行配置阶段（解析所有 build.gradle）。
 
 **Configuration Cache（配置缓存）**：缓存配置阶段的**结果（Task 图）**，如果构建脚本没变，**下次直接跳过配置阶段**，复用缓存的图。
 

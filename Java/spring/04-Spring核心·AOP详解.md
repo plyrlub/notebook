@@ -159,7 +159,7 @@ public Object around(ProceedingJoinPoint pjp, LogExec logExec) throws Throwable 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)      // 必须 RUNTIME
 public @interface Idempotent {
-    String key();                         // SpEL 表达式计算幂等键（见 [06-SpEL表达式详解](06-SpEL表达式详解.md)）
+    String key();                         // SpEL 表达式计算幂等键（见 [[06-SpEL表达式详解]]）
     int expireSeconds() default 10;
 }
 

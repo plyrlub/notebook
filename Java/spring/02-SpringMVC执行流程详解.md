@@ -9,7 +9,7 @@ tags: [Java, SpringMVC, DispatcherServlet, 控制器, 拦截器, 参数绑定, �
 
 > 版本基线：Spring MVC 5.x/6.x（Spring Boot 内嵌）
 > 受众：Java 后端开发。假设已懂 Spring 核心（IoC/AOP）；需理解 HTTP 请求如何在 SpringMVC 里被路由、绑定、返回。
-> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（容器/Bean）、**Java反射详解**（见知识库）（参数绑定底层）、**00-网络传输协议总览**（见知识库）（HTTP）
+> 前置知识：[01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)（容器/Bean）、[Java反射详解](../Java反射详解.md)（参数绑定底层）、**00-网络传输协议总览**（见知识库）（HTTP）
 > 关联笔记：[03-Spring与SpringMVC整合实践详解](03-Spring与SpringMVC整合实践详解.md)（传统整合）、springboot 域 [01-SpringBoot启动原理与自动装配详解](../springboot/01-SpringBoot启动原理与自动装配详解.md)（自动装配 DispatcherServlet）
 
 ## 📋 总纲
@@ -34,7 +34,7 @@ tags: [Java, SpringMVC, DispatcherServlet, 控制器, 拦截器, 参数绑定, �
 ## 2. 前置知识
 
 - [01-Spring核心·IoC与Bean生命周期详解](01-Spring核心·IoC与Bean生命周期详解.md)：@Controller 是 @Component 族，控制器是容器管理的 Bean
-- **Java反射详解**（见知识库）：HandlerAdapter 用反射调用控制器方法 + 参数转换
+- [Java反射详解](../Java反射详解.md)：HandlerAdapter 用反射调用控制器方法 + 参数转换
 
 ## 3. 核心知识点
 

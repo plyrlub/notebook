@@ -9,7 +9,7 @@ tags: [Gradle, 构建工具, 依赖管理, Configuration, Version Catalog, 冲�
 
 > 版本基线：Gradle 8.x 为主线，标注 5.x 差异（本机实测 Gradle 5.1.1 + JDK 8）
 > 受众：想深入理解 Gradle 依赖管理（Configuration 体系、冲突解析、Version Catalog）的后端开发。
-> 关联笔记：[02-Gradle Task与生命周期详解](02-Gradle%20Task与生命周期详解.md)、**00-构建工具总览·Maven & Gradle选型对比**（见知识库）
+> 关联笔记：[02-Gradle Task与生命周期详解](02-Gradle Task与生命周期详解.md)、[00-构建工具总览·Maven & Gradle选型对比](../00-构建工具总览·Maven & Gradle选型对比.md)
 
 ## 📋 总纲
 
@@ -33,7 +33,7 @@ tags: [Gradle, 构建工具, 依赖管理, Configuration, Version Catalog, 冲�
 ## 前置知识
 
 - [01-依赖与仓库](../Maven/01-依赖与仓库.md)——依赖范围（scope）、dependencyManagement 是对照基础
-- [02-Gradle Task与生命周期详解](02-Gradle%20Task与生命周期详解.md)——构建脚本基础
+- [02-Gradle Task与生命周期详解](02-Gradle Task与生命周期详解.md)——构建脚本基础
 
 ---
 
@@ -180,7 +180,7 @@ dependencies {
 
 ## 上一篇 / 下一篇
 
-[02-Gradle Task与生命周期详解](02-Gradle%20Task与生命周期详解.md) / [04-Gradle多项目构建详解](04-Gradle多项目构建详解.md)
+[02-Gradle Task与生命周期详解](02-Gradle Task与生命周期详解.md) / [04-Gradle多项目构建详解](04-Gradle多项目构建详解.md)
 
 ## 参考资料
 
