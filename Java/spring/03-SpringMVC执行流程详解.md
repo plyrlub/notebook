@@ -61,7 +61,7 @@ sequenceDiagram
     DS->>HA: 3. 调用适配器
     HA->>Ctrl: 4. 反射调用方法（参数绑定）
     Ctrl-->>HA: Model + View / @ResponseBody 数据
-    HA->>IC: 5. 后置拦截器 postHandle
+    DS->>IC: 5. 后置拦截器 postHandle（DispatcherServlet 回退逆序调用）
     DS->>VR: 6. 解析视图（JSP 场景）
     VR-->>DS: View
     DS-->>C: 7. 渲染返回响应（或直接写 @ResponseBody）
@@ -73,7 +73,7 @@ sequenceDiagram
 | 2 | 拦截器 preHandle | 请求前处理（鉴权/日志） |
 | 3 | HandlerAdapter | 适配调用控制器方法 |
 | 4 | Controller | 执行业务，绑定参数 |
-| 5 | 拦截器 postHandle | 响应前处理 |
+| 5 | 拦截器 postHandle | DispatcherServlet 逆序调拦截器（响应前处理） |
 | 6 | ViewResolver | 解析视图（仅返回视图名时） |
 | 7 | 渲染/写出 | 返回响应 |
 

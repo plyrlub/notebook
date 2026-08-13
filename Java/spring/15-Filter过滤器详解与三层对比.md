@@ -171,13 +171,13 @@ sequenceDiagram
     C->>T: HTTP 请求
     T->>F: 进入 Filter(最外层)
     F->>DS: chain.doFilter() 放行
-    DS->>I: postHandle preHandler
+    DS->>I: 拦截器 preHandle（正序）
     I->>AOP: 命中切点
     AOP->>M: @Before → 业务方法 → @After
     M-->>AOP: 返回结果
     AOP-->>I: 返回
-    I-->>DS: postHandle / afterCompletion
-    DS-->>F: 响应返回路径
+    I-->>DS: 拦截器 postHandle（逆序）
+    DS-->>F: afterCompletion & 响应返回路径
     F-->>T: filter 后处理
     T-->>C: HTTP 响应
 ```
