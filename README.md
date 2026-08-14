@@ -100,6 +100,28 @@
 - [Gradle性能优化详解](Java/构建工具/Gradle/05-Gradle性能优化详解.md)
     守护进程/构建缓存/配置缓存/实测
 
+## 数据库
+
+### DB 通用理论（跨库通用概念层）
+
+- [数据库总览](数据库/00-数据库总览.md)
+    知识域统一入口，4 大分支索引：MySQL / PostgreSQL / Redis / DB 通用理论
+- [关系型DB事务详解](数据库/DB通用理论/01-关系型DB事务详解.md)
+    ACID/事务边界/隔离级别(脏读/不可重复读/幻读)/保存点/各库默认级别
+- [关系型DB锁详解](数据库/DB通用理论/02-关系型DB锁详解.md)
+    乐观vs悲观/锁粒度/共享排他/锁升级/死锁四条件
+- [关系型DB-MVCC详解](数据库/DB通用理论/03-关系型DB-MVCC详解.md)
+    MVCC 是什么/两套方案对比/快照机制/各库差异
+
+### PostgreSQL（已同步篇目）
+
+- [PostgreSQL 事务详解](数据库/PostgreSQL/01-基础/06-事务详解.md)
+    PG 事务语法/默认隔离级别/保存点 SQL/本机实测
+- [PostgreSQL 锁详解](数据库/PostgreSQL/01-基础/07-锁详解.md)
+    7 种表锁/行锁 SQL/pg_locks/咨询锁/死锁/实测
+- [PostgreSQL MVCC 深入原理](数据库/PostgreSQL/02-设计原理/03-MVCC深入原理.md)
+    元组头/clog/hint bits/VM/HOT/VACUUM/快照构建/表膨胀
+
 ## 通用技术
 
 ### 前后端缓存

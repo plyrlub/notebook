@@ -124,10 +124,13 @@ public void save() { ... }
 | **REQUIRES_NEW**（另开连接） | 峰值 **+1** | 子段独立 | **能** | 多占连接 + 拉长主事务 |
 | **NESTED**（保存点） | 1 | 子段 `ROLLBACK TO savepoint` | 不能（跟随外层） | 保存点 write/undo 开销 |
 
-- **REQUIRES_NEW 的"另开连接"**：从连接池再拿一条独立待机的连接承载全新事务（可能复用到同一条物理连接对象，但语义是独立事务）；MySQL 不支持 begin 嵌套，故必须另拿连接；Oracle 不豁免——REQUIRES_NEW 同样另拿连接。所谓"同一条连接"是连接对象复用，**不是**同连接上 `begin;begin` 嵌套。
-- **NESTED 的"保存点"**：同一条连接上用 `SAVEPOINT`（Oracle/MySQL 均支持），子段失败 `ROLLBACK TO savepoint` 只回滚子段；但子段不能独立提交（随外层），且有 undo 累积开销。
+- **REQUIRES_NEW 的"另开连接"**：
+  从连接池再拿一条独立待机的连接承载全新事务（可能复用到同一条物理连接对象，但语义是独立事务）；MySQL 不支持 begin 嵌套，故必须另拿连接；Oracle 不豁免——REQUIRES_NEW 同样另拿连接。所谓"同一条连接"是连接对象复用，**不是**同连接上 `begin;begin` 嵌套。
+- **NESTED 的"保存点"**：
+  同一条连接上用 `SAVEPOINT`（Oracle/MySQL 均支持），子段失败 `ROLLBACK TO savepoint` 只回滚子段；但子段不能独立提交（随外层），且有 undo 累积开销。
 - **性能铁律**：REQUIRES_NEW 贵在**多占连接 + 主事务被拉长**（夹提交点时主连接持有时间变长、锁/undo 占用久）；NESTED 贵在**保存点 undo**。二者都是"用性能换独立性"。
-- **反模式**：在 for 循环里反复调 REQUIRES_NEW（每次另拿连接+独立提交）会严重劣化——应改批量/自定义保存点。同理，想"缩短当前事务"应去事务/换 NOT_SUPPORTED，而不是 REQUIRES_NEW（那恰恰是延长）。
+- **反模式**：
+  在 for 循环里反复调 REQUIRES_NEW（每次另拿连接+独立提交）会严重劣化——应改批量/自定义保存点。同理，想"缩短当前事务"应去事务/换 NOT_SUPPORTED，而不是 REQUIRES_NEW（那恰恰是延长）。
 
 ## 四、回滚规则
 
@@ -153,19 +156,16 @@ public void d() { throw new BusinessException("不滚"); }
 
 ## 五、隔离级别
 
-| 隔离级别 | 脏读 | 不可重复读 | 幻读 | 说明 |
-| --- | --- | --- | --- | --- |
-| READ_UNCOMMITTED | 可能 | 可能 | 可能 | 几乎不用 |
-| READ_COMMITTED | 否 | 可能 | 可能 | **多数数据库默认**（PG/MySQL InnDB 为 RR） |
-| REPEATABLE_READ | 否 | 否 | 可能（InnoDB 靠间隙锁避免） | MySQL 默认 |
-| SERIALIZABLE | 否 | 否 | 否 | 串行化，性能最低 |
+> 📌 **通用知识**：四隔离级别表、脏读/不可重复读/幻读定义、各库默认隔离级别对比见 **[01-关系型DB事务详解](../../数据库/DB通用理论/01-关系型DB事务详解.md) §4 / §5**。本节只讲 Spring 层的配置入口。
+
+Spring 通过 `@Transactional(isolation=...)` 指定当前事务的隔离级别（对应数据库的 four-level 模型）：
 
 ```java
 @Transactional(isolation = Isolation.REPEATABLE_READ)
 public void query() { ... }
 ```
 
-注意：隔离级别不是越高越好，与并发性能权衡；MySQL InnoDB 默认 REPEATABLE_READ 但靠 MVCC + 间隙锁实际避免了大部分幻读。
+**结果性要点**：Spring 默认 `Isolation.DEFAULT`（沿用数据库默认）；MySQL InnoDB 默认 `REPEATABLE_READ`，但靠 MVCC + 间隙锁实际避免了大部分幻读（PG 默认 `Read Committed`）。
 
 ## 六、失效场景（重点 ★）
 
@@ -211,7 +211,7 @@ public void bad() {
 
 - **推荐标在实现类方法上**：标接口方法上，JDK 动态代理能识别，但 CGLIB 代理（Boot 默认）对接口注解的识别依赖 Spring 的注解查找逻辑，易出"注解不生效"的模糊问题；标实现类最稳。
 - 事务方法里**长事务**：一个事务里做多次远程调用/大循环，长时间持有数据库连接 → 用 REQUIRES_NEW 或拆分事务。
-- 事务与锁：先查后更（check-then-act）要配合悲观锁（SELECT FOR UPDATE）或乐观锁版本号，事务本身不解决并发覆盖。
+- 事务与锁：先查后更（check-then-act）要配合悲观锁（SELECT FOR UPDATE）或乐观锁版本号，事务本身不解决并发覆盖（锁的通用原理与优化/悲现锁对比见 [02-关系型DB锁详解](../../数据库/DB通用理论/02-关系型DB锁详解.md)）。
 - @Transactional 与自定义切面顺序：事务切面默认优先级最低（LOWEST_PRECEDENCE），自定义 @Order 数值小于它时自定义通知在事务内执行（见 [07-Spring核心·AOP详解](07-Spring核心·AOP详解.md)）。
 
 ## 八、边界：单服务 vs 分布式事务
