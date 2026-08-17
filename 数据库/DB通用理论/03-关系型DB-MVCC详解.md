@@ -9,7 +9,7 @@ tags: [数据库, 关系型数据库, DB通用理论, MVCC, 并发控制, 事务
 
 > **一句话记忆**：MVCC（Multi-Version Concurrency Control，多版本并发控制）= 让同一行数据同时存在多个历史版本，每个事务看到自己"应该看到"的版本，从而实现**读不阻塞写、写不阻塞读**。PG 靠堆表多留旧版，MySQL 靠 undo log 存旧版——方向相反，殊途同归。
 
-**本篇定位**：DB 通用理论层——讲清 MVCC **是什么/为什么/两套方案/快照概念/各库差异**这些通用概念与跨库对比。某库的内部实现（PG 元组头/VM/HOT/clog/VACUUM，MySQL undo/purge/Read View/Next-Key）在各库笔记详述，MySQL 尚以占位块标注待补充。
+**本篇定位**：DB 通用理论层——讲清 MVCC **是什么/为什么/两套方案/快照概念/各库差异**这些通用概念与跨库对比。某库的内部实现（PG 元组头/VM/HOT/clog/VACUUM，MySQL undo/purge/Read View/Next-Key）在各库笔记详述，MySQL 侧见 **07-事务与锁详解**（见知识库）。
 
 ## 📋 总纲
 
@@ -98,9 +98,9 @@ tags: [数据库, 关系型数据库, DB通用理论, MVCC, 并发控制, 事务
 
 ---
 
-## 5. 📌 MySQL 实现细节（占位）
+## 5. MySQL 实现细节（链接 MySQL 篇）
 
-> 📌 **本节为占位**：MySQL InnoDB 的具体实现细节（undo log / purge / Read View / Next-Key 锁）当前未在 vault 中的 MySQL 笔记详述，**待总结补全**。已由对照表 1 概括其机制要点，以下仅列出待深入方向。
+> 📌 MySQL InnoDB 的具体实现细节（undo log / purge / Read View / Next-Key 锁）详见 **07-事务与锁详解**（见知识库），总览见 **00-MySQL总览**（见知识库）。以下列出待深入方向。
 
 **待总结内容**：
 - **undo log 回滚段**：如何按版本链存储"原地更新前的旧值"。
