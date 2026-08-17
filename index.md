@@ -8,35 +8,210 @@
 
 ## Java
 
-### Java 核心机制
+### JDK 基础库
 
-- [Java SPI机制详解](Java/Java%20SPI机制详解.md)
-    JDK / Spring / Dubbo / Servlet 四机制全覆盖
-- [Java volatile详解](Java/Java%20volatile详解.md)
+- [JDK基础库总览](Java/JDK基础库/00-JDK基础库总览.md)
+    并发 / 集合 / 核心机制 / 新特性统一入口
+
+#### 并发编程
+
+- [并发编程总览](Java/JDK基础库/并发/00-并发编程总览.md)
+    多线程 / JUC / 线程池知识域地图
+- [多线程基础详解](Java/JDK基础库/并发/01-多线程基础详解.md)
+    线程状态、start/join/yield、CAS、锁基础
+- [Java volatile详解](Java/JDK基础库/并发/Java%20volatile详解.md)
     JMM/硬件链路、MESI、内存屏障、假共享、面试 10 问
-- [Java反射详解](Java/Java反射详解.md)
+- [JUC之锁与AQS](Java/JDK基础库/并发/JUC/01-JUC之锁与AQS.md)
+    AQS、ReentrantLock、读写锁、StampedLock、Condition
+- [JUC之原子类与CAS](Java/JDK基础库/并发/JUC/02-JUC之原子类与CAS.md)
+    Atomic 系列、CAS ABA、LongAdder
+- [JUC之并发容器](Java/JDK基础库/并发/JUC/03-JUC之并发容器.md)
+    ConcurrentHashMap、CopyOnWrite、阻塞队列
+- [Java线程池原理与参数详解](Java/JDK基础库/并发/线程池/01-Java线程池原理与参数详解.md)
+    ThreadPoolExecutor 七参、提交流程、拒绝策略
+- [线程数设置与虚拟线程选型](Java/JDK基础库/并发/线程池/03-线程数设置与虚拟线程选型.md)
+    CPU/IO 密集、线程池调优、虚拟线程
+
+#### 核心机制
+
+- [Java SPI机制详解](Java/JDK基础库/核心机制/Java SPI机制详解.md)
+    JDK / Spring / Dubbo / Servlet 四机制全覆盖
+- [Java反射详解](Java/JDK基础库/核心机制/Java反射详解.md)
     核心 API/为什么慢、缓存 → MethodHandle → LambdaMetafactory 四层优化、面试 8 问
+- [Java注解机制详解](Java/JDK基础库/核心机制/Java注解机制详解.md)
+    自定义注解、Annotation 处理、与反射配合
+- [Java代理详解](Java/JDK基础库/核心机制/Java代理详解.md)
+    JDK 动态代理 / CGLIB、用途与选型
+- [Java Agent与字节码增强详解](Java/JDK基础库/核心机制/Java%20Agent与字节码增强详解.md)
+    premain/agentmain、Instrumentation、字节码增强原理
 
 ### JVM
 
-- [Java GC详解](Java/Java%20GC详解.md)
+- [JVM总览](Java/JVM/00-JVM总览.md)
+    内存/GC/类加载/调优知识域地图
+- [JMM内存模型详解](Java/JVM/JMM内存模型详解.md)
+    JMM、happens-before、主存/工作内存、volatile/synchronized 语义
+- [Java类加载机制与双亲委派详解](Java/JVM/Java类加载机制与双亲委派详解.md)
+    类加载过程、双亲委派、打破场景
+- [Java GC详解](Java/JVM/Java%20GC详解.md)
     判活/算法/收集器演进（Serial→G1→ZGC）、三色标记、SafePoint、面试 11 问
+- [JVM调优实战](Java/JVM/JVM调优实战.md)
+    参数调优、GC 日志、内存泄漏排查
+- [Arthas在线诊断](Java/JVM/Arthas在线诊断.md)
+    JVM 诊断命令、线上排障实战
 
-### Java 框架
+### Spring 三件套（Spring / SpringMVC / SpringBoot）
 
-- [Tomcat总览](Java/tomcat/00-Tomcat总览.md)
-    基于 8.5.x：架构/Coyote/Catalina、server.xml 全标签、源码构建、启动流程、类加载、HTTPS、性能优化 + 类加载深度篇
+- [Spring三件套体系总览](Java/框架/spring/00-Spring三件套体系总览·Spring与SpringMVC与SpringBoot.md)
+    三件套定位/演进/职责边界/知识域地图/学习路线
+- [Spring核心·IoC与Bean生命周期详解](Java/框架/spring/01-Spring核心·IoC与Bean生命周期详解.md)
+    IoC/DI、Bean 生命周期、三种装配、循环依赖三级缓存、作用域
+- [Spring核心·IoC与Bean生命周期实践](Java/框架/spring/02-Spring核心·IoC与Bean生命周期实践.md)
+    注解式装配实战、常用注解、XML/注解混用
+- [SpringMVC执行流程详解](Java/框架/spring/03-SpringMVC执行流程详解.md)
+    DispatcherServlet 流程、参数绑定、拦截器、全局异常
+- [Spring核心·AOP详解](Java/框架/spring/07-Spring核心·AOP详解.md)
+    动态代理/CGLIB、五种通知、切点、失效场景
+- [Spring事务管理详解](Java/框架/spring/09-Spring事务管理详解.md)
+    @Transactional、7 传播、隔离级别、12 类失效
+- [SpEL表达式详解](Java/框架/spring/11-SpEL表达式详解.md)
+    SpEL 语法、注解取参、AOP 切面手动解析
+- [Filter过滤器详解与三层对比](Java/框架/spring/15-Filter过滤器详解与三层对比.md)
+    Servlet规范、三方法、两种配置、Filter/拦截器/AOP 三层对比
+- [全局异常与国际化详解](Java/框架/spring/17-全局异常与国际化详解.md)
+    @ControllerAdvice、BusinessException、错误码、MessageSource/i18n
+
+#### SpringBoot（详解 + 实践）
+
+- [SpringBoot体系总览](Java/框架/springboot/00-SpringBoot体系总览.md)
+    定位/核心三大件/知识域地图/学习路线
+- [启动原理与自动装配详解](Java/框架/springboot/01-SpringBoot启动原理与自动装配详解.md)
+    @SpringBootApplication、自动装配、.imports、条件注解
+- [配置体系与外部化配置详解](Java/框架/springboot/02-SpringBoot配置体系与外部化配置详解.md)
+    外部化配置优先级、@ConfigurationProperties vs @Value、profile
+- [模块化详解](Java/框架/springboot/04-SpringBoot模块化详解.md)
+    Boot4 一个 jar→一组模块、starter 改名
+- [自定义Starter详解](Java/框架/springboot/05-SpringBoot自定义Starter详解.md)
+    双模块、@AutoConfiguration、.imports 注册、元数据
+- [异步与线程池详解](Java/框架/springboot/07-SpringBoot异步与线程池详解.md)
+    @Async、线程池配置、CompletableFuture、失效场景
+- [日志配置详解](Java/框架/springboot/09-SpringBoot日志配置详解.md)
+    SLF4J+Logback、logback-spring.xml、滚动策略、MDC
+- [Actuator监控详解](Java/框架/springboot/11-SpringBoot%20Actuator监控详解.md)
+    health、Micrometer、Prometheus/Grafana、安全暴露
+- [WebFlux响应式编程详解](Java/框架/springboot/13-Spring%20WebFlux响应式编程详解.md)
+    Mono/Flux、背压、SSE 流式输出（AI agent）、MVC vs WebFlux
+- [SpringDoc与OpenAPI集成详解](Java/框架/springboot/16-SpringDoc与OpenAPI集成详解.md)
+    OpenAPI 3、springdoc 配置、注解派生产品文档
+
+### 安全框架
+
+- [安全框架选型总览·Spring Security & Apache Shiro](Java/框架/安全/00-安全框架选型总览·Spring%20Security%20&%20Apache%20Shiro.md)
+    两大框架定位、对比选型
+- [Spring Security核心架构详解](Java/框架/安全/01-Spring%20Security核心架构详解.md)
+    FilterChain、SecurityContext、认证/授权架构
+- [Spring Security认证机制详解](Java/框架/安全/02-Spring%20Security认证机制详解.md)
+    UsernamePassword、JWT/OAuth2、认证流程
+- [Apache Shiro核心架构详解](Java/框架/安全/04-Apache%20Shiro核心架构详解.md)
+    Subject/SecurityManager/Realm、认证授权流程
+- [Spring Security与Shiro对比选型详解](Java/框架/安全/07-Spring%20Security与Shiro对比选型详解.md)
+    核心差异、社区、适用场景、迁移建议
+
+### 定时任务
+
+- [定时任务框架选型总览](Java/框架/定时任务/00-定时任务框架选型总览.md)
+    Quartz / XXL-Job / Elastic-Job / PowerJob 对比
+- [Quartz详解](Java/框架/定时任务/01-Quartz详解.md)
+    JobDetail/Trigger/Scheduler、集群、持久化
+- [XXL-Job详解](Java/框架/定时任务/02-XXL-Job详解.md)
+    调度中心/执行器、分片、路由策略
+
+### 数据访问层（ORM / 分库分表）
+
+- [ORM全家桶总览与选型](Java/框架/数据访问层/00-ORM全家桶总览与选型.md)
+    MyBatis / MyBatis-Plus / JPA 定位与选型
+- [MyBatis核心机制详解](Java/框架/数据访问层/01-MyBatis核心机制详解.md)
+    动态代理、SqlSession、四大对象、生命周期
+- [MyBatisPlus核心机制详解](Java/框架/数据访问层/05-MyBatis%20Plus核心机制详解.md)
+    通用 CRUD、条件构造器、分页插件
+- [JPA与Spring Data JPA详解](Java/框架/数据访问层/06-JPA与Spring%20Data%20JPA详解.md)
+     实体映射、Repository、@Query 派生查询
+- [分库分表总览与选型](Java/框架/数据访问层/分库分表/00-分库分表总览与选型.md)
+    垂直/水平拆分、中间件选型
+- [分片键与分片算法详解](Java/框架/数据访问层/分库分表/02-分片键与分片算法详解.md)
+    分片键设计、哈希/范围/区间分片
+- [ShardingSphere-JDBC集成与配置详解](Java/框架/数据访问层/分库分表/04-ShardingSphere-JDBC集成与配置详解.md)
+    集成配置、读写分离、分片实战
+
+### 服务通信 / 网络底座
+
+- [RPC与远程调用总览](Java/框架/服务通信/00-RPC与远程调用总览.md)
+    RPC 原理、序列化/协议、对比选型
+- [Apache Dubbo详解](Java/框架/服务通信/04-Apache%20Dubbo详解.md)
+    注册中心、负载均衡、SPI 扩展、线程模型
+- [gRPC详解](Java/框架/服务通信/05-gRPC详解.md)
+    Protobuf、HTTP/2、流式 RPC
+- [OpenFeign详解](Java/框架/服务通信/06-OpenFeign详解.md)
+    声明式 HTTP 客户端、编码器/解码器、日志
+- [网络底座总览](Java/框架/网络底座/00-网络底座总览.md)
+    Socket/NIO/Netty/Web服务器 知识域
+- [Socket与IO模型](Java/框架/网络底座/网络通信/01-Socket与IO模型.md)
+    BIO/NIO/AIO、事件驱动、reactor
+- [Java NIO详解](Java/框架/网络底座/网络通信/02-Java%20NIO详解.md)
+    Channel/Buffer/Selector、零拷贝
+- [Netty核心机制详解](Java/框架/网络底座/网络通信/03-Netty核心机制详解.md)
+    EventLoop/ChannelPipeline、编解码、心跳
+- [Tomcat总览](Java/框架/网络底座/Web服务器/tomcat/00-Tomcat总览.md)
+    基于 8.5.x：架构/Coyote/Catalina、server.xml、源码、类加载、HTTPS、性能优化
+- [Tomcat类加载机制详解](Java/框架/网络底座/Web服务器/tomcat/06-Tomcat类加载机制详解.md)
+   ⭐ 双亲委派打破、类隔离、热部署
+- [Tomcat性能优化策略](Java/框架/网络底座/Web服务器/tomcat/08-Tomcat性能优化策略.md)
+    JVM/GC 调优、线程池、连接器/IO 模式调优
+
+### 三方库
+
+- [Caffeine Java缓存详解](Java/三方库/Caffeine%20Java缓存详解.md)
+    本地缓存选型、缓存淘汰、统计
+- [Guava概览与模块化辨析](Java/三方库/Guava/00-Guava概览与模块化辨析.md)
+    Guava 模块划分与取舍
+- [Guava collect集合增强详解](Java/三方库/Guava/02-Guava%20collect集合增强详解.md)
+    Immutable、Multimap、BiMap、RangeSet
+- [Guava concurrent与cache详解](Java/三方库/Guava/03-Guava%20concurrent与cache详解.md)
+    ListenableFuture、RateLimiter、Cache 构建器
+- [JSON序列化与反序列化总览](Java/三方库/JSON序列化/00-JSON序列化与反序列化总览.md)
+    Gson/Fastjson2/Jackson 定位与选型
+- [Jackson核心与ObjectMapper详解](Java/三方库/JSON序列化/05-Jackson核心与ObjectMapper详解.md)
+    核心注解、配置、ObjectMapper 定制
+- [Jackson与SpringBoot集成详解](Java/三方库/JSON序列化/07-Jackson与SpringBoot集成详解.md)
+    WebMvc 配置、JSON 视图、日期处理
+- [Lombok详解](Java/三方库/Lombok详解.md)
+    注解处理器、常用注解、与编译期增强
+- [MapStruct详解](Java/三方库/MapStruct详解.md)
+    Bean 映射、编译期代码生成、性能
+
+### 设计模式
+
+- [设计模式总览](Java/设计模式/00-设计模式总览.md)
+    GoF 23 与高频面试模式地图
+- [单例模式详解](Java/设计模式/01-单例模式详解.md)
+    饿汉/懒汉/DCL/枚举、反射与序列化防破坏
+- [工厂方法与简单工厂详解](Java/设计模式/02-工厂方法与简单工厂详解.md)
+    简单工厂/工厂方法/抽象工厂定位
+- [建造者模式详解](Java/设计模式/04-建造者模式详解.md)
+    Builder 链式、与构造函数对比
+- [代理模式详解](Java/设计模式/07-代理模式详解.md)
+    JDK 动态代理/CGLIB、静态与动态
+- [设计模式踩坑记录](Java/设计模式/99-设计模式踩坑记录.md)
+    过度设计、必填校验绕过等反模式
 
 ### 构建工具
 
-- **构建工具总览·Maven & Gradle选型对比**（见知识库）
+- [构建工具总览·Maven & Gradle选型对比](Java/构建工具/00-构建工具总览·Maven%20&%20Gradle选型对比.md)
     两大构建工具定位、核心差异与选型建议
 - [Maven 依赖与仓库](Java/构建工具/Maven/01-依赖与仓库.md)
     依赖配置/范围/调解 + 仓库/镜像/私服
 - [Maven 生命周期与插件](Java/构建工具/Maven/02-生命周期与插件.md)
     三套生命周期/插件绑定 + 聚合与继承
-- [Maven 私服与测试](Java/构建工具/Maven/03-私服与测试.md)
-    Nexus 私服搭建 + surefire 测试
 - [Maven 版本与灵活构建](Java/构建工具/Maven/04-版本与灵活构建.md)
     版本约定/发布 + 属性/Profile/Archetype
 - [Gradle核心机制详解](Java/构建工具/Gradle/01-Gradle核心机制详解.md)
@@ -50,8 +225,47 @@
 - [Gradle性能优化详解](Java/构建工具/Gradle/05-Gradle性能优化详解.md)
     守护进程/构建缓存/配置缓存/实测
 
----
+### 测试
 
+- [测试体系总览](Java/测试/00-测试体系总览.md)
+    单元/集成/基准/契约测试布局
+- [JUnit 5详解](Java/测试/01-JUnit%205详解.md)
+    JUnit5 架构、断言、参数化、生命周期
+- [Mockito详解](Java/测试/02-Mockito详解.md)
+    打桩、verify、ArgumentMatcher、spy
+- [JMH基准测试详解](Java/测试/03-JMH基准测试详解.md)
+    微基准、死代码消除、黑名单
+- [Spring Boot测试与Testcontainers](Java/测试/05-Spring%20Boot测试与Testcontainers.md)
+    @SpringBootTest、切片测试、容器集成测试
+
+### 微服务
+
+- [微服务总览](Java/微服务/00-微服务总览.md)
+    架构演进、拆分、治理知识域
+- [Spring Cloud Gateway详解](Java/微服务/网关/01-Spring%20Cloud%20Gateway详解.md)
+    路由、过滤器、负载均衡集成
+- [Sentinel流量控制详解](Java/微服务/治理/01-Sentinel流量控制详解.md)
+    限流/熔断/降级、控制台、规则持久化
+- [熔断限流降级·原理与组件选型](Java/微服务/治理/02-熔断限流降级·原理与组件选型.md)
+    Sentinel / Hystrix / resilience4j 对比选型
+
+### 中间件
+
+- [中间件总览](Java/中间件/00-中间件总览.md)
+    分布式协调 / 配置中心 / 注册中心知识域
+- [Seata分布式事务框架详解](Java/中间件/分布式协调/分布式事务/Seata分布式事务框架详解.md)
+    AT/TCC/SAGA 模式、事务协调
+- [Apollo配置中心详解](Java/中间件/配置中心/Apollo/01-Apollo配置中心详解.md)
+    分层配置、热加载、灰度发布
+- [Nacos配置·动态热加载详解](Java/中间件/配置中心/Nacos/01-Nacos配置·动态热加载详解.md)
+    Nacos 配置中心、监听与刷新
+- [Nacos服务注册与发现详解](Java/中间件/配置中心/Nacos/03-服务注册与发现详解.md)
+    NamingService、健康检查、负载均衡
+
+### 代码片段
+
+- [IP转换（IPv4 ↔ long / IPv6 ↔ BigInteger）](Java/代码片段/IP转换.md)
+    通用 IP 数值化工具方法（JDK 17 实测）
 ## 通用技术
 
 ### 前后端缓存

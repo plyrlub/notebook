@@ -6,3 +6,5 @@ mkdocs.yml
 
 # Python 缓存
 __pycache__/
+
+site/
