@@ -35,7 +35,7 @@ Servlet 容器
 业务代码
 ```
 
-![](assets/ch1_00.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch1_00.png)
 
 **注意**：浏览器访问服务使用的是 **HTTP 协议**，HTTP 是**应用层协议**，用于定义数据通信的格式；具体的数据传输使用的是 **TCP/IP 协议**（传输层/网络层）。
 
@@ -58,7 +58,7 @@ Servlet 容器（Catalina）
 业务代码
 ```
 
-![](assets/ch1_01.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch1_01.png)
 
 HTTP 服务器接收到请求之后把请求交给 **Servlet 容器**来处理，Servlet 容器通过 **Servlet 接口**调用业务类。
 
@@ -101,7 +101,7 @@ Tomcat 设计了**两个核心组件**：
 - Coyote 将 Socket 输入转换封装为 Request 对象，进一步封装后交由 Catalina 容器进行处理；处理请求完成后，Catalina 通过 Coyote 提供的 Response 对象将结果写入输出流
 - **Coyote 负责的是具体协议（应用层）和 IO（传输层）相关内容**
 
-![](assets/ch1_02.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch1_02.png)
 
 **Coyote 支持的 IO 模型与协议**：
 
@@ -118,7 +118,7 @@ Tomcat 设计了**两个核心组件**：
 
 ### 3.2 Coyote 的内部组件及流程
 
-![](assets/ch1_03.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch1_03.png)
 
 **Coyote 组件及作用**：
 
@@ -144,11 +144,11 @@ Socket 字节流 → EndPoint（TCP/IP 传输层）→ Processor（HTTP 应用�
 
 **Tomcat 是一个由一系列可配置的组件构成的 Web 容器，而 Catalina 是 Tomcat 的 Servlet 容器**。
 
-![](assets/ch1_04.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch1_04.png)
 
 ### 4.2 Servlet 容器 Catalina 的结构
 
-![](assets/ch1_05.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch1_05.png)
 
 其实，**可以认为整个 Tomcat 就是一个 Catalina 实例**。Tomcat 启动的时候会初始化这个实例，Catalina 实例通过加载 server.xml 完成其他实例的创建，创建并管理一个 Server；Server 创建并管理多个 Service；每个 Service 又可以有多个 Connector 和一个 Container。
 

@@ -10,7 +10,7 @@ tags: [Java, Tomcat, 索引, 学习笔记]
 > 基于 **Tomcat 8.5.x** 整理。
 > 官方网站：https://tomcat.apache.org/ ｜ 官方文档：https://tomcat.apache.org/tomcat-8.5-doc/index.html
 
-![](assets/main_00.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/main_00.png)
 
 ## 📋 总纲
 

@@ -83,18 +83,22 @@ Spring Boot 启动 (AutoConfiguration 生效)
 
 **(4) 自动装配**：spring.factories 或 `META-INF/spring/xxxAutoConfiguration.imports` 里注册 `OpenApiAutoConfiguration`/`SpringDocWebMvcConfiguration` 等，按条件注解（`@ConditionalOnClass` 等）在依赖了 starter 时生效。
 
-**Mermaid：组件协作**
+**组件协作图**
 
 ```mermaid
-flowchart LR
-    B[Spring Boot 启动<br/>AutoConfiguration]
-    B --> H[RequestMappingHandlerMapping<br/>收集路由]
-    H --> P[注解解析器<br/>HandlerMethod/参数/返回]
-    P --> M[ModelConverter/Jackson<br/>泛型展开 Schema]
-    M --> O[OpenAPI 对象<br/>paths/components/security]
-    O --> D["/v3/api-docs<br/>序列化 JSON"]
-    D --> U[Swagger UI 渲染]
-    O --> G[GroupedOpenApi<br/>分组/过滤]
+flowchart TB
+    B["<b>Spring Boot 启动</b><br/><font color=#757575>AutoConfiguration 生效</font>"]
+    H["<b>扫描控制器</b><br/><font color=#757575>RequestMappingHandlerMapping 收集路由</font>"]
+    P["<b>注解解析</b><br/><font color=#757575>HandlerMethod / 参数 / 返回 → OpenAPI</font>"]
+    M["<b>模型解析</b><br/><font color=#757575>ModelConverter / Jackson 泛型展开 Schema</font>"]
+    O["<b>组装 OpenAPI 对象</b><br/><font color=#757575>paths / components / security</font>"]
+    D["<b>/v3/api-docs</b><br/><font color=#757575>序列化输出 JSON</font>"]
+    U["<b>Swagger UI</b><br/><font color=#757575>拉取并渲染</font>"]
+    G["<b>GroupedOpenApi</b><br/><font color=#757575>分组 / 过滤</font>"]
+
+    B -- "收集路由" --> H --> P --> M --> O
+    O -- "序列化 JSON" --> D --> U
+    O -. "分组/过滤" .-> G
 ```
 
 ---

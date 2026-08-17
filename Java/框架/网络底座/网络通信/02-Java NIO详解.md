@@ -51,7 +51,7 @@ NIO 有三大核心部分：
 - Channel(通道)
 - Buffer(缓冲区),
 - Selector(选择器)
-![](assets/NIO三大核心组件.png)
+![](NIO三大核心组件.png)
 1. 每个 channel 都会对应一个 Buffer
 1. Selector 对应一个线程， 一个线程对应多个 channel(连接)
 1. 每个 channel 都注册到 Selector选择器上
@@ -62,13 +62,13 @@ NIO 有三大核心部分：
 # 2、缓冲区 Buffer
 ## 2.1 基本介绍
 缓冲区（Buffer）：缓冲区本质上是一个可以读写数据的内存块，可以理解成是一个数组，该对象提供了一组方法，可以更轻松地使用内存块，，缓冲区对象内置了一些机制，能够跟踪和记录缓冲区的状态变化情况。Channel 提供从网络读取数据的渠道，但是读取或写入的数据都必须经由 Buffer.
-![](assets/Buffer缓冲区结构.png)
+![](Buffer缓冲区结构.png)
 ## 2.2 Buffer 常用 API 介绍
 ### 2.2.1 Buffer 类及其子类
 ```
 java.nio.Buffer
 ```
-![](assets/Buffer类层次.png)
+![](Buffer类层次.png)
 ### 2.2.2 创建
 在各个具体类型的 Buffer 中定义了创建的方法：
 因为返回值等都不太一样，这部分方法就放在具体的子抽象类中。
@@ -98,7 +98,7 @@ public class CreateBufferDemo {
 ```
 ### 2.2.3 添加数据
 这里也是以 byteBuffer 来举例。
-![](assets/ByteBuffer添加数据.png)
+![](ByteBuffer添加数据.png)
 ```java
 import java.nio.ByteBuffer;
 /**
@@ -153,9 +153,9 @@ public class PutBufferDemo {
 ### 2.2.4 读取数据
 这里也是以 byteBuffer 来举例。
 flip
-![](assets/Buffer翻转flip.png)
+![](Buffer翻转flip.png)
 clear方法图解
-![](assets/Buffer清空clear.png)
+![](Buffer清空clear.png)
 ```java
 import java.nio.ByteBuffer;
 /**
@@ -239,7 +239,7 @@ channel.write(new ByteBuffer[]{bf1,bf2,bf3})
 ## 2.3 只读
 这里以 ByteBuffer 为例：
 因为 ByteBuffer 默认情况下创建方法实际创建的是子类：
-![](assets/ByteBuffer子类.png)
+![](ByteBuffer子类.png)
 后面带
 ```java
 public ByteBuffer asReadOnlyBuffer() {

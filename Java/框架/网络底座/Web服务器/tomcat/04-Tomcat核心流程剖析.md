@@ -20,7 +20,7 @@ tags: [Java, Tomcat, 源码, 启动流程, Bootstrap, 请求流程]
 
 ## 1. 启动流程
 
-![](assets/ch4_00.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch4_00.png)
 
 ### 1.1 startup.sh
 
@@ -30,7 +30,7 @@ startup.sh
         └── 之后指向 org.apache.catalina.startup.Bootstrap 的 main 方法
 ```
 
-![](assets/ch4_01.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch4_01.png)
 
 - 用户在 bin 目录执行 `startup.sh`
 - startup.sh 内部调用 `catalina.sh start`
@@ -47,7 +47,7 @@ Bootstrap.main()
         └── 其他如图顺代码（daemon.start() → Catalina.start()）
 ```
 
-![](assets/ch4_01.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch4_01.png)
 
 关键点：
 
@@ -87,7 +87,7 @@ startup.sh → catalina.sh → Bootstrap.main() → Bootstrap.init()
 
 ### 3.1 新建 Web 项目
 
-![](assets/ch4_02.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch4_02.png)
 
 - 用 IDE 新建一个 Web 项目（如 web_demo），写一个简单的 Servlet（hello）
 - 可以在这里进行**部署到 Tomcat 成品中测试**（先验证业务代码正确）
@@ -96,11 +96,11 @@ startup.sh → catalina.sh → Bootstrap.main() → Bootstrap.init()
 
 将上一步项目部署测试后 **War 包解压后的文件夹**，拷贝到源代码的 `webapps` 目录中：
 
-![](assets/ch4_03.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch4_03.png)
 
 ### 3.3 启动源码工程
 
-![](assets/ch4_04.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch4_04.png)
 
 此处启动项目之后，可在浏览器访问：
 

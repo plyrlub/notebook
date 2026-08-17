@@ -41,7 +41,7 @@ JVM 的运行优化主要是**内存分配**和**垃圾回收策略**的优化�
 
 配置方式：直接放在 **catalina.sh 脚本**中：
 
-![](assets/ch7_00.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch7_00.png)
 
 ```bash
 # catalina.sh 中的 JAVA_OPTS
@@ -93,7 +93,7 @@ JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC -XX:ParallelGCThreads=4"
 
 ### 3.1 调整 Tomcat 线程池
 
-![](assets/ch7_01.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch7_01.png)
 
 在 server.xml 中配置共享线程池：
 
@@ -143,7 +143,7 @@ JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC -XX:ParallelGCThreads=4"
 
 ### 3.3 禁用 AJP 连接器
 
-![](assets/ch7_02.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch7_02.png)
 
 - **AJP 协议**用于 Tomcat 与 Apache/nginx 等 Web 服务器集成
 - 如果**没有使用 Apache 等集成需求，建议禁用 AJP**（减少攻击面 + 省资源）

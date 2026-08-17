@@ -88,7 +88,7 @@ tomcat-src/
 -Dcatalina.base=/path/to/tomcat-src/source
 ```
 
-![](assets/ch3_00.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch3_00.png)
 
 ---
 
@@ -96,11 +96,11 @@ tomcat-src/
 
 **③ 此时运行成功；浏览器访问会提示：**
 
-![](assets/ch3_01.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch3_01.png)
 
 **④ 手动加载**
 
-![](assets/ch3_02.png))
+![](01-学习/Java/框架/网络底座/Web服务器/tomcat/assets/ch3_02.png)
 
 此时访问 `http://localhost:8080/`，可以正常看见 Tomcat 默认页面，表示 **Tomcat 源代码环境正常构建完成**。
 
