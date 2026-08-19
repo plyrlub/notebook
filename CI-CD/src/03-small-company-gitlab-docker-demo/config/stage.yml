@@ -1,0 +1,11 @@
+# stage 环境配置（与 prod 一致，便于预发验证）
+app:
+  env: stage
+  debug: false
+
+db:
+  pool_size: 20
+  echo: false
+
+redis:
+  ttl: 3600

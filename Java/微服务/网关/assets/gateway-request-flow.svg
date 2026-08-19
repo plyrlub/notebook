@@ -1,0 +1,110 @@
+<svg viewBox="0 0 680 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Gateway请求处理完整流程</title>
+  <desc>展示Predicate断言匹配路由、FilteringWebHandler合并过滤器链、过滤器链执行三个阶段</desc>
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5"
+      markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke"
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <style>
+    .ts{font:12px/1.4 var(--font-sans, sans-serif);fill:#5F5E5A}
+    .th{font:500 14px/1.4 var(--font-sans, sans-serif);fill:#444441}
+    .sl{font:500 13px var(--font-mono, monospace);fill:#378ADD}
+  </style>
+
+  <rect x="0" y="0" width="680" height="520" fill="#FFFFFF"/>
+
+  <!-- Request entry -->
+  <g>
+    <rect x="280" y="20" width="120" height="40" rx="8" fill="#E6F1FB" stroke="#85B7EB" stroke-width="0.5"/>
+    <text class="th" x="340" y="40" text-anchor="middle" dominant-baseline="central">HTTP Request</text>
+  </g>
+  <path d="M340 62 L340 86" fill="none" stroke="#378ADD" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <!-- Stage 1: Predicate Matching -->
+  <rect x="40" y="88" width="600" height="120" rx="12" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+  <text class="sl" x="56" y="110" dominant-baseline="central">① Predicate 匹配路由</text>
+  <text class="ts" x="56" y="128" dominant-baseline="central">RoutePredicateHandlerMapping</text>
+
+  <!-- Route 1 -->
+  <g>
+    <rect x="60" y="142" width="170" height="52" rx="8" fill="#fff" stroke="#AFA9EC" stroke-width="0.5"/>
+    <text class="th" x="145" y="160" text-anchor="middle" dominant-baseline="central">Route: order-service</text>
+    <text class="ts" x="145" y="178" text-anchor="middle" dominant-baseline="central">Path=/api/order/**</text>
+  </g>
+  <!-- Route 2 -->
+  <g>
+    <rect x="255" y="142" width="170" height="52" rx="8" fill="#fff" stroke="#AFA9EC" stroke-width="0.5"/>
+    <text class="th" x="340" y="160" text-anchor="middle" dominant-baseline="central">Route: user-service</text>
+    <text class="ts" x="340" y="178" text-anchor="middle" dominant-baseline="central">Path=/api/user/**</text>
+  </g>
+  <!-- Route 3 (dashed = no match) -->
+  <g opacity="0.4">
+    <rect x="450" y="142" width="170" height="52" rx="8" fill="#fff" stroke="#AFA9EC" stroke-width="0.5" stroke-dasharray="4 3"/>
+    <text class="th" x="535" y="160" text-anchor="middle" dominant-baseline="central">Route: payment</text>
+    <text class="ts" x="535" y="178" text-anchor="middle" dominant-baseline="central">Host=pay.*  ✗</text>
+  </g>
+
+  <!-- Match indicator -->
+  <text class="ts" x="145" y="200" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">✓ matched</text>
+  <text class="ts" x="340" y="200" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">✗</text>
+
+  <path d="M340 210 L340 236" fill="none" stroke="#378ADD" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <!-- Stage 2: Merge Filter Chain -->
+  <rect x="40" y="238" width="600" height="130" rx="12" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+  <text class="sl" x="56" y="260" dominant-baseline="central" fill="#0F6E56">② 组装合并过滤器链</text>
+  <text class="ts" x="56" y="278" dominant-baseline="central">FilteringWebHandler</text>
+
+  <!-- Two sources merging -->
+  <g>
+    <rect x="60" y="290" width="210" height="60" rx="8" fill="#fff" stroke="#5DCAA5" stroke-width="0.5"/>
+    <text class="th" x="165" y="310" text-anchor="middle" dominant-baseline="central">路由 GatewayFilters</text>
+    <text class="ts" x="165" y="328" text-anchor="middle" dominant-baseline="central">AddRequestHeader, Retry...</text>
+  </g>
+  <g>
+    <rect x="410" y="290" width="210" height="60" rx="8" fill="#fff" stroke="#5DCAA5" stroke-width="0.5"/>
+    <text class="th" x="515" y="310" text-anchor="middle" dominant-baseline="central">所有 GlobalFilters</text>
+    <text class="ts" x="515" y="328" text-anchor="middle" dominant-baseline="central">AuthFilter, LogFilter...</text>
+  </g>
+
+  <!-- Merge arrows -->
+  <path d="M165 352 Q165 372 290 382" fill="none" stroke="#5DCAA5" stroke-width="1" marker-end="url(#arrow2)"/>
+  <path d="M515 352 Q515 372 390 382" fill="none" stroke="#5DCAA5" stroke-width="1" marker-end="url(#arrow2)"/>
+
+  <path d="M340 372 L340 392" fill="none" stroke="#378ADD" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+  <!-- Stage 3: Execute Chain -->
+  <rect x="40" y="394" width="600" height="116" rx="12" fill="#FAEEDA" stroke="#FAC775" stroke-width="0.5"/>
+  <text class="sl" x="56" y="416" dominant-baseline="central" fill="#854F0B">③ 按 order 执行合并后的链</text>
+  <text class="ts" x="56" y="434" dominant-baseline="central">统一排序后依次执行</text>
+
+  <!-- Chain boxes -->
+  <g>
+    <rect x="60" y="442" width="120" height="50" rx="8" fill="#fff" stroke="#FAC775" stroke-width="0.5"/>
+    <text class="th" x="120" y="460" text-anchor="middle" dominant-baseline="central">AuthFilter</text>
+    <text class="ts" x="120" y="476" text-anchor="middle" dominant-baseline="central">order=-100</text>
+  </g>
+  <g>
+    <rect x="195" y="442" width="120" height="50" rx="8" fill="#fff" stroke="#FAC775" stroke-width="0.5"/>
+    <text class="th" x="255" y="460" text-anchor="middle" dominant-baseline="central">AddHeader</text>
+    <text class="ts" x="255" y="476" text-anchor="middle" dominant-baseline="central">order=10</text>
+  </g>
+  <g>
+    <rect x="330" y="442" width="120" height="50" rx="8" fill="#fff" stroke="#FAC775" stroke-width="0.5"/>
+    <text class="th" x="390" y="460" text-anchor="middle" dominant-baseline="central">Retry</text>
+    <text class="ts" x="390" y="476" text-anchor="middle" dominant-baseline="central">order=20</text>
+  </g>
+  <g>
+    <rect x="465" y="442" width="120" height="50" rx="8" fill="#fff" stroke="#FAC775" stroke-width="0.5"/>
+    <text class="th" x="525" y="460" text-anchor="middle" dominant-baseline="central">LogFilter</text>
+    <text class="ts" x="525" y="476" text-anchor="middle" dominant-baseline="central">order=500</text>
+  </g>
+
+  <!-- Chain arrows -->
+  <path d="M180 467 L193 467" fill="none" stroke="#BA7517" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <path d="M315 467 L328 467" fill="none" stroke="#BA7517" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <path d="M450 467 L463 467" fill="none" stroke="#BA7517" stroke-width="1.5" marker-end="url(#arrow2)"/>
+</svg>

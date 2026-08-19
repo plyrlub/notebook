@@ -1,0 +1,66 @@
+<svg viewBox="0 0 680 430" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8A8A85"/>
+    </marker>
+  </defs>
+  <style>
+    .ts{font:12px/1.4 sans-serif;fill:#5F5E5A}
+    .th{font:600 14px/1.4 sans-serif;fill:#444441}
+    .sm{font:11px monospace;fill:#378ADD}
+    .note{font:11px sans-serif;fill:#9A6B3F}
+  </style>
+  <rect x="0" y="0" width="680" height="430" fill="#FFFFFF"/>
+
+  <text x="340" y="28" text-anchor="middle" class="th">请求 /fallback/abc 的完整时间线</text>
+
+  <!-- Step 1: predicate -->
+  <rect x="20" y="50" width="150" height="64" fill="#E8F2E8" stroke="#7FB57F" stroke-width="1.5" rx="8"/>
+  <text x="95" y="72" text-anchor="middle" class="th" font-size="13">① 断言匹配</text>
+  <text x="95" y="90" text-anchor="middle" class="ts" font-size="11">PathRoutePredicateFactory</text>
+  <text x="95" y="106" text-anchor="middle" class="ts" font-size="11">判定 /fallback/abc 命中</text>
+
+  <line x1="170" y1="82" x2="205" y2="82" stroke="#8A8A85" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+  <!-- Step 2: RouteToRequestUrlFilter -->
+  <rect x="207" y="50" width="180" height="64" fill="#F2F7FC" stroke="#9EC3E8" stroke-width="1.5" rx="8"/>
+  <text x="297" y="70" text-anchor="middle" class="th" font-size="13">② RouteToRequestUrlFilter</text>
+  <text x="297" y="88" text-anchor="middle" class="ts" font-size="11">改写 URL 属性（第 1 次）</text>
+  <text x="297" y="105" text-anchor="middle" class="sm">→ forward:///local/fallback/abc</text>
+  <text x="297" y="128" text-anchor="middle" class="note">纯内存改写，请求还没动</text>
+
+  <line x1="387" y1="82" x2="422" y2="82" stroke="#8A8A85" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+  <!-- Step 3: terminal filters -->
+  <rect x="424" y="50" width="130" height="64" fill="#FBEFE8" stroke="#D9A077" stroke-width="1.5" rx="8"/>
+  <text x="489" y="72" text-anchor="middle" class="th" font-size="13">③ 终端过滤器</text>
+  <text x="489" y="90" text-anchor="middle" class="ts" font-size="11">按 scheme 自选择</text>
+  <text x="489" y="106" text-anchor="middle" class="sm">scheme = forward</text>
+
+  <!-- Branch A: forward -->
+  <line x1="489" y1="114" x2="489" y2="150" stroke="#8A8A85" stroke-width="1.5" marker-end="url(#ar2)"/>
+  <rect x="380" y="152" width="220" height="92" fill="#FBEFE8" stroke="#D9A077" stroke-width="1.5" rx="8"/>
+  <text x="490" y="174" text-anchor="middle" class="th" font-size="13">ForwardRoutingFilter 接管</text>
+  <text x="490" y="193" text-anchor="middle" class="ts" font-size="11">交给 DispatcherHandler</text>
+  <text x="490" y="212" text-anchor="middle" class="ts" font-size="11">第 2 次路径解析：</text>
+  <text x="490" y="229" text-anchor="middle" class="sm">/local/fallback/abc → Handler</text>
+  <text x="490" y="248" text-anchor="middle" class="note">WebFlux 内部 HandlerMapping，不出网关</text>
+
+  <!-- Branch B: external -->
+  <line x1="554" y1="82" x2="590" y2="82" stroke="#8A8A85" stroke-width="1.5" marker-end="url(#ar2)"/>
+  <text x="600" y="120" text-anchor="middle" class="ts" font-size="11">若 uri 是外部地址:</text>
+  <rect x="545" y="152" width="125" height="92" fill="#F2F7FC" stroke="#9EC3E8" stroke-width="1.5" rx="8"/>
+  <text x="607" y="176" text-anchor="middle" class="th" font-size="12">NettyRoutingFilter</text>
+  <text x="607" y="195" text-anchor="middle" class="ts" font-size="11">真正发出 HTTP</text>
+  <text x="607" y="212" text-anchor="middle" class="ts" font-size="11">网络请求，</text>
+  <text x="607" y="229" text-anchor="middle" class="ts" font-size="11">无第 2 次路径解析</text>
+  <text x="607" y="246" text-anchor="middle" class="sm">scheme=http/https</text>
+
+  <!-- Bottom: URL attribute evolution -->
+  <rect x="20" y="270" width="640" height="130" fill="#FAFAF8" stroke="#D9D9D4" stroke-width="1.2" rx="8"/>
+  <text x="40" y="296" class="th" font-size="13">请求 URL 属性演化</text>
+  <text x="40" y="320" class="sm">进入网关:      http://gateway:8080/fallback/abc</text>
+  <text x="40" y="344" class="sm">② 改写后:      forward:///local/fallback/abc   ← 写入 GATEWAY_REQUEST_URL_ATTR</text>
+  <text x="40" y="368" class="sm">③ forward 后:  DispatcherHandler 按 path=/local/fallback/abc 查找 Handler</text>
+  <text x="40" y="392" class="note">真正"移动请求"只有一次（③）；② 只是内存里换了个地址标签</text>
+</svg>

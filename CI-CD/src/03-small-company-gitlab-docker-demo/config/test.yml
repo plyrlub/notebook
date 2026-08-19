@@ -1,0 +1,11 @@
+# test 环境配置
+app:
+  env: test
+  debug: false
+
+db:
+  pool_size: 10
+  echo: false
+
+redis:
+  ttl: 600

@@ -1,0 +1,5 @@
+[project]
+name = "myapp"
+version = "1.0.0"
+description = "小企业 GitLab CI + Docker 方案示例应用"
+requires-python = ">=3.12"

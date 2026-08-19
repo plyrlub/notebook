@@ -1,0 +1,11 @@
+# dev 环境配置
+app:
+  env: dev
+  debug: true
+
+db:
+  pool_size: 5
+  echo: true
+
+redis:
+  ttl: 300

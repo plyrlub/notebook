@@ -1,0 +1,11 @@
+# prod 环境配置
+app:
+  env: prod
+  debug: false
+
+db:
+  pool_size: 20
+  echo: false
+
+redis:
+  ttl: 3600
