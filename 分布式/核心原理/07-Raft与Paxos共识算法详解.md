@@ -11,7 +11,7 @@ tags: [分布式, 共识算法, Raft, Paxos, ZAB, 一致性, 选举, 日志复�
 > **版本基线**：Raft 论文（Diego Ongaro & John Ousterhout, 2014《In Search of an Understandable Consensus Algorithm》）、Paxos（Lamport 1998）、ZAB（ZooKeeper）| 创建日期：2026-08-10
 > **受众**：后端开发熟手，已懂 CAP/BASE 与 ZooKeeper 基本概念，准备架构/中间件面试或理解 etcd/Consul/TiKV 的原理。
 > 前置知识：[00-分布式基础总览](../00-分布式基础总览.md)、[02-CAP与BASE理论详解](02-CAP与BASE理论详解.md)、[00-ZooKeeper总览](../Zookeeper/00-ZooKeeper总览.md)
-> 关联笔记：[04-分布式事务详解](04-分布式事务详解.md)（共识与事务的关系）、[03-分布式锁原理详解](03-分布式锁原理详解.md)（ZooKeeper 锁依赖 ZAB）、**Seata分布式事务框架详解**（见知识库）（raft 存储模式）
+> 关联笔记：[04-分布式事务详解](04-分布式事务详解.md)（共识与事务的关系）、[03-分布式锁原理详解](03-分布式锁原理详解.md)（ZooKeeper 锁依赖 ZAB）、[Seata分布式事务框架详解](../../Java/中间件/分布式协调/分布式事务/Seata分布式事务框架详解.md)（raft 存储模式）
 
 ---
 
@@ -506,7 +506,7 @@ P1 发 Prepare(3) → 覆盖 2 ...
 - 下一篇（应用）：[00-ZooKeeper总览](../Zookeeper/00-ZooKeeper总览.md)——ZAB 是共识在 ZooKeeper 的实现（对照本篇知识点九）。
 - 理论基础：[02-CAP与BASE理论详解](02-CAP与BASE理论详解.md)、[00-分布式基础总览](../00-分布式基础总览.md)
 - 协同应用：[03-分布式锁原理详解](03-分布式锁原理详解.md)（ZooKeeper 锁依赖 ZAB）、[04-分布式事务详解](04-分布式事务详解.md)
-- 框架落地：**Seata分布式事务框架详解**（见知识库）（知识点十四 raft 存储模式 = Raft 的实际工程应用）
+- 框架落地：[Seata分布式事务框架详解](../../Java/中间件/分布式协调/分布式事务/Seata分布式事务框架详解.md)（知识点十四 raft 存储模式 = Raft 的实际工程应用）
 
 ## 8. 参考资料
 

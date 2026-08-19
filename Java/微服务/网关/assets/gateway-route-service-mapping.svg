@@ -1,0 +1,79 @@
+<svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8A8A85"/>
+    </marker>
+  </defs>
+  <style>
+    .ts{font:12px/1.4 sans-serif;fill:#5F5E5A}
+    .th{font:600 14px/1.4 sans-serif;fill:#444441}
+    .code{font:12px monospace;fill:#378ADD}
+    .box{fill:#FFFFFF;stroke:#D9D9D4;stroke-width:1.5}
+  </style>
+  <rect x="0" y="0" width="680" height="400" fill="#FFFFFF"/>
+
+  <!-- Client -->
+  <rect x="20" y="170" width="90" height="56" class="box" rx="8"/>
+  <text x="65" y="193" text-anchor="middle" class="th">客户端</text>
+  <text x="65" y="211" text-anchor="middle" class="ts">/api/** 请求</text>
+  <line x1="110" y1="198" x2="152" y2="198" stroke="#8A8A85" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Gateway -->
+  <rect x="155" y="60" width="150" height="280" fill="#F2F7FC" stroke="#9EC3E8" stroke-width="1.5" rx="10"/>
+  <text x="230" y="85" text-anchor="middle" class="th">Spring Cloud Gateway</text>
+  <rect x="170" y="105" width="120" height="60" class="box" rx="6"/>
+  <text x="230" y="126" text-anchor="middle" class="th" font-size="13">Route 表</text>
+  <text x="230" y="145" text-anchor="middle" class="ts">断言 + URI + Filters</text>
+
+  <!-- Route 1 -->
+  <rect x="170" y="180" width="120" height="42" fill="#E8F2E8" stroke="#7FB57F" stroke-width="1.2" rx="6"/>
+  <text x="230" y="196" text-anchor="middle" class="code" font-size="11">Path=/api/order/**</text>
+  <text x="230" y="213" text-anchor="middle" class="code" font-size="11">uri: lb://order-service</text>
+  <!-- Route 2 -->
+  <rect x="170" y="232" width="120" height="42" fill="#E8F2E8" stroke="#7FB57F" stroke-width="1.2" rx="6"/>
+  <text x="230" y="248" text-anchor="middle" class="code" font-size="11">Path=/api/user/**</text>
+  <text x="230" y="265" text-anchor="middle" class="code" font-size="11">uri: lb://user-service</text>
+  <!-- Route 3 -->
+  <rect x="170" y="284" width="120" height="42" fill="#FBEFE8" stroke="#D9A077" stroke-width="1.2" rx="6"/>
+  <text x="230" y="300" text-anchor="middle" class="code" font-size="11">Path=/fallback/**</text>
+  <text x="230" y="317" text-anchor="middle" class="code" font-size="11">uri: forward:/local</text>
+
+  <!-- Arrows to services -->
+  <line x1="290" y1="201" x2="360" y2="120" stroke="#8A8A85" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="290" y1="253" x2="360" y2="225" stroke="#8A8A85" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="290" y1="305" x2="360" y2="320" stroke="#8A8A85" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- order-service cluster -->
+  <rect x="363" y="55" width="140" height="110" fill="#F2F7FC" stroke="#9EC3E8" stroke-width="1.5" rx="10"/>
+  <text x="433" y="76" text-anchor="middle" class="th" font-size="13">order-service 集群</text>
+  <rect x="378" y="88" width="110" height="20" class="box" rx="4"/>
+  <text x="433" y="102" text-anchor="middle" class="ts" font-size="11">instance-1 :8081</text>
+  <rect x="378" y="113" width="110" height="20" class="box" rx="4"/>
+  <text x="433" y="127" text-anchor="middle" class="ts" font-size="11">instance-2 :8082</text>
+  <rect x="378" y="138" width="110" height="20" class="box" rx="4"/>
+  <text x="433" y="152" text-anchor="middle" class="ts" font-size="11">instance-3 :8083</text>
+
+  <!-- user-service cluster -->
+  <rect x="363" y="195" width="140" height="90" fill="#F2F7FC" stroke="#9EC3E8" stroke-width="1.5" rx="10"/>
+  <text x="433" y="216" text-anchor="middle" class="th" font-size="13">user-service 集群</text>
+  <rect x="378" y="228" width="110" height="20" class="box" rx="4"/>
+  <text x="433" y="242" text-anchor="middle" class="ts" font-size="11">instance-1 :9081</text>
+  <rect x="378" y="253" width="110" height="20" class="box" rx="4"/>
+  <text x="433" y="267" text-anchor="middle" class="ts" font-size="11">instance-2 :9082</text>
+
+  <!-- forward local -->
+  <rect x="363" y="300" width="140" height="56" fill="#FBEFE8" stroke="#D9A077" stroke-width="1.5" rx="10"/>
+  <text x="433" y="322" text-anchor="middle" class="th" font-size="13">网关本地 Handler</text>
+  <text x="433" y="341" text-anchor="middle" class="ts" font-size="11">不出网关，本地 dispatch</text>
+
+  <!-- Right legend -->
+  <text x="530" y="80" class="th" font-size="13">关系总结</text>
+  <text x="530" y="105" class="ts">Route = 一条转发规则</text>
+  <text x="530" y="123" class="ts">(断言 + 目标 URI + 过滤器)</text>
+  <text x="530" y="150" class="ts">服务集合 = lb:// 后面的</text>
+  <text x="530" y="168" class="ts">多实例集群(注册中心)</text>
+  <text x="530" y="195" class="ts">N 条 Route → N 个服务</text>
+  <text x="530" y="213" class="ts">一个服务也可配多条 Route</text>
+  <text x="530" y="240" class="ts">forward:// 不指向服务，</text>
+  <text x="530" y="258" class="ts">指向网关自己的接口</text>
+</svg>

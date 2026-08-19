@@ -247,7 +247,19 @@
 - [微服务总览](Java/微服务/00-微服务总览.md)
     架构演进、拆分、治理知识域
 - [Spring Cloud Gateway详解](Java/微服务/网关/01-Spring%20Cloud%20Gateway详解.md)
-    路由、过滤器、负载均衡集成
+    路由、过滤器、负载均衡集成（索引/骨架）
+- [内置过滤器详解](Java/微服务/网关/04-内置过滤器详解.md)
+    断言、过滤器工厂、三过滤器对比、跨域/重试/熔断
+- [内置GlobalFilter深度](Java/微服务/网关/05-内置GlobalFilter深度.md)
+    GlobalFilter 清单/顺序、FilteringWebHandler 源码、自定义
+- [Actuator运维实操](Java/微服务/网关/06-Actuator运维实操.md)
+    Actuator 运行时观察与动态增删路由
+- [动态路由与高可用](Java/微服务/网关/07-动态路由与高可用.md)
+    WebSocket、动态路由(Nacos)、配置实战、生产实践
+- [网关鉴权详解](Java/微服务/网关/08-网关鉴权详解.md)
+    统一鉴权、JWT、TokenRelay
+- [Spring Cloud Gateway实践](Java/微服务/网关/02-Spring%20Cloud%20Gateway实践.md)
+    工程骨架与联调
 - [Sentinel流量控制详解](Java/微服务/治理/01-Sentinel流量控制详解.md)
     限流/熔断/降级、控制台、规则持久化
 - [熔断限流降级·原理与组件选型](Java/微服务/治理/02-熔断限流降级·原理与组件选型.md)
